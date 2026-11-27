@@ -8,6 +8,7 @@ import RenderBlocks from "@/components/blocks/render-blocks";
 import RenderHero from "@/components/blocks/render-hero";
 import { JsonLdViewScript } from "@/components/shared/elements-ssr";
 import DAL from "@/lib/core/dal";
+import { resolveMediaUrl } from "@/lib/core/util";
 import { CollectionName } from "@/lib/core/types/types";
 import { getDecodedSlug } from "@/lib/core/util";
 import { buildMetadataByModel } from "@/lib/seo/metadata";
@@ -32,7 +33,23 @@ export async function generateMetadata({
 export default async function PagePage({ params }: PropsSlug) {
   const slug = await getDecodedSlug(params);
   const page = await DAL.queryPageBySlug(slug);
-  if (!page && slug === "home") return <HomeExperience />;
+  if (!page && slug === "home") {
+    const products = await DAL.queryAllProducts();
+    const catalogProducts = products.map((product) => ({
+      title: product.title,
+      slug: product.slug,
+      image:
+        product.meta?.image && typeof product.meta.image === "object"
+          ? resolveMediaUrl(product.meta.image)
+          : null,
+      price: Number(product.priceInUSD ?? 0),
+      originalPrice:
+        typeof product.originalPriceInUSD === "number"
+          ? product.originalPriceInUSD
+          : null,
+    }));
+    return <HomeExperience catalogProducts={catalogProducts} />;
+  }
   if (!page) return notFound();
   return (
     <article className="min-w-0 overflow-x-clip py-1">
