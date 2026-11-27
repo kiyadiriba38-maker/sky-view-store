@@ -17,6 +17,7 @@ import {
   Users,
   Reviews,
   Sellers,
+  Notifications,
 } from "@/lib/collections";
 import { baseEditor } from "@/lib/collections/base-fields";
 import appConfig from "@/lib/core/config";
@@ -70,7 +71,7 @@ export default buildConfig({
 
   sharp,
 
-  collections: [Users, Pages, Category, Media, SeoMedia, GalleryMedia, Reviews, Sellers],
+  collections: [Users, Pages, Category, Media, SeoMedia, GalleryMedia, Reviews, Sellers, Notifications],
   db: postgresAdapter({
     pool: {
       connectionString: appConfig.DATABASE_URL,
