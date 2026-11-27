@@ -1,13 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { FormEvent, useState } from "react";
 
 type Mode = "login" | "register";
 
 export default function AccountAccess({ mode }: { mode: Mode }) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const requestedNext = searchParams.get("next");
+  const redirectTo = requestedNext?.startsWith("/") && !requestedNext.startsWith("//") ? requestedNext : "/account";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
@@ -34,7 +37,7 @@ export default function AccountAccess({ mode }: { mode: Mode }) {
         setMessage(result?.errors?.[0]?.message || result?.message || "We could not complete that request. Check your details and try again.");
         return;
       }
-      router.push("/account");
+      router.push(redirectTo);
       router.refresh();
     } catch {
       setMessage("A connection problem occurred. Please try again.");
@@ -74,7 +77,7 @@ export default function AccountAccess({ mode }: { mode: Mode }) {
             {message ? <p role="alert" className="rounded-xl border border-rose-300/20 bg-rose-300/10 px-4 py-3 text-xs leading-5 text-rose-100">{message}</p> : null}
             <button disabled={busy} type="submit" className="flex w-full items-center justify-center rounded-xl bg-cyan-200 px-5 py-4 text-xs font-extrabold uppercase tracking-[.17em] text-[#07111a] transition hover:-translate-y-0.5 hover:bg-white disabled:cursor-not-allowed disabled:opacity-50">{busy ? "Please wait…" : mode === "login" ? "Sign in" : "Create account"} <span className="ml-2">↗</span></button>
           </form>
-          <p className="mt-7 text-center text-xs text-white/45">{mode === "login" ? "New to Sky View Store?" : "Already have an account?"} <Link className="font-semibold text-cyan-200 hover:text-white" href={mode === "login" ? "/account/register" : "/account/login"}>{mode === "login" ? "Create account" : "Sign in"}</Link></p>
+          <p className="mt-7 text-center text-xs text-white/45">{mode === "login" ? "New to Sky View Store?" : "Already have an account?"} <Link className="font-semibold text-cyan-200 hover:text-white" href={`${mode === "login" ? "/account/register" : "/account/login"}${requestedNext ? `?next=${encodeURIComponent(redirectTo)}` : ""}`}>{mode === "login" ? "Create account" : "Sign in"}</Link></p>
           <p className="mt-8 text-center text-[10px] leading-5 text-white/25">Your account is for customer shopping features. Payments on this site remain demo-only.</p>
         </section>
       </div>
