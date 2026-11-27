@@ -421,6 +421,11 @@ export const Orders: CollectionOverride = ({ defaultCollection }) => {
         async ({ data, req, operation }) => {
           if (!data) return data;
 
+          // Order line items and totals are immutable snapshots after creation.
+          // Status changes and return-request updates must never be rebuilt
+          // from a cart that may have changed or been emptied since checkout.
+          if (operation !== "create") return data;
+
           if (operation === "create") {
             if (!req.user) throw new Error("Sign in before placing an order.");
             data.status = OrderStatus.NEW;
