@@ -50,15 +50,15 @@ export const Reviews: CollectionConfig = {
           limit: 100,
           pagination: false,
           where: { customer: { equals: req.user.id } },
-          select: { status: true, items: true },
+          select: { status: true, items: true, isDemoOrder: true },
         });
 
         const hasEligiblePurchase = orders.docs.some((order) => {
-          if (order.status === "canceled" || order.status === "refunded") return false;
+          if (order.isDemoOrder || order.status === "canceled" || order.status === "refunded") return false;
           return (order.items ?? []).some((item) => {
             const raw = item.product;
             const purchasedProductId = typeof raw === "object" && raw ? raw.id : raw;
-            return String(purchasedProductId ?? "") === String(productId);
+            return !item.isDemo && String(purchasedProductId ?? "") === String(productId);
           });
         });
 
