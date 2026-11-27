@@ -62,7 +62,7 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
   }, []);
 
   const realProducts = useMemo(() => catalogProducts.map((product) => ({
-    id: \`real-\${product.slug}\`, slug: product.slug, title: product.title,
+    id: `real-${product.slug}`, slug: product.slug, title: product.title,
     category: "Real products", categorySlug: "real-products",
     priceETB: product.price, originalPriceETB: product.originalPrice ?? product.price,
     image: product.image ?? DEMO_CATEGORIES[2].image, demo: false as const,
@@ -73,7 +73,7 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
   const products = useMemo(() => {
     const combined = [...realProducts, ...DEMO_PRODUCTS];
     return combined.filter((product) => {
-      const matchesQuery = \`\${product.title} \${product.category}\`.toLowerCase().includes(query.trim().toLowerCase());
+      const matchesQuery = `${product.title} ${product.category}`.toLowerCase().includes(query.trim().toLowerCase());
       const matchesCategory = category === "All" || product.category === category;
       const matchesKind = kind === "all" || (kind === "demo" ? product.demo : !product.demo);
       return matchesQuery && matchesCategory && matchesKind;
@@ -89,7 +89,7 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
   };
 
   return (
-    <main className={\`sv-marketplace min-h-screen \${theme === "dark" ? "sv-dark" : "sv-light"}\`}>
+    <main className={`sv-marketplace min-h-screen ${theme === "dark" ? "sv-dark" : "sv-light"}`}>
       <div className="sv-market-topline">ETHIOPIA FIRST <span>✦</span> DISCOVER MORE. SHOP SMARTER.</div>
       <header className="sv-market-header">
         <Link href="/" className="sv-brand" aria-label="Sky View Store home">
@@ -126,7 +126,7 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
       <section className="sv-category-section">
         <div className="sv-section-heading"><div><span className="sv-eyebrow">EXPLORE THE COLLECTIONS</span><h2>{t.categories}</h2></div><Link href="/categories">View all categories ↗</Link></div>
         <div className="sv-category-grid">
-          {categories.slice(0, 8).map((item) => <Link href={\`/shop?category=\${item.slug}\`} className="sv-category-tile" key={item.slug}><Image src={item.image} alt="" fill unoptimized sizes="(max-width: 640px) 50vw, 25vw" /><span className="sv-category-shade" /><span className="sv-category-name">{item.name}</span><span className="sv-category-arrow">↗</span></Link>)}
+          {categories.slice(0, 8).map((item) => <Link href={`/shop?category=${item.slug}`} className="sv-category-tile" key={item.slug}><Image src={item.image} alt="" fill unoptimized sizes="(max-width: 640px) 50vw, 25vw" /><span className="sv-category-shade" /><span className="sv-category-name">{item.name}</span><span className="sv-category-arrow">↗</span></Link>)}
         </div>
       </section>
 
@@ -138,7 +138,7 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
         </div>
         <div className="sv-product-grid">
           {products.slice(0, 24).map((product) => {
-            const href = product.demo ? \`/demo-product/\${product.slug}\` : product.external ? product.externalUrl! : \`/product/\${product.slug}\`;
+            const href = product.demo ? `/demo-product/${product.slug}` : product.external ? product.externalUrl! : `/product/${product.slug}`;
             return <article className="sv-product-card" key={product.id}><Link href={href} target={!product.demo && product.external ? "_blank" : undefined} rel={!product.demo && product.external ? "noopener noreferrer" : undefined} className="sv-product-image"><Image src={product.image} alt={product.title} fill unoptimized sizes="(max-width: 640px) 50vw, 25vw" /><span className={product.demo ? "sv-label-demo" : "sv-label-real"}>{product.demo ? t.demo : t.real}</span></Link><div className="sv-product-info"><small>{product.category}</small><Link href={href} className="sv-product-title">{product.title}</Link><div className="sv-price-row"><b>{formatPrice(product.priceETB, currency, rates)}</b><del>{formatPrice(product.originalPriceETB, currency, rates)}</del></div><span className="sv-demo-note">{product.demo ? "Sample listing · simulated stock" : "Published marketplace listing"}</span></div></article>;
           })}
         </div>

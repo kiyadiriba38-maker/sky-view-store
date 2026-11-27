@@ -21,7 +21,7 @@ export type DemoProduct = {
 };
 
 const photo = (id: string, width = 900) =>
-  \`https://images.unsplash.com/\${id}?auto=format&fit=crop&w=\${width}&q=85\`;
+  `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${width}&q=85`;
 
 export const DEMO_CATEGORIES: DemoCategory[] = [
   { name: "Phones & Accessories", slug: "phones-accessories", description: "Phones, cases, chargers and everyday mobile essentials.", image: photo("photo-1511707171634-5f897ff02aa9") },
@@ -39,7 +39,7 @@ export const DEMO_CATEGORIES: DemoCategory[] = [
   { name: "Furniture & Decor", slug: "furniture-decor", description: "Furniture, lighting and decorative details.", image: photo("photo-1616486338812-3dadae4b4ace") },
   { name: "Jewelry & Watches", slug: "jewelry-watches", description: "Watches, jewelry and finishing touches.", image: photo("photo-1523275335684-37898b6baf30") },
   { name: "Baby & Kids", slug: "baby-kids", description: "Family essentials, kids' accessories and nursery items.", image: photo("photo-1516627145497-ae6968895b74") },
-  { name: "Books & Stationery", slug: "books-stationery", description: "Books, notebooks and tools for learning.", image: photo("photo-1455390582262-044c ebenfalls") },
+  { name: "Books & Stationery", slug: "books-stationery", description: "Books, notebooks and tools for learning.", image: photo("photo-1455390582262-044cdead277a") },
   { name: "Travel & Luggage", slug: "travel-luggage", description: "Bags, organizers and travel accessories.", image: photo("photo-1553062407-98eeb64c6a62") },
   { name: "Pet Supplies", slug: "pet-supplies", description: "Everyday accessories for pets and their people.", image: photo("photo-1450778869180-41d0601e046e") },
   { name: "Garden & Home Improvement", slug: "garden-home", description: "Garden tools and practical outdoor accessories.", image: photo("photo-1416879595882-3373a0480b5b") },
@@ -77,22 +77,22 @@ export const DEMO_PRODUCTS: DemoProduct[] = DEMO_CATEGORIES.flatMap((category, c
   return Array.from({ length: 50 }, (_, index) => {
     const sequence = categoryIndex * 50 + index;
     const base = names[index % names.length] ?? "Everyday accessory";
-    const title = \`\${adjectives[index % adjectives.length]} \${base}\`;
+    const title = `${adjectives[index % adjectives.length]} ${base}`;
     const price = 180 + ((sequence * 137 + categoryIndex * 83) % 14800);
     return {
-      id: \`demo-\${sequence + 1}\`,
-      slug: \`demo-\${category.slug}-\${String(index + 1).padStart(2, "0")}\`,
+      id: `demo-${sequence + 1}`,
+      slug: `demo-${category.slug}-${String(index + 1).padStart(2, "0")}`,
       title,
       category: category.name,
       categorySlug: category.slug,
       priceETB: price,
       originalPriceETB: Math.round(price * 1.18),
       image: photoByCategory[categoryIndex],
-      description: \`\${title} is a sample marketplace listing created for the Sky View Store demo catalogue. This listing demonstrates the product detail, shopping, delivery and checkout experience. Product availability, specifications and fulfilment details are illustrative only and are not a real offer for sale.\`,
+      description: `${title} is a sample marketplace listing created for the Sky View Store demo catalogue. This listing demonstrates the product detail, shopping, delivery and checkout experience. Product availability, specifications and fulfilment details are illustrative only and are not a real offer for sale.`,
       specifications: [
         { label: "Listing type", value: "Demo product" },
         { label: "Category", value: category.name },
-        { label: "Catalogue reference", value: \`SV-DEMO-\${String(sequence + 1).padStart(4, "0")}\` },
+        { label: "Catalogue reference", value: `SV-DEMO-${String(sequence + 1).padStart(4, "0")}` },
         { label: "Fulfilment", value: "Simulated delivery" },
       ],
       variants: ["Standard", "Premium"],

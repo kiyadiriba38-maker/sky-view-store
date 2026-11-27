@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
   const product = getDemoProduct(decodeURIComponent(slug));
-  return product ? { title: \`\${product.title} | Demo product | Sky View Store\`, description: product.description } : { robots: "noindex" };
+  return product ? { title: `${product.title} | Demo product | Sky View Store`, description: product.description } : { robots: "noindex" };
 }
 
 export default async function DemoProductPage({ params }: Props) {
