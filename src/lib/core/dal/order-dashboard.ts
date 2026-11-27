@@ -13,8 +13,8 @@ const NON_REVENUE_STATUSES = new Set(["canceled", "refunded"]);
 
 type DashboardOrder = Pick<
   Order,
-  "id" | "name" | "email" | "amount" | "status" | "createdAt" | "isDemoOrder"
->;
+  "id" | "name" | "email" | "amount" | "status" | "createdAt"
+> & { isDemoOrder?: boolean };
 
 const toInputDate = (date: Date) => date.toISOString().slice(0, 10);
 
@@ -142,7 +142,7 @@ export const getOrderDashboard = async (req: PayloadRequest) => {
       isDemoOrder: true,
     },
   });
-  const orders = docs as DashboardOrder[];
+  const orders = docs as unknown as DashboardOrder[];
   const fromTime = from.getTime();
   const toTime = to.getTime();
   const periodOrders = orders.filter((order) => {
