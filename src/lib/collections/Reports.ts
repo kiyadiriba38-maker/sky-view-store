@@ -2,6 +2,7 @@ import type { Access, CollectionConfig } from "payload";
 
 import { isAdmin } from "@/lib/collections/base-fields";
 import { createStoreNotification } from "@/lib/core/notifications";
+import { createStoreAuditLog } from "@/lib/core/audit-log";
 
 const reportReadAccess: Access = ({ req }) => {
   if (!req.user) return false;
@@ -53,6 +54,15 @@ export const Reports: CollectionConfig = {
     afterChange: [
       async ({ doc, operation, req }) => {
         if (operation === "create") {
+          if (req.user) {
+            await createStoreAuditLog(req.payload, {
+              actor: req.user.id,
+              action: "moderation_report_submitted",
+              targetCollection: "reports",
+              targetId: doc.id,
+              summary: `A marketplace report was submitted for review.`,
+            });
+          }
           const admins = await req.payload.find({
             collection: "users",
             where: { roles: { contains: "admin" } },
@@ -69,6 +79,14 @@ export const Reports: CollectionConfig = {
               href: "/admin/collections/reports",
             });
           }
+        } else if (operation === "update" && previousDoc?.status !== doc.status && req.user?.roles?.includes("admin")) {
+          await createStoreAuditLog(req.payload, {
+            actor: req.user.id,
+            action: "moderation_report_status_changed",
+            targetCollection: "reports",
+            targetId: doc.id,
+            summary: `Moderation report status changed to ${String(doc.status)}.`,
+          });
         }
         return doc;
       },
