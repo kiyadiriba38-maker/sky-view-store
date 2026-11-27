@@ -11,6 +11,7 @@ import {
   mixedSlugField,
   patchPricesGroupField,
   populateSlugOnCreate,
+  isAdmin,
 } from "@/lib/collections/base-fields";
 import { makeRevalidateHooks, normalizeFaqs } from "@/lib/collections/hooks";
 import { CollectionName, RoutePath } from "@/lib/core/types/types";
@@ -23,7 +24,7 @@ const isSidebarField = (field: Field) =>
     ? field.admin.position === "sidebar"
     : false;
 
-const publicProductListings: Where = { and: [{ _status: { equals: "published" } }, { listingStatus: { equals: "approved" } }] };
+const publicProductListings: Where = { and: [{ _status: { equals: "published" } }, { listingStatus: { equals: "approved" } }, { or: [{ isDemo: { equals: true } }, { listingPolicyReviewed: { equals: true } }] }] };
 
 const readMarketplaceProducts: Access = async ({ req }) => {
   if (req.user?.roles?.includes("admin")) return true;
@@ -77,6 +78,25 @@ const enforceSellerListing: CollectionBeforeChangeHook = async ({ data, req, ope
     return { ...data, seller: seller.id, listingType: "marketplace_seller", isDemo: false, listingStatus: "pending", _status: "draft" };
   }
   return { ...data, seller: seller.id, listingType: "marketplace_seller", isDemo: false, listingStatus: "pending", _status: "draft" };
+};
+
+const requirePolicyReviewForPublication: CollectionBeforeChangeHook = async ({
+  data,
+  originalDoc,
+  req,
+}) => {
+  if (!data || !isAdmin({ req })) return data;
+
+  const listingStatus = data.listingStatus ?? originalDoc?.listingStatus;
+  const documentStatus = data._status ?? originalDoc?._status;
+  const isDemo = data.isDemo ?? originalDoc?.isDemo;
+  const policyReviewed = data.listingPolicyReviewed ?? originalDoc?.listingPolicyReviewed;
+
+  if (!isDemo && listingStatus === "approved" && documentStatus === "published" && policyReviewed !== true) {
+    throw new Error("Complete the store listing policy review before publishing this product.");
+  }
+
+  return data;
 };
 
 const enhanceVariantField = (field: Field): Field => {
@@ -179,6 +199,20 @@ export const Products: CollectionOverride = ({ defaultCollection }) => {
       admin: { position: "sidebar", description: "Sample listing. Demo orders and reviews must remain clearly labelled." },
     },
     {
+      name: "listingPolicyReviewed",
+      type: "checkbox",
+      defaultValue: false,
+      access: {
+        read: ({ req }) => isAdmin({ req }),
+        create: ({ req }) => isAdmin({ req }),
+        update: ({ req }) => isAdmin({ req }),
+      },
+      admin: {
+        position: "sidebar",
+        description: "Complete the store's product and seller policy review before approving and publishing this listing.",
+      },
+    },
+    {
       name: "listingStatus",
       type: "select",
       defaultValue: "approved",
@@ -276,7 +310,7 @@ export const Products: CollectionOverride = ({ defaultCollection }) => {
     },
     hooks: {
       ...makeRevalidateHooks(CollectionName.products),
-      beforeChange: [populateSlugOnCreate, enforceSellerListing],
+      beforeChange: [populateSlugOnCreate, enforceSellerListing, requirePolicyReviewForPublication],
       beforeValidate: [
         ({ data }) => {
           if (!data) return data;
