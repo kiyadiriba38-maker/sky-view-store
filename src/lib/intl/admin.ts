@@ -11,7 +11,7 @@ type EntityLabels = {
 
 type TranslationMap = Record<string, string>;
 type EntityTranslationMap = Record<string, EntityLabels>;
-type LocalizedText = { en: string; he: string };
+type LocalizedText = { en: string; he: string; am?: string; om?: string };
 type NavigationGroup = LocalizedText & { entities: string[] };
 type TranslationObject = Record<string, unknown>;
 
@@ -67,7 +67,7 @@ const applyNavigationGroups = (config: Config): void => {
     if (group) {
       collection.admin = {
         ...collection.admin,
-        group: group[appConfig.LOCAL.lang],
+        group: group[appConfig.LOCAL.lang] ?? group.en,
       };
     }
   }
