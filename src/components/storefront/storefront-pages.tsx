@@ -64,7 +64,9 @@ export function ProductGrid({ products }: { products: Product[] }) {
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {products.map((product) => {
-        const image = product.meta?.image && typeof product.meta.image === "object" ? resolveMediaUrl(product.meta.image) : null;
+        const demo = Boolean((product as Product & { isDemo?: boolean }).isDemo);
+        const demoImage = (product as Product & { demoImageUrl?: string }).demoImageUrl;
+        const image = product.meta?.image && typeof product.meta.image === "object" ? resolveMediaUrl(product.meta.image) : demo && demoImage ? demoImage : null;
         const external = product.listingType === "external" && Boolean(product.externalUrl);
         const price = Number(product.priceInUSD ?? 0);
         const href = external ? product.externalUrl! : `/product/${product.slug}`;
@@ -73,7 +75,7 @@ export function ProductGrid({ products }: { products: Product[] }) {
             <Link href={href} target={external ? "_blank" : undefined} rel={external ? "noopener noreferrer" : undefined} className="block">
               <div className="relative aspect-square overflow-hidden bg-[#172436]">
                 {image ? <Image src={image} alt={product.title} fill unoptimized sizes="(max-width: 768px) 100vw, 25vw" className="object-cover transition duration-700 group-hover:scale-105" /> : <div className="grid h-full place-items-center text-4xl text-cyan-100/30">✦</div>}
-                <span className="absolute left-3 top-3 rounded-full border border-white/15 bg-black/55 px-3 py-1.5 text-[8px] font-bold uppercase tracking-[.12em]">{external ? "External seller" : "Sky View Store"}</span>
+                <span className="absolute left-3 top-3 rounded-full border border-white/15 bg-black/55 px-3 py-1.5 text-[8px] font-bold uppercase tracking-[.12em]">{demo ? "DEMO PRODUCT" : external ? "External seller" : "Sky View Store"}</span>
               </div>
               <div className="p-4">
                 <h2 className="line-clamp-2 min-h-10 text-sm font-semibold leading-5">{product.title}</h2>
