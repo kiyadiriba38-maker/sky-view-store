@@ -46,7 +46,7 @@ export const Orders: CollectionOverride = ({ defaultCollection }) => {
         if (!req.user) return false;
         return { customer: { equals: req.user.id } };
       },
-      create: () => true,
+      // Checkout is account-only; never allow anonymous order creation.\n      create: ({ req }) => Boolean(req.user),
     },
 
     fields: [
@@ -307,15 +307,89 @@ export const Orders: CollectionOverride = ({ defaultCollection }) => {
           const cartId = typeof rawCart === "object" ? rawCart?.id : rawCart;
           if (!cartId) return data;
 
+          if (operation === "create" && !req.user) {
+            throw new Error("Sign in before placing an order.");
+          }
+
           const cart = await req.payload.findByID({
             collection: "carts",
             id: cartId,
             depth: 3,
           });
 
+          if (operation === "create") {
+            const cartCustomer = (cart as typeof cart & { customer?: number | string | { id: number | string } }).customer;
+            const cartCustomerId = typeof cartCustomer === "object" && cartCustomer
+              ? cartCustomer.id
+              : cartCustomer;
+            if (!req.user || String(cartCustomerId ?? "") !== String(req.user.id)) {
+              throw new Error("This cart does not belong to your signed-in account.");
+            }
+          }
+
           const items: CartItem[] = Array.isArray(cart?.items)
             ? cart.items
             : [];
+
+          if (operation === "create") {
+            if (!items.length) {
+              throw new Error("Your cart is empty.");
+            }
+            for (const item of items) {
+              const quantity = Number(item?.quantity ?? 0);
+              if (!Number.isSafeInteger(quantity) || quantity < 1) {
+                throw new Error("Cart quantities must be positive whole numbers.");
+              }
+
+              const productId =
+                typeof item.product === "object"
+                  ? item.product?.id
+                  : item.product;
+              if (!productId) throw new Error("A cart item is missing its product.");
+
+              const product = typeof item.product === "object" && item.product
+                ? item.product as Product
+                : await req.payload.findByID({
+                    collection: CollectionName.products,
+                    id: productId,
+                    depth: 0,
+                  });
+              const marketplaceProduct = product as Product & {
+                listingStatus?: string;
+                isDemo?: boolean;
+              };
+              if (marketplaceProduct._status !== "published" || marketplaceProduct.listingStatus === "pending" || marketplaceProduct.listingStatus === "rejected" || marketplaceProduct.listingStatus === "suspended") {
+                throw new Error("A product in your cart is no longer available.");
+              }
+
+              const variantId =
+                typeof item.variant === "object"
+                  ? item.variant?.id
+                  : item.variant;
+              const variant = variantId
+                ? (typeof item.variant === "object" && item.variant
+                    ? item.variant as Variant
+                    : await req.payload.findByID({
+                        collection: "variants",
+                        id: variantId,
+                        depth: 0,
+                      }))
+                : null;
+              if (variant) {
+                const variantProductId = typeof variant.product === "object"
+                  ? variant.product?.id
+                  : variant.product;
+                if (String(variantProductId) !== String(productId)) {
+                  throw new Error("Cart variant does not belong to its product.");
+                }
+              }
+
+              const available = Number(variant?.inventory ?? product.inventory ?? 0);
+              if (available < quantity) {
+                throw new Error(`Not enough stock for ${product.title}. Available: ${available}.`);
+              }
+            }
+          }
 
           if (operation === "create") {
             for (const item of items) {
@@ -427,7 +501,7 @@ export const Orders: CollectionOverride = ({ defaultCollection }) => {
             );
 
           data.items = snapshot;
-          data.amount = cart.subtotal;
+          data.amount = snapshot.reduce((total, item) => total + item.lineTotal, 0);
 
           return data;
         },
