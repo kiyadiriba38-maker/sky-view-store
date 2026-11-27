@@ -1,6 +1,6 @@
 import type { Product } from "@/lib/core/types/payload-types";
 import type { CollectionOverride } from "@payloadcms/plugin-ecommerce/types";
-import type { Access, CollectionBeforeChangeHook, Field, Where } from "payload";
+import type { Access, CollectionBeforeChangeHook, Field, PayloadRequest, Where } from "payload";
 
 import {
   DESCRIPTION_FIELD,
