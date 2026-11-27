@@ -231,6 +231,9 @@ export const patchPriceRowFields = (
       if (sub.type === "number" && name.includes("price")) {
         return {
           ...sub,
+          label: name.includes("original")
+            ? "Original price (ETB)"
+            : "Price (ETB)",
           required: priceRequired,
           min: 0,
           admin: priceRequired
