@@ -68,6 +68,7 @@ export const Sellers: CollectionConfig = {
       type: "relationship",
       relationTo: "users",
       required: true,
+      access: { read: isAdmin },
       admin: { position: "sidebar", readOnly: true },
     },
     { name: "storeName", type: "text", required: true },
