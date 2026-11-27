@@ -6,7 +6,7 @@ import { StorefrontShell } from "@/components/storefront/storefront-pages";
 import type { DemoProduct } from "@/lib/demo/catalog";
 
 export default function DemoProductDetail({ product }: { product: DemoProduct }) {
-  return <StorefrontShell eyebrow={\`DEMO LISTING / \${product.category}\`} title={product.title} description="This is a sample product page. It demonstrates the shopping experience; product information, availability and fulfilment are illustrative only.">
+  return <StorefrontShell eyebrow={`DEMO LISTING / ${product.category}`} title={product.title} description="This is a sample product page. It demonstrates the shopping experience; product information, availability and fulfilment are illustrative only.">
     <div className="grid gap-8 lg:grid-cols-[1fr_.9fr]">
       <div className="relative aspect-square overflow-hidden rounded-3xl border border-white/10 bg-[#101a28]">
         <Image src={product.image} alt={product.title} fill unoptimized priority className="object-cover" />

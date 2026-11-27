@@ -110,8 +110,6 @@ html, html[data-theme="light"], html[data-theme="dark"] {
 }
 
 
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap');
-
 .sv-marketplace{--sv-bg:#070b13;--sv-panel:#101a29;--sv-panel-2:#152337;--sv-text:#f5f8fc;--sv-muted:#9aa9bc;--sv-line:rgba(255,255,255,.1);--sv-accent:#69e4f2;background:var(--sv-bg);color:var(--sv-text);font-family:'DM Sans','Manrope',sans-serif;min-height:100vh;overflow:hidden;padding-bottom:74px}
 .sv-marketplace *{box-sizing:border-box}
 .sv-marketplace a{color:inherit;text-decoration:none}
