@@ -39,6 +39,12 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
     ALTER TABLE "products_rels"
       ADD COLUMN IF NOT EXISTS "sellers_id" integer REFERENCES "sellers"("id") ON DELETE SET NULL;
 
+    ALTER TABLE "orders"
+      ADD COLUMN IF NOT EXISTS "is_demo_order" boolean DEFAULT true NOT NULL;
+
+    ALTER TABLE "orders_items"
+      ADD COLUMN IF NOT EXISTS "is_demo" boolean DEFAULT false NOT NULL;
+
     ALTER TABLE "reviews"
       ADD COLUMN IF NOT EXISTS "is_demo" boolean DEFAULT false NOT NULL,
       ADD COLUMN IF NOT EXISTS "verified_purchase" boolean DEFAULT false NOT NULL;
@@ -55,6 +61,8 @@ export async function down({ db }: MigrateDownArgs): Promise<void> {
     DROP INDEX IF EXISTS "products_is_demo_idx";
     DROP INDEX IF EXISTS "products_listing_status_idx";
     ALTER TABLE "products_rels" DROP COLUMN IF EXISTS "sellers_id";
+    ALTER TABLE "orders_items" DROP COLUMN IF EXISTS "is_demo";
+    ALTER TABLE "orders" DROP COLUMN IF EXISTS "is_demo_order";
     ALTER TABLE "reviews" DROP COLUMN IF EXISTS "verified_purchase", DROP COLUMN IF EXISTS "is_demo";
     ALTER TABLE "products" DROP COLUMN IF EXISTS "listing_status", DROP COLUMN IF EXISTS "is_demo", DROP COLUMN IF EXISTS "demo_image_url", DROP COLUMN IF EXISTS "product_image_url";
     DROP TABLE IF EXISTS "sellers_rels";
