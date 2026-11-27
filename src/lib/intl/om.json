@@ -47,5 +47,66 @@
       "yourCart": "Gaarii bituu kee",
       "total": "Waliigala"
     }
+  },
+  "blocks": {
+    "gallery": {
+      "select_image": "Suuraa filadhu"
+    }
+  },
+  "review_form": {
+    "open_button": "Yaada barreessi",
+    "title": "Yaada dabaladhu",
+    "subtitle": "Muuxannoo oomisha kanaa qoodadhu",
+    "close_button": "Cufi",
+    "cancel_button": "Haqi",
+    "submit_button": "Yaada ergi",
+    "submit_sending": "Ergaa jira...",
+    "close_aria": "Foddaa cufi",
+    "toast_success": "Galatoomi! Yaadni kee dabalameera.",
+    "toast_failed": "Yaada erguun hin milkoofne",
+    "validation": {
+      "too_short": "{field} baay'ee gabaabaa dha (xiqqaan {min})",
+      "too_long": "{field} baay'ee dheeraa dha (baay'inni {max})"
+    },
+    "fields": {
+      "authorName": {
+        "label": "Maqaa",
+        "required": "Barbaachisa"
+      },
+      "authorEmail": {
+        "label": "Imeelii (filannoo)",
+        "invalid": "Imeelii sirrii galchi"
+      },
+      "title": {
+        "label": "Mata-duree",
+        "required": "Barbaachisa"
+      },
+      "rating": {
+        "label": "Sadarkaa",
+        "aria": "5 keessaa {value} kenni"
+      },
+      "body": {
+        "label": "Yaada",
+        "required": "Barbaachisa"
+      }
+    }
+  },
+  "order_notifier": {
+    "whatsappAdmin": "📦 Ajajni haaraan fudhatame → ",
+    "email": {
+      "subjectPrefix": "Mirkaneessa ajajaa - Lakkoofsa",
+      "greeting": "Akkam",
+      "confirmation": "Ajajni kee milkaa'inaan nu gaheera.",
+      "total": "Waliigala kaffalamu:",
+      "orderNumber": "Lakkoofsa ajajaa:",
+      "thanks": "Nu waliin bituu keetiif galatoomi 💚",
+      "headers": {
+        "image": "Suuraa",
+        "product": "Oomisha",
+        "quantity": "Baay'ina",
+        "price": "Gatii",
+        "total": "Waliigala"
+      }
+    }
   }
 }
