@@ -93,7 +93,7 @@ export function ProductGrid({ products }: { products: Product[] }) {
         const href = `/product/${product.slug}`;
         return (
           <article key={product.id} className="group overflow-hidden rounded-2xl border border-white/10 bg-[#101a28] transition duration-300 hover:-translate-y-1 hover:border-cyan-200/50 hover:shadow-[0_20px_60px_rgba(0,0,0,.28)]">
-            <Link href={href} target={external ? "_blank" : undefined} rel={external ? "noopener noreferrer" : undefined} className="block">
+            <Link href={href} className="block">
               <div className="relative aspect-square overflow-hidden bg-[#172436]">
                 {image ? <Image src={image} alt={product.title} fill unoptimized sizes="(max-width: 768px) 100vw, 25vw" className="object-cover transition duration-700 group-hover:scale-105" /> : <div className="grid h-full place-items-center text-4xl text-cyan-100/30">✦</div>}
                 <span className="absolute left-3 top-3 rounded-full border border-white/15 bg-black/55 px-3 py-1.5 text-[8px] font-bold uppercase tracking-[.12em]">{demo ? "DEMO PRODUCT" : product.listingType === "marketplace_seller" ? "APPROVED SELLER" : "SKY VIEW STORE"}</span>
@@ -103,7 +103,7 @@ export function ProductGrid({ products }: { products: Product[] }) {
                 {demo ? <p className="mt-2 inline-flex rounded-full border border-amber-300/30 bg-amber-300/10 px-2 py-1 text-[8px] font-bold tracking-wider text-amber-200">DEMO · SIMULATED ORDER</p> : null}
                 <div className="mt-4 flex items-center justify-between border-t border-white/10 pt-4">
                   <div><p className="text-sm font-bold">{formatPrice(price)}</p>{product.originalPriceInUSD && product.originalPriceInUSD > price ? <p className="mt-1 text-[10px] text-white/35 line-through">{formatPrice(product.originalPriceInUSD)}</p> : null}</div>
-                  <span className="grid size-9 place-items-center rounded-full border border-cyan-200/40 text-cyan-100 transition group-hover:bg-cyan-200 group-hover:text-[#07111a]">{external ? "↗" : "→"}</span>
+                  <span className="grid size-9 place-items-center rounded-full border border-cyan-200/40 text-cyan-100 transition group-hover:bg-cyan-200 group-hover:text-[#07111a]">{"→"}</span>
                 </div>
               </div>
             </Link>
