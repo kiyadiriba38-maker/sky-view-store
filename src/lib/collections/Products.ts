@@ -101,6 +101,44 @@ export const Products: CollectionOverride = ({ defaultCollection }) => {
           "Original price in Ethiopian birr (ETB), before discount. Shown as a strikethrough price when set.",
       },
     },
+    {
+      name: "listingType",
+      type: "select",
+      required: true,
+      defaultValue: "own_store",
+      options: [
+        { label: "Sky View Store product", value: "own_store" },
+        { label: "External marketplace listing", value: "external" },
+      ],
+      admin: {
+        position: "sidebar",
+        description: "Choose whether customers order from Sky View Store or visit an external seller.",
+      },
+    },
+    {
+      name: "externalMarketplace",
+      type: "select",
+      options: [
+        { label: "Jiji Ethiopia", value: "jiji" },
+        { label: "Amazon", value: "amazon" },
+        { label: "eBay", value: "ebay" },
+        { label: "Other seller", value: "other" },
+      ],
+      admin: {
+        position: "sidebar",
+        condition: (_, siblingData) => siblingData?.listingType === "external",
+        description: "Marketplace hosting the original listing.",
+      },
+    },
+    {
+      name: "externalUrl",
+      type: "text",
+      admin: {
+        position: "sidebar",
+        condition: (_, siblingData) => siblingData?.listingType === "external",
+        description: "Full URL to the original seller's product page. Customers will be sent there to buy.",
+      },
+    },
     DESCRIPTION_FIELD,
     {
       name: "gallery",
