@@ -300,6 +300,7 @@ export const Products: CollectionOverride = ({ defaultCollection }) => {
         "title",
         "isDemo",
         "listingStatus",
+        "listingPolicyReviewed",
         "seller",
         "enableVariants",
         "_status",
