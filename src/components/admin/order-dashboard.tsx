@@ -254,7 +254,7 @@ const OrderDashboardInner = () => {
         <div>
           <p>{t("eyebrow")}</p>
           <h1>{t("title")}</h1>
-          <span>{t("description")}</span>
+          <span>{t("description")}</span><small className="order-dashboard__revenue-note">{t("revenueNote")}</small>
         </div>
         <div className="order-dashboard__header-actions">
           <Link
@@ -410,7 +410,7 @@ const OrderDashboardInner = () => {
                       <td>
                         <Link href={`/admin/collections/orders/${order.id}`}>
                           <strong>{order.name}</strong>
-                          <span>{order.email}</span>
+                          <span>{order.email}</span>{order.isDemoOrder ? <small className="order-dashboard__demo-label">{t("demoOrder")}</small> : null}
                         </Link>
                       </td>
                       <td>{dateFormatter.format(new Date(order.createdAt))}</td>
