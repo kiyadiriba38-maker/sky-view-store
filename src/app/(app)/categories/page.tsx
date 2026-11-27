@@ -11,7 +11,7 @@ export const metadata: Metadata = { title: "Categories | Sky View Store", descri
 
 export default async function CategoriesPage() {
   const categories = await DAL.queryArchiveCategories({ limit: 0 });
-  return <StorefrontShell eyebrow="Browse by interest / 03" title="Explore every category." description="Discover products across technology, fashion, home, beauty, sports, automotive, hobbies and more. Demo catalogue categories are available immediately; real product availability depends on published listings.">
+  return <StorefrontShell page="categories" eyebrow="Browse by interest / 03" title="Explore every category." description="Discover products across technology, fashion, home, beauty, sports, automotive, hobbies and more. Demo catalogue categories are available immediately; real product availability depends on published listings.">
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
       {DEMO_CATEGORIES.map((category,index)=><Link key={category.slug} href={`/shop?category=${category.slug}`} className="group relative min-h-48 overflow-hidden rounded-2xl border border-white/10 bg-[#101a28]">
         <Image src={category.image} alt="" fill unoptimized sizes="(max-width: 640px) 50vw, 25vw" className="object-cover transition duration-700 group-hover:scale-105"/>
