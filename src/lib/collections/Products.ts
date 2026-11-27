@@ -27,6 +27,19 @@ const publicProductListings: Where = { and: [{ _status: { equals: "published" } 
 
 const readMarketplaceProducts: Access = async ({ req }) => {
   if (req.user?.roles?.includes("admin")) return true;
+  if (!req.user) return publicProductListings;
+  const sellers = await req.payload.find({
+    collection: "sellers" as never,
+    depth: 0,
+    limit: 100,
+    where: { owner: { equals: req.user.id } },
+  });
+  const ids = (sellers.docs as Array<{ id: number }>).map((seller) => seller.id);
+  return ids.length ? ({ or: [publicProductListings, { seller: { in: ids } }] } as Where) : publicProductListings;
+};
+
+const canCreateSellerProduct: Access = async ({ req }) => {
+  if (req.user?.roles?.includes("admin")) return true;
   if (!req.user) return false;
   const sellers = await req.payload.find({
     collection: "sellers" as never,
@@ -216,7 +229,7 @@ export const Products: CollectionOverride = ({ defaultCollection }) => {
     {
       name: "externalUrl",
       type: "text",
-      validate: (value) => {
+      validate: (value: unknown) => {
         if (!value) return true;
         try {
           const url = new URL(String(value));
@@ -277,19 +290,7 @@ export const Products: CollectionOverride = ({ defaultCollection }) => {
   return {
     ...defaultCollection,
     access: {
-      read: async ({ req }) => {
-        if (req.user?.roles?.includes("admin")) return true;
-        const publicListings = { and: [{ _status: { equals: "published" } }, { listingStatus: { equals: "approved" } }] };
-        if (!req.user) return publicListings;
-        const sellers = await req.payload.find({
-          collection: "sellers" as never,
-          depth: 0,
-          limit: 100,
-          where: { owner: { equals: req.user.id } },
-        });
-        const ids = (sellers.docs as Array<{ id: number }>).map((seller) => seller.id);
-        return ids.length ? ({ or: [publicProductListings, { seller: { in: ids } }] } as Where) : publicProductListings;
-      },
+      read: readMarketplaceProducts,
       create: canCreateSellerProduct,
       update: canManageSellerProducts,
       delete: adminOnlyAccess.delete,
