@@ -278,7 +278,8 @@
     "googlePending": "Google sign-in will appear once the store's Google client ID is configured.",
     "newToStore": "New to Sky View Store?",
     "alreadyHaveAccount": "Already have an account?",
-    "paymentsDemoOnly": "Your account is for customer shopping features. Payments on this site remain demo-only."
+    "paymentsDemoOnly": "Your account is for customer shopping features. Payments on this site remain demo-only.",
+    "notificationsLink": "Notifications"
   },
   "seller": {
     "accountLink": "Customer account",
@@ -433,5 +434,18 @@
     "dealsTitle": "Deals worth discovering.",
     "dealsDescription": "Only products with an original price and a lower current price set by the store admin appear here.",
     "newest": "Newest"
+  },
+  "notifications": {
+    "title": "Your notifications",
+    "description": "Updates about your orders, seller application and store activity.",
+    "markAll": "Mark all as read",
+    "unread": "Unread",
+    "read": "Read",
+    "empty": "You're all caught up.",
+    "open": "Open update",
+    "loading": "Loading notifications…",
+    "error": "We couldn't load your notifications. Please try again.",
+    "signIn": "Sign in to view your notifications.",
+    "back": "Back to account"
   }
 }
