@@ -16,6 +16,7 @@ export default function ProductDescription({
   return (
     <div className="flex flex-col gap-6">
       <div className="border-b pb-6">
+        {Boolean((product as ProductSinglePage & { isDemo?: boolean }).isDemo) ? <span className="mb-3 inline-flex rounded-full border border-amber-400/40 bg-amber-400/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-amber-700 dark:text-amber-300">Demo product · simulated order</span> : null}
         <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
           <h1
             dir={rtl ? "rtl" : "ltr"}
