@@ -15,6 +15,7 @@ import {
 } from "@/lib/collections/base-fields";
 import { makeRevalidateHooks, normalizeFaqs } from "@/lib/collections/hooks";
 import { createStoreNotification } from "@/lib/core/notifications";
+import { createStoreAuditLog } from "@/lib/core/audit-log";
 import { CollectionName, RoutePath } from "@/lib/core/types/types";
 
 const getFieldName = (field: Field) =>
@@ -337,6 +338,23 @@ export const Products: CollectionOverride = ({ defaultCollection }) => {
             previousDoc?._status !== doc._status;
 
           if (sellerId && statusChanged) {
+            if (req.user && operation === "create") {
+              await createStoreAuditLog(req.payload, {
+                actor: req.user.id,
+                action: "product_listing_submitted",
+                targetCollection: "products",
+                targetId: doc.id,
+                summary: `Product listing "${doc.title}" submitted for moderation.`,
+              });
+            } else if (req.user && isAdmin({ req })) {
+              await createStoreAuditLog(req.payload, {
+                actor: req.user.id,
+                action: "product_listing_reviewed",
+                targetCollection: "products",
+                targetId: doc.id,
+                summary: `Product listing "${doc.title}" changed to ${String(doc.listingStatus ?? "pending")} / ${String(doc._status ?? "draft")}.`,
+              });
+            }
             const listingStatus = doc.listingStatus ?? "pending";
             const statusLabel = listingStatus === "approved" && doc._status === "published"
               ? "approved and published"
