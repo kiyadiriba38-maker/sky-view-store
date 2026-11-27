@@ -278,6 +278,15 @@
     "customerReview": "የደንበኛ ግምገማ",
     "noReviewsYet": "እስካሁን ግምገማ የለም።",
     "honestFeedback": "ሌሎች ገዢዎችን ለመርዳት ጠቃሚ እና ታማኝ አስተያየት ያካፍሉ።",
-    "reviewEmptyTitle": "የእርስዎ ልምድ እዚህ ይጠበቃል።"
+    "reviewEmptyTitle": "የእርስዎ ልምድ እዚህ ይጠበቃል።",
+    "shopEyebrow": "የገበያ ምርቶች / 01",
+    "shopTitle": "ገበያውን ይመልከቱ።",
+    "shopDescription": "1,000+ በግልጽ የተለዩ የሙከራ ምርቶችን ከስካይ ቪው ስቶር እና ከተፈቀዱ ሻጮች እውነተኛ ምርቶች ጋር ያግኙ። የሙከራ ምርቶች ለማሳያ ብቻ ናቸው።",
+    "categoriesEyebrow": "በፍላጎት ይመልከቱ / 03",
+    "categoriesTitle": "ሁሉንም ምድቦች ይመልከቱ።",
+    "categoriesDescription": "የቴክኖሎጂ፣ ፋሽን፣ ቤት፣ ውበት፣ ስፖርት፣ መኪና እና ሌሎች ምድቦችን ይመልከቱ። የሙከራ ምድቦች አሁኑኑ ይገኛሉ።",
+    "dealsEyebrow": "ቅናሾች / 02",
+    "dealsTitle": "ሊታዩ የሚገቡ ቅናሾች።",
+    "dealsDescription": "በአስተዳዳሪው የተቀመጠ የቀድሞ ዋጋ እና ዝቅተኛ የአሁኑ ዋጋ ያላቸው ምርቶች ብቻ እዚህ ይታያሉ።"
   }
 }
