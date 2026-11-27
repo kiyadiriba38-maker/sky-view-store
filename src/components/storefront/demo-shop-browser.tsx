@@ -17,14 +17,15 @@ export default function DemoShopBrowser({ realProducts }: Props) {
   const [page,setPage]=useState(1);
   useEffect(()=>{const params=new URLSearchParams(window.location.search);const selected=params.get("category");if(selected)setCategory(selected)},[]);
   const real=useMemo(()=>realProducts.map(product=>{
-    const demo=Boolean(product.isDemo);
-    const categories=Array.isArray(product.categories)?product.categories:[];
+    const extended=product as Product & {isDemo?:boolean;demoImageUrl?:string|null;productImageUrl?:string|null};
+    const demo=Boolean(extended.isDemo);
+    const categories=Array.isArray(product.categories)?product.categories as Array<{title?:string;slug?:string}>:[];
     const firstCategory=categories.find((category)=>typeof category==="object"&&category!==null);
-    const category=firstCategory&&typeof firstCategory==="object"?"title" in firstCategory&&typeof firstCategory.title==="string"?firstCategory.title:"Marketplace":"Marketplace";
-    const categorySlug=firstCategory&&typeof firstCategory==="object"&&"slug" in firstCategory&&typeof firstCategory.slug==="string"?firstCategory.slug:"real-products";
-    const imageUrl=demo?product.demoImageUrl:product.productImageUrl;
+    const category=firstCategory?.title??"Marketplace";
+    const categorySlug=firstCategory?.slug??"real-products";
+    const imageUrl=demo?extended.demoImageUrl:extended.productImageUrl;
     const image=imageUrl||(product.meta?.image&&typeof product.meta.image==="object"?resolveMediaUrl(product.meta.image):DEMO_CATEGORIES[2].image);
-    return {id:`database-${product.id}`,slug:product.slug,title:product.title,category,categorySlug,price:Number(product.priceInUSD??0),image,demo,databaseBacked:true as const};
+    return {id:`database-${product.id}`,slug:product.slug,title:product.title,category,categorySlug,priceETB:Number(product.priceInUSD??0),image,demo,databaseBacked:true as const};
   }),[realProducts]);
   const demoFallback=real.some(item=>item.demo)?[]:DEMO_PRODUCTS;
   const categoryOptions=useMemo(()=>{
@@ -49,7 +50,7 @@ export default function DemoShopBrowser({ realProducts }: Props) {
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
       {shown.map(item=>{
         const href=item.demo&&!((item as (typeof real)[number]).databaseBacked)?`/demo-product/${item.slug}`: `/product/${item.slug}`;
-        const price=item.demo?item.priceETB:(item as (typeof real)[number]).price;
+        const price=item.priceETB;
         return <article key={item.id} className="group overflow-hidden rounded-2xl border border-white/10 bg-[#101a28] transition hover:-translate-y-1 hover:border-cyan-200/50">
           <Link href={href} className="block"><div className="relative aspect-square bg-[#172436]"><Image src={item.image} alt={item.title} fill unoptimized sizes="(max-width: 640px) 50vw, 20vw" className="object-cover transition duration-500 group-hover:scale-105"/><span className={`absolute left-2 top-2 rounded-full px-2 py-1 text-[8px] font-black tracking-wider ${item.demo?"bg-amber-300 text-slate-950":"bg-emerald-300 text-slate-950"}`}>{item.demo?"DEMO":"REAL PRODUCT"}</span></div><div className="p-3"><p className="text-[9px] uppercase tracking-wider text-white/45">{item.category}</p><h2 className="mt-1 line-clamp-2 min-h-9 text-xs font-semibold leading-5">{item.title}</h2><p className="mt-3 text-sm font-extrabold">{new Intl.NumberFormat("en-ET",{style:"currency",currency:"ETB",maximumFractionDigits:0}).format(price)}</p><p className="mt-1 text-[9px] text-white/40">{item.demo?"Simulated listing · no real stock":"Published marketplace listing"}</p></div></Link>
         </article>
