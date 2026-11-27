@@ -29,7 +29,7 @@ export default function CartPageClient() {
             <Link href={`/product/${product.slug}`} className="min-w-0 flex-1">
               <p className="font-semibold">{product.title}</p>
               {isVariant && variant ? <p className="mt-1 text-xs text-white/45">{Array.isArray(variant.options) ? variant.options.map((option) => typeof option === "object" && option && "label" in option ? String(option.label) : null).filter(Boolean).join(" / ") : ""}</p> : null}
-              <p className="mt-3 text-sm font-bold"><Price amount={price} /></p>
+              {typeof price === "number" ? <p className="mt-3 text-sm font-bold"><Price amount={price} /></p> : null}
               {typeof originalPrice === "number" ? <p className="text-xs text-white/35 line-through"><Price amount={originalPrice} /></p> : null}
             </Link>
             <div className="flex items-center justify-between gap-4 sm:justify-end">
