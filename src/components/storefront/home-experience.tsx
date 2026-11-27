@@ -13,6 +13,7 @@ type CatalogProduct = {
   listingType?: "own_store" | "marketplace_seller" | "external" | null;
   isDemo?: boolean;
   demoImageUrl?: string | null;
+  category?: string;
   externalUrl?: string | null;
 };
 
@@ -44,7 +45,7 @@ const categoryTiles = [
   { name: "Lifestyle", count: "06", copy: "The pieces that go places.", image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=1000&q=85" },
 ];
 
-const filters = ["All", "Tech", "Audio", "Wearables", "Cameras", "Workspace", "Home", "Lifestyle", "Accessories"];
+const filters = ["All", "Demo", "Real", "Phones & Accessories", "Computers & Office", "Electronics", "Audio & Headphones", "Home & Living", "Fashion", "Beauty & Personal Care", "Sports & Outdoors"];
 
 const formatETB = (amount: number) =>
   new Intl.NumberFormat("en-ET", { style: "currency", currency: "ETB", maximumFractionDigits: 0 }).format(amount);
@@ -58,14 +59,15 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
     const items = live
       ? catalogProducts.slice(0, 24).map((item, index) => ({
           name: item.title,
-          category: "Store catalogue",
+          category: item.category || "Marketplace",
           image: item.image || item.demoImageUrl || previewProducts[index % previewProducts.length].image,
           tag: item.isDemo ? "DEMO PRODUCT" : item.listingType === "external" ? "EXTERNAL LISTING" : item.listingType === "marketplace_seller" ? "APPROVED SELLER" : "SKY VIEW STORE",
           price: formatETB(item.price),
           oldPrice: item.originalPrice && item.originalPrice > item.price ? formatETB(item.originalPrice) : null,
           href: item.listingType === "external" && item.externalUrl && /^https?:\/\//i.test(item.externalUrl) ? item.externalUrl : `/product/${item.slug}`,
           external: item.listingType === "external" && Boolean(item.externalUrl && /^https?:\/\//i.test(item.externalUrl)),
-          preview: Boolean(item.isDemo),
+          preview: false,
+          isDemo: Boolean(item.isDemo),
         }))
       : previewProducts.map((item) => ({
           name: item.name,
@@ -77,10 +79,11 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
           href: null as string | null,
           external: false,
           preview: true,
+          isDemo: false,
         }));
     return items.filter((item) => {
       const matchesQuery = `${item.name} ${item.category}`.toLowerCase().includes(query.toLowerCase());
-      const matchesFilter = activeFilter === "All" || item.category.toLowerCase() === activeFilter.toLowerCase();
+      const matchesFilter = activeFilter === "All" || (activeFilter === "Demo" ? item.isDemo : activeFilter === "Real" ? !item.isDemo && !item.preview : item.category.toLowerCase() === activeFilter.toLowerCase());
       return matchesQuery && matchesFilter;
     });
   }, [catalogProducts, query, activeFilter]);
@@ -169,7 +172,7 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
             <div className="no-scrollbar mt-8 flex gap-2 overflow-x-auto pb-2">{filters.map((filter) => <button key={filter} onClick={() => setActiveFilter(filter)} className={`shrink-0 rounded-full border px-4 py-2.5 text-[9px] font-bold uppercase tracking-[.14em] transition ${activeFilter === filter ? "border-cyan-200 bg-cyan-200 text-[#07111a]" : "border-white/15 text-white/55 hover:border-cyan-200/60 hover:text-cyan-100"}`}>{filter}</button>)}</div>
             <div className="mt-8 flex items-center justify-between border-b border-white/10 pb-4 text-[9px] font-bold uppercase tracking-[.2em] text-white/35"><span>{cards.length} {catalogProducts.length ? "catalogue items" : "preview concepts"}</span><span>{catalogProducts.length ? "Published listings" : "Concept preview only"}</span></div>
             {cards.length ? <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {cards.map((product, index) => <article key={product.name} className="group overflow-hidden rounded-2xl border border-white/10 bg-[#111a27] transition duration-500 hover:-translate-y-1 hover:border-cyan-200/45 hover:shadow-[0_24px_60px_rgba(0,0,0,.3)]"><div className="relative aspect-[4/4.2] overflow-hidden bg-[#182333]"><Image src={product.image} alt={product.name} fill unoptimized sizes="(max-width: 768px) 100vw, 25vw" className="object-cover transition duration-700 group-hover:scale-105" /><div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" /><span className="absolute left-3 top-3 rounded-full border border-white/20 bg-black/40 px-3 py-1.5 text-[8px] font-bold uppercase tracking-[.15em] backdrop-blur">{product.preview ? "Preview concept" : product.tag}</span><span className="absolute bottom-3 right-4 text-[9px] font-bold tracking-[.2em] text-white/65">{String(index + 1).padStart(2, "0")}</span></div><div className="p-4 sm:p-5"><p className="text-[8px] font-bold uppercase tracking-[.22em] text-cyan-200/70">{product.category}</p><h3 className="mt-2 min-h-11 text-sm font-semibold leading-5">{product.name}</h3><div className="mt-4 flex items-center justify-between border-t border-white/10 pt-4"><div>{product.price ? <><p className="text-sm font-bold">{product.price}</p>{product.oldPrice ? <p className="mt-1 text-[10px] text-white/35 line-through">{product.oldPrice}</p> : null}</> : <p className="text-[9px] font-semibold uppercase tracking-[.12em] text-white/35">Not listed for sale</p>}</div>{product.href ? <a href={product.href} target={product.external ? "_blank" : undefined} rel={product.external ? "noopener noreferrer" : undefined} className="grid size-10 place-items-center rounded-full border border-cyan-200/50 text-cyan-100 transition group-hover:bg-cyan-200 group-hover:text-[#07111a]">{product.external ? "↗" : "→"}</a> : <span className="rounded-full border border-white/10 px-3 py-2 text-[8px] font-bold uppercase tracking-[.12em] text-white/35">Preview</span>}</div></div></article>)}
+              {cards.map((product, index) => <article key={product.name} className="group overflow-hidden rounded-2xl border border-white/10 bg-[#111a27] transition duration-500 hover:-translate-y-1 hover:border-cyan-200/45 hover:shadow-[0_24px_60px_rgba(0,0,0,.3)]"><div className="relative aspect-[4/4.2] overflow-hidden bg-[#182333]"><Image src={product.image} alt={product.name} fill unoptimized sizes="(max-width: 768px) 100vw, 25vw" className="object-cover transition duration-700 group-hover:scale-105" /><div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" /><span className="absolute left-3 top-3 rounded-full border border-white/20 bg-black/40 px-3 py-1.5 text-[8px] font-bold uppercase tracking-[.15em] backdrop-blur">{product.preview ? "Preview concept" : product.isDemo ? "DEMO PRODUCT" : product.tag}</span><span className="absolute bottom-3 right-4 text-[9px] font-bold tracking-[.2em] text-white/65">{String(index + 1).padStart(2, "0")}</span></div><div className="p-4 sm:p-5"><p className="text-[8px] font-bold uppercase tracking-[.22em] text-cyan-200/70">{product.category}</p><h3 className="mt-2 min-h-11 text-sm font-semibold leading-5">{product.name}</h3><div className="mt-4 flex items-center justify-between border-t border-white/10 pt-4"><div>{product.price ? <><p className="text-sm font-bold">{product.price}</p>{product.oldPrice ? <p className="mt-1 text-[10px] text-white/35 line-through">{product.oldPrice}</p> : null}</> : <p className="text-[9px] font-semibold uppercase tracking-[.12em] text-white/35">Not listed for sale</p>}</div>{product.href ? <a href={product.href} target={product.external ? "_blank" : undefined} rel={product.external ? "noopener noreferrer" : undefined} className="grid size-10 place-items-center rounded-full border border-cyan-200/50 text-cyan-100 transition group-hover:bg-cyan-200 group-hover:text-[#07111a]">{product.external ? "↗" : "→"}</a> : <span className="rounded-full border border-white/10 px-3 py-2 text-[8px] font-bold uppercase tracking-[.12em] text-white/35">Preview</span>}</div></div></article>)}
             </div> : <div className="mt-5 rounded-2xl border border-dashed border-white/15 px-6 py-16 text-center"><p className="text-lg font-semibold">No matching products</p><p className="mt-2 text-xs text-white/40">Try another search or choose a different category.</p><button onClick={() => { setQuery(""); setActiveFilter("All"); }} className="mt-5 rounded-full border border-cyan-200/50 px-5 py-3 text-[9px] font-bold uppercase tracking-[.15em] text-cyan-100 transition hover:bg-cyan-200 hover:text-[#07111a]">Clear filters</button></div>}
           </div>
         </section>
