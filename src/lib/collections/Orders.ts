@@ -441,7 +441,7 @@ export const Orders: CollectionOverride = ({ defaultCollection }) => {
             });
           }
 
-          const snapshot = items
+          const snapshot = verifiedItems
             .map((it) => {
               const quantity = Number(it?.quantity ?? 0);
               if (!quantity) return null;
