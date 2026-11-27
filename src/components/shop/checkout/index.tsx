@@ -3,7 +3,7 @@
 import { useCart } from "@payloadcms/plugin-ecommerce/client/react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import CheckoutForm from "@/components/shop/checkout/checkout-form";
 import CheckoutSummary from "@/components/shop/checkout/checkout-summary";
@@ -13,6 +13,18 @@ export default function CheckoutClient() {
   const t = useTranslations("checkout.page");
   const { cart, clearCart } = useCart();
   const [successOrderId, setSuccessOrderId] = useState<string | null>(null);
+  const [authStatus, setAuthStatus] = useState<"loading" | "signed-in" | "signed-out">("loading");
+
+  useEffect(() => {
+    let active = true;
+    fetch("/api/users/me", { credentials: "include", cache: "no-store" })
+      .then(async (response) => {
+        const data = response.ok ? await response.json().catch(() => null) : null;
+        if (active) setAuthStatus(data?.user ? "signed-in" : "signed-out");
+      })
+      .catch(() => { if (active) setAuthStatus("signed-out"); });
+    return () => { active = false; };
+  }, []);
 
   const cartIsEmpty = !cart?.items?.length;
 
@@ -32,6 +44,24 @@ export default function CheckoutClient() {
         >
           {t("continueShopping")}
         </Link>
+      </div>
+    );
+  }
+
+  if (authStatus === "loading" && !successOrderId) {
+    return <div className="my-8 rounded-2xl border border-white/10 bg-white/[.03] p-8 text-center text-sm text-muted-foreground">Checking your customer account…</div>;
+  }
+
+  if (authStatus === "signed-out" && !successOrderId) {
+    return (
+      <div className="mx-auto my-8 w-full max-w-xl rounded-2xl border border-cyan-200/20 bg-cyan-200/5 p-7 text-center">
+        <p className="text-[10px] font-bold uppercase tracking-[.2em] text-cyan-200">Customer sign-in required</p>
+        <h2 className="mt-3 text-2xl font-semibold">Sign in to continue checkout.</h2>
+        <p className="mt-3 text-sm leading-6 text-muted-foreground">Your cart is kept separate from your account. Sign in or create a customer account to place a demo order.</p>
+        <div className="mt-6 flex flex-wrap justify-center gap-3">
+          <Link href="/account/login?next=%2Fcheckout" className="rounded-full bg-cyan-200 px-6 py-3 text-xs font-bold text-slate-950">Sign in</Link>
+          <Link href="/account/register?next=%2Fcheckout" className="rounded-full border border-white/20 px-6 py-3 text-xs font-bold">Create account</Link>
+        </div>
       </div>
     );
   }
