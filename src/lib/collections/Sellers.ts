@@ -1,6 +1,12 @@
-import type { Access, CollectionConfig } from "payload";
+import type { Access, CollectionConfig, Where } from "payload";
 
 import { isAdmin } from "@/lib/collections/base-fields";
+
+const readSellerProfiles: Access = ({ req }) => {
+  if (isAdmin({ req })) return true;
+  if (!req.user) return { approvalStatus: { equals: "approved" } } as Where;
+  return { or: [{ approvalStatus: { equals: "approved" } }, { owner: { equals: req.user.id } }] } as Where;
+};
 
 const isOwnerOrAdmin: Access = ({ req }) => {
   if (!req.user) return false;
@@ -19,16 +25,7 @@ export const Sellers: CollectionConfig = {
     description: "Seller applications and approved marketplace stores.",
   },
   access: {
-    read: ({ req }) => {
-      if (isAdmin({ req })) return true;
-      if (!req.user) return { approvalStatus: { equals: "approved" } };
-      return {
-        or: [
-          { approvalStatus: { equals: "approved" } },
-          { owner: { equals: req.user.id } },
-        ],
-      };
-    },
+    read: readSellerProfiles,
     create: ({ req }) => Boolean(req.user),
     update: isOwnerOrAdmin,
     delete: isAdmin,
