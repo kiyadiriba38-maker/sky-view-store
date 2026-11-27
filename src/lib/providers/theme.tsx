@@ -4,8 +4,8 @@ import { createContext, useCallback, useContext, useEffect, useState } from "rea
 
 import type { ReactNode } from "react";
 
-export const themeLocalStorageKey = "payload-theme";
-export const defaultTheme: Theme = "light";
+export const themeLocalStorageKey = "sv-theme";
+export const defaultTheme: Theme = "dark";
 export type Theme = "dark" | "light";
 
 export interface ThemeContextType {
