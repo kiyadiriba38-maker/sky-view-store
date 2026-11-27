@@ -133,6 +133,17 @@ export const Products: CollectionOverride = ({ defaultCollection }) => {
     {
       name: "externalUrl",
       type: "text",
+      validate: (value) => {
+        if (!value) return true;
+        try {
+          const url = new URL(String(value));
+          return url.protocol === "https:" || url.protocol === "http:"
+            ? true
+            : "Use a valid http or https seller URL.";
+        } catch {
+          return "Enter a valid seller URL beginning with https://.";
+        }
+      },
       admin: {
         position: "sidebar",
         condition: (_, siblingData) => siblingData?.listingType === "external",
