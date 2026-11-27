@@ -204,46 +204,10 @@ export const Products: CollectionOverride = ({ defaultCollection }) => {
       options: [
         { label: "Sky View Store product", value: "own_store" },
         { label: "Approved marketplace seller", value: "marketplace_seller" },
-        { label: "External marketplace listing", value: "external" },
       ],
       admin: {
         position: "sidebar",
         description: "Choose whether customers order from Sky View Store or visit an external seller.",
-      },
-    },
-    {
-      name: "externalMarketplace",
-      type: "select",
-      options: [
-        { label: "Jiji Ethiopia", value: "jiji" },
-        { label: "Amazon", value: "amazon" },
-        { label: "eBay", value: "ebay" },
-        { label: "Other seller", value: "other" },
-      ],
-      admin: {
-        position: "sidebar",
-        condition: (_, siblingData) => siblingData?.listingType === "external",
-        description: "Marketplace hosting the original listing.",
-      },
-    },
-    {
-      name: "externalUrl",
-      type: "text",
-      validate: (value: unknown) => {
-        if (!value) return true;
-        try {
-          const url = new URL(String(value));
-          return url.protocol === "https:" || url.protocol === "http:"
-            ? true
-            : "Use a valid http or https seller URL.";
-        } catch {
-          return "Enter a valid seller URL beginning with https://.";
-        }
-      },
-      admin: {
-        position: "sidebar",
-        condition: (_, siblingData) => siblingData?.listingType === "external",
-        description: "Full URL to the original seller's product page. Customers will be sent there to buy.",
       },
     },
     DESCRIPTION_FIELD,
