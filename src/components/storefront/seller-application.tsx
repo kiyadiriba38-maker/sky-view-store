@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import type { FormEvent } from "react";
 
 type ApplicationState = "idle" | "submitting" | "pending" | "approved" | "error";
 
@@ -13,7 +14,7 @@ export default function SellerApplication() {
   const [state, setState] = useState<ApplicationState>("idle");
   const [message, setMessage] = useState("");
 
-  async function submit(event: React.FormEvent<HTMLFormElement>) {
+  async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setState("submitting");
     setMessage("");
