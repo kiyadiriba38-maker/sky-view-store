@@ -7,6 +7,7 @@ import ArchiveBlock from "@/components/blocks/archive";
 import GalleryBlock from "@/components/blocks/gallery";
 import ProductDescription from "@/components/shop/product/product-description";
 import ProductReviews from "@/components/shop/product/review";
+import ReportListingButton from "@/components/storefront/report-listing-button";
 
 export default async function ProductPage({
   product,
@@ -14,6 +15,7 @@ export default async function ProductPage({
   product: ProductSinglePage;
 }) {
   const t = await getTranslations("product");
+  const isDemo = Boolean((product as ProductSinglePage & { isDemo?: boolean }).isDemo);
 
   return (
     <div className="container pb-2 ">
@@ -46,6 +48,7 @@ export default async function ProductPage({
         </div>
       ) : null}
       <ProductReviews reviews={product.reviews} productId={product.id} />
+      {!isDemo ? <ReportListingButton productId={product.id} productSlug={product.slug} /> : null}
     </div>
   );
 }
