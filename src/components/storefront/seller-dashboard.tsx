@@ -3,11 +3,15 @@
 import Link from "next/link";
 import type { FormEvent } from "react";
 import { useCallback, useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 
 type Seller = { id: number; storeName: string; approvalStatus: "pending" | "approved" | "suspended" | "rejected"; city?: string };
 type SellerProduct = { id: number; title: string; slug: string; listingStatus?: string; _status?: string; inventory?: number; priceInUSD?: number };
+type SellerMetrics = { totalProducts: number; publishedProducts: number; pendingProducts: number; completedOrders: number; averageRating: number | null; verifiedReviewCount: number; responseTimeHours: number | null; deliveryPerformance: number | null; rank: number | null; approvedSellerCount: number; badges: string[] };
 
 export default function SellerDashboard() {
+  const t = useTranslations("seller");
+  const [metrics, setMetrics] = useState<SellerMetrics | null>(null);
   const [seller, setSeller] = useState<Seller | null>(null);
   const [products, setProducts] = useState<SellerProduct[]>([]);
   const [loading, setLoading] = useState(true);
@@ -34,6 +38,11 @@ export default function SellerDashboard() {
       if (!sellerResponse.ok) throw new Error("Could not load your seller profile.");
       setSeller(current ?? null);
       if (current) {
+        const metricsResponse = await fetch("/api/sellers/me/metrics", { credentials: "include", cache: "no-store" });
+        if (metricsResponse.ok) {
+          const metricsData = await metricsResponse.json();
+          setMetrics(metricsData?.metrics ?? null);
+        }
         const productsUrl = new URL("/api/products", window.location.origin);
         productsUrl.searchParams.set("where[seller][equals]", String(current.id));
         productsUrl.searchParams.set("limit", "100");
@@ -111,6 +120,23 @@ export default function SellerDashboard() {
               <div><p className="text-xs text-white/40">Store profile</p><h2 className="mt-1 text-2xl font-semibold">{seller.storeName}</h2><p className="mt-1 text-xs text-white/45">{seller.city || "Ethiopia"}</p></div>
               <span className={`rounded-full border px-4 py-2 text-[10px] font-bold uppercase tracking-wider ${seller.approvalStatus === "approved" ? "border-emerald-300/30 bg-emerald-300/10 text-emerald-200" : "border-amber-300/30 bg-amber-300/10 text-amber-200"}`}>{seller.approvalStatus}</span>
             </div>
+            <section className="mt-5 rounded-2xl border border-white/10 bg-[#101a28] p-6">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <h2 className="text-lg font-semibold">{t("metricsTitle")}</h2>
+                <span className="text-[9px] uppercase tracking-wider text-white/35">{t("badges")}</span>
+              </div>
+              <p className="mt-2 text-xs leading-6 text-white/45">{t("reputationNote")}</p>
+              <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                <div className="rounded-xl border border-white/10 bg-white/[.025] p-4"><p className="text-[10px] text-white/45">{t("publishedListings")}</p><strong className="mt-2 block text-2xl">{metrics?.publishedProducts ?? "—"}</strong></div>
+                <div className="rounded-xl border border-white/10 bg-white/[.025] p-4"><p className="text-[10px] text-white/45">{t("pendingReview")}</p><strong className="mt-2 block text-2xl">{metrics?.pendingProducts ?? "—"}</strong></div>
+                <div className="rounded-xl border border-white/10 bg-white/[.025] p-4"><p className="text-[10px] text-white/45">{t("completedOrders")}</p><strong className="mt-2 block text-2xl">{metrics?.completedOrders ?? "—"}</strong></div>
+                <div className="rounded-xl border border-white/10 bg-white/[.025] p-4"><p className="text-[10px] text-white/45">{t("verifiedRating")}</p><strong className="mt-2 block text-lg">{metrics?.averageRating === null || metrics?.averageRating === undefined ? t("awaitingVerifiedReviews") : `${metrics.averageRating.toFixed(2)} / 5 · ${metrics.verifiedReviewCount}`}</strong></div>
+                <div className="rounded-xl border border-white/10 bg-white/[.025] p-4"><p className="text-[10px] text-white/45">{t("responseTime")}</p><strong className="mt-2 block text-sm">{metrics?.responseTimeHours == null ? t("notMeasured") : `${metrics.responseTimeHours} h`}</strong></div>
+                <div className="rounded-xl border border-white/10 bg-white/[.025] p-4"><p className="text-[10px] text-white/45">{t("deliveryPerformance")}</p><strong className="mt-2 block text-sm">{metrics?.deliveryPerformance == null ? t("notMeasured") : `${metrics.deliveryPerformance}%`}</strong></div>
+                <div className="rounded-xl border border-white/10 bg-white/[.025] p-4"><p className="text-[10px] text-white/45">{t("sellerRank")}</p><strong className="mt-2 block text-sm">{metrics?.rank ? `#${metrics.rank} / ${metrics.approvedSellerCount}` : t("notRanked")}</strong></div>
+                <div className="rounded-xl border border-white/10 bg-white/[.025] p-4"><p className="text-[10px] text-white/45">{t("badges")}</p><div className="mt-2 flex flex-wrap gap-1.5">{(metrics?.badges ?? []).map((badge) => <span key={badge} className="rounded-full border border-cyan-200/20 bg-cyan-200/5 px-2 py-1 text-[9px] text-cyan-100">{badge === "Trusted seller" ? t("trustedSeller") : badge === "Top rated" ? t("topRated") : t("newSeller")}</span>)}</div></div>
+              </div>
+            </section>
             {seller.approvalStatus !== "approved" ? (
               <div className="mt-5 rounded-2xl border border-amber-300/20 bg-amber-300/5 p-6 text-sm leading-7 text-amber-100">Your seller application is {seller.approvalStatus}. Product listing tools unlock after an administrator approves your store.</div>
             ) : (
