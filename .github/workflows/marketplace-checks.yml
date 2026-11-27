@@ -1,10 +1,14 @@
 name: Marketplace foundation checks
 
 on:
+  push:
+    branches:
+      - feat/sky-view-marketplace-foundation
   pull_request:
     branches:
       - master
     types: [opened, synchronize, reopened, ready_for_review]
+  workflow_dispatch:
 
 permissions:
   contents: read
