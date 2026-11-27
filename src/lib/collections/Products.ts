@@ -61,7 +61,7 @@ const enforceSellerListing: CollectionBeforeChangeHook = async ({ data, req, ope
   if (operation === "create") {
     return { ...data, seller: seller.id, listingType: "marketplace_seller", isDemo: false, listingStatus: "pending", _status: "draft" };
   }
-  return { ...data, seller: seller.id, listingType: "marketplace_seller", isDemo: false, listingStatus: originalDoc?.listingStatus ?? "pending", _status: "draft" };
+  return { ...data, seller: seller.id, listingType: "marketplace_seller", isDemo: false, listingStatus: "pending", _status: "draft" };
 };
 
 const enhanceVariantField = (field: Field): Field => {
@@ -141,6 +141,16 @@ export const Products: CollectionOverride = ({ defaultCollection }) => {
         description:
           "Original price in Ethiopian birr (ETB), before discount. Shown as a strikethrough price when set.",
       },
+    },
+    {
+      name: "productImageUrl",
+      type: "text",
+      validate: (value) => {
+        if (!value) return true;
+        try { return new URL(String(value)).protocol === "https:" ? true : "Use an HTTPS image URL."; }
+        catch { return "Enter a valid HTTPS image URL."; }
+      },
+      admin: { position: "sidebar", description: "Seller-supplied product image URL. Only use images you are authorized to publish." },
     },
     {
       name: "demoImageUrl",
