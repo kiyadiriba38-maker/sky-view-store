@@ -183,7 +183,9 @@
       "noData": "No data for the selected range",
       "noOrders": "There are no orders yet",
       "errorTitle": "Could not load the orders dashboard",
-      "errorDescription": "Refresh the page or select another date range"
+      "errorDescription": "Refresh the page or select another date range",
+      "revenueNote": "Simulated demo orders are excluded from revenue totals; they remain visible in order counts.",
+      "demoOrder": "DEMO ORDER"
     },
     "orderStatus": {
       "title": "Status",
