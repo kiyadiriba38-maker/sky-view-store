@@ -168,7 +168,7 @@ export const Sellers: CollectionConfig = {
         { label: "Suspended", value: "suspended" },
         { label: "Rejected", value: "rejected" },
       ],
-      access: { read: isAdmin, update: isDesignatedModerator },
+      access: { read: ({ req }) => Boolean(req.user), update: isDesignatedModerator },
       admin: { position: "sidebar" },
     },
     { name: "responseTimeHours", type: "number", min: 0, admin: { readOnly: true } },
