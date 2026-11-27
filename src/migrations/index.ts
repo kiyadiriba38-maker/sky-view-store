@@ -7,6 +7,7 @@ import * as migration_20261127_183000_listing_policy_review from "./20261127_183
 import * as migration_20261127_184000_product_seller_relation from "./20261127_184000_product_seller_relation";
 import * as migration_20261127_191500_notifications from "./20261127_191500_notifications";
 import * as migration_20261127_193500_reports from "./20261127_193500_reports";
+import * as migration_20261127_194500_audit_logs from "./20261127_194500_audit_logs";
 
 export const migrations = [
   {
@@ -53,5 +54,10 @@ export const migrations = [
     up: migration_20261127_193500_reports.up,
     down: migration_20261127_193500_reports.down,
     name: "20261127_193500_reports",
+  },
+  {
+    up: migration_20261127_194500_audit_logs.up,
+    down: migration_20261127_194500_audit_logs.down,
+    name: "20261127_194500_audit_logs",
   },
 ];
