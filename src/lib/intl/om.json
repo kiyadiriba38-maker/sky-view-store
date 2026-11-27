@@ -268,6 +268,16 @@
     "noCategories": "Ramaddiin erga bulchaan maxxanse booda asitti mul'ata.",
     "collection": "WALITTI QABAMA",
     "exploreProductsInCollection": "Oomishaalee walitti qabama kana keessa jiran ilaali.",
-    "exploreCollection": "Walitti qabama ilaali"
+    "exploreCollection": "Walitti qabama ilaali",
+    "communityFeedback": "Hawaasa / yaada oomishaa",
+    "reviewTransparency": "Yaadni kun yaada yaalii yookaan bittaa mirkanaa'e jedhamee adda baafama.",
+    "verifiedPurchasesCount": "Yaada maamilaa {count} mirkanaa'e",
+    "demoSamplesCount": "Fakkeenya yaalii {count} — sadarkaa maamilaa keessaa hin lakkaa'amu",
+    "demoReview": "YAADA YAALII",
+    "verifiedPurchase": "BITTAA MIRKANAA'E",
+    "customerReview": "YAADA MAAMILAA",
+    "noReviewsYet": "Ammaaf yaadni hin jiru.",
+    "honestFeedback": "Maamilaa itti aanu gargaaruuf yaada faayidaa qabu fi dhugaa qoodi.",
+    "reviewEmptyTitle": "Muuxannoon kee asitti barbaachisa."
   }
 }
