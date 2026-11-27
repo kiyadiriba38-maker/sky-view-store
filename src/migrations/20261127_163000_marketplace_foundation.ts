@@ -31,6 +31,7 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
     CREATE INDEX IF NOT EXISTS "sellers_rels_users_idx" ON "sellers_rels" ("users_id");
 
     ALTER TABLE "products"
+      ADD COLUMN IF NOT EXISTS "product_image_url" varchar,
       ADD COLUMN IF NOT EXISTS "demo_image_url" varchar,
       ADD COLUMN IF NOT EXISTS "is_demo" boolean DEFAULT false NOT NULL,
       ADD COLUMN IF NOT EXISTS "listing_status" varchar DEFAULT 'approved' NOT NULL;
@@ -55,7 +56,7 @@ export async function down({ db }: MigrateDownArgs): Promise<void> {
     DROP INDEX IF EXISTS "products_listing_status_idx";
     ALTER TABLE "products_rels" DROP COLUMN IF EXISTS "sellers_id";
     ALTER TABLE "reviews" DROP COLUMN IF EXISTS "verified_purchase", DROP COLUMN IF EXISTS "is_demo";
-    ALTER TABLE "products" DROP COLUMN IF EXISTS "listing_status", DROP COLUMN IF EXISTS "is_demo", DROP COLUMN IF EXISTS "demo_image_url";
+    ALTER TABLE "products" DROP COLUMN IF EXISTS "listing_status", DROP COLUMN IF EXISTS "is_demo", DROP COLUMN IF EXISTS "demo_image_url", DROP COLUMN IF EXISTS "product_image_url";
     DROP TABLE IF EXISTS "sellers_rels";
     DROP TABLE IF EXISTS "sellers";
   `);
