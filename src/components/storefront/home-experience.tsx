@@ -106,6 +106,7 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
               <Link href="/help" className="transition hover:text-cyan-200">Help</Link>
             </nav>
             <div className="flex items-center gap-2">
+              <Link href="/account/login" className="hidden rounded-full border border-white/15 px-4 py-2.5 text-[9px] font-bold uppercase tracking-[.16em] text-white/75 transition hover:border-cyan-200 hover:text-cyan-100 sm:inline-flex">Sign in</Link>
               <Link href="/cart" className="hidden rounded-full border border-white/15 px-4 py-2.5 text-[9px] font-bold uppercase tracking-[.16em] text-white/75 transition hover:border-cyan-200 hover:text-cyan-100 sm:inline-flex">Your cart ↗</Link>
               <a href="#catalogue" className="rounded-full bg-cyan-200 px-4 py-2.5 text-[9px] font-extrabold uppercase tracking-[.16em] text-[#07111a] transition hover:-translate-y-0.5 hover:bg-white sm:px-5">Explore store <span className="ml-1">↗</span></a>
             </div>
