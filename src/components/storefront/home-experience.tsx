@@ -15,6 +15,7 @@ type CatalogProduct = {
   listingType?: "own_store" | "marketplace_seller" | "external" | null;
   isDemo?: boolean;
   demoImageUrl?: string | null;
+  productImageUrl?: string | null;
   category?: string;
   externalUrl?: string | null;
 };
@@ -62,7 +63,7 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
       ? catalogProducts.slice(0, 24).map((item, index) => ({
           name: item.title,
           category: item.category || "Marketplace",
-          image: item.image || item.demoImageUrl || previewProducts[index % previewProducts.length].image,
+          image: item.image || item.demoImageUrl || item.productImageUrl || previewProducts[index % previewProducts.length].image,
           tag: item.isDemo ? "DEMO PRODUCT" : item.listingType === "external" ? "EXTERNAL LISTING" : item.listingType === "marketplace_seller" ? "APPROVED SELLER" : "SKY VIEW STORE",
           price: formatETB(item.price),
           oldPrice: item.originalPrice && item.originalPrice > item.price ? formatETB(item.originalPrice) : null,
