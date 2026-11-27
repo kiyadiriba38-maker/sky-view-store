@@ -5,6 +5,7 @@ import * as migration_20261127_163000_marketplace_foundation from "./20261127_16
 import * as migration_20261127_180500_order_returns from "./20261127_180500_order_returns";
 import * as migration_20261127_183000_listing_policy_review from "./20261127_183000_listing_policy_review";
 import * as migration_20261127_184000_product_seller_relation from "./20261127_184000_product_seller_relation";
+import * as migration_20261127_191500_notifications from "./20261127_191500_notifications";
 
 export const migrations = [
   {
@@ -41,5 +42,10 @@ export const migrations = [
     up: migration_20261127_184000_product_seller_relation.up,
     down: migration_20261127_184000_product_seller_relation.down,
     name: "20261127_184000_product_seller_relation",
+  },
+  {
+    up: migration_20261127_191500_notifications.up,
+    down: migration_20261127_191500_notifications.down,
+    name: "20261127_191500_notifications",
   },
 ];
