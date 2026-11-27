@@ -43,7 +43,7 @@ const products = [
 const categories = [
   { number: "01", name: "Technology", note: "Smart tools for modern life", image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=900&q=85" },
   { number: "02", name: "Audio", note: "Find your own frequency", image: "https://images.unsplash.com/photo-1484704849700-f032a568e944?auto=format&fit=crop&w=900&q=85" },
-  { number: "03", name: "Accessories", note: "The finishing touches", image: "https://images.unsplash.com/photo-1491553895911-0055 Oj07?auto=format&fit=crop&w=900&q=85" },
+  { number: "03", name: "Accessories", note: "The finishing touches", image: "https://images.unsplash.com/photo-1491553895911-0055?auto=format&fit=crop&w=900&q=85" },
 ];
 
 export default function HomeExperience({ catalogProducts = [] }: { catalogProducts?: CatalogProduct[] }) {
