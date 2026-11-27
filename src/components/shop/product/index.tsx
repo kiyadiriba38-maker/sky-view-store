@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 
 import type { ProductSinglePage } from "@/lib/core/types/types";
@@ -19,6 +20,11 @@ export default async function ProductPage({
       <div className="flex flex-col  rounded-lg border  border-t-0 lg:p-8    lg:flex-row    ">
         <div className="h-full w-full basis-full lg:basis-1/2">
           <div className="w-full">
+            {!product.gallery?.some((item) => item.image && typeof item.image === "object") && (product as ProductSinglePage & { demoImageUrl?: string }).demoImageUrl ? (
+              <div className="relative mx-auto aspect-square w-full max-w-md overflow-hidden rounded-2xl bg-[#101a28]">
+                <Image src={(product as ProductSinglePage & { demoImageUrl?: string }).demoImageUrl!} alt={product.title} fill unoptimized sizes="(max-width: 768px) 100vw, 448px" className="object-cover" />
+              </div>
+            ) : null}
             <GalleryBlock
               images={product.gallery ?? []}
               id={`product-${product.id}`}
