@@ -44,12 +44,12 @@ const categoryTiles = [
 
 const filters = ["All", "Tech", "Audio", "Wearables", "Cameras", "Workspace", "Home", "Lifestyle", "Accessories"];
 
+const formatETB = (amount: number) =>
+  new Intl.NumberFormat("en-ET", { style: "currency", currency: "ETB", maximumFractionDigits: 0 }).format(amount);
+
 export default function HomeExperience({ catalogProducts = [] }: { catalogProducts?: CatalogProduct[] }) {
   const [query, setQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState("All");
-
-  const formatETB = (amount: number) =>
-    new Intl.NumberFormat("en-ET", { style: "currency", currency: "ETB", maximumFractionDigits: 0 }).format(amount);
 
   const cards = useMemo(() => {
     const live = catalogProducts.length > 0;
