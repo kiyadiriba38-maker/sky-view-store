@@ -3,11 +3,13 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 type CurrentUser = { email?: string; roles?: string[] } | null;
 
 export default function AccountPage() {
   const router = useRouter();
+  const t = useTranslations("account");
   const [user, setUser] = useState<CurrentUser>(null);
   const [loading, setLoading] = useState(true);
 
@@ -51,6 +53,7 @@ export default function AccountPage() {
               <Link href="/seller/dashboard" className="rounded-xl border border-white/10 bg-white/[.03] p-5 text-sm font-semibold text-white/80 transition hover:border-cyan-200/30">Open Seller Center ↗</Link>
               <Link href="/cart" className="rounded-xl border border-white/10 bg-white/[.03] p-5 text-sm font-semibold text-white/80 transition hover:border-cyan-200/30">View your cart ↗</Link>
               <Link href="/account/orders" className="rounded-xl border border-white/10 bg-white/[.03] p-5 text-sm font-semibold text-white/80 transition hover:border-cyan-200/30">View your orders ↗</Link>
+              <Link href="/account/notifications" className="rounded-xl border border-white/10 bg-white/[.03] p-5 text-sm font-semibold text-white/80 transition hover:border-cyan-200/30">{t("notificationsLink")} ↗</Link>
             </div>
             <button onClick={signOut} className="mt-8 rounded-full border border-white/15 px-5 py-3 text-[10px] font-bold uppercase tracking-[.17em] text-white/60 transition hover:border-rose-200/40 hover:text-rose-100">Sign out</button>
           </>
