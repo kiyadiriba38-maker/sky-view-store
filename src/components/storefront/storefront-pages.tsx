@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { ReactNode } from "react";
 
 import type { Category, Product } from "@/lib/core/types/payload-types";
 import { formatPrice, resolveMediaUrl } from "@/lib/core/util";
@@ -13,7 +14,7 @@ export function StorefrontShell({
   eyebrow: string;
   title: string;
   description: string;
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
     <div className="sv-page min-h-screen bg-[#070b12] text-white">
