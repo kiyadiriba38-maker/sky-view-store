@@ -61,8 +61,8 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
           tag: item.listingType === "external" ? "EXTERNAL LISTING" : "SKY VIEW STORE",
           price: formatETB(item.price),
           oldPrice: item.originalPrice && item.originalPrice > item.price ? formatETB(item.originalPrice) : null,
-          href: item.listingType === "external" && item.externalUrl && /^https?:\\/\\//i.test(item.externalUrl) ? item.externalUrl : `/product/${item.slug}`,
-          external: item.listingType === "external" && Boolean(item.externalUrl && /^https?:\\/\\//i.test(item.externalUrl)),
+          href: item.listingType === "external" && item.externalUrl && /^https?:\/\//i.test(item.externalUrl) ? item.externalUrl : `/product/${item.slug}`,
+          external: item.listingType === "external" && Boolean(item.externalUrl && /^https?:\/\//i.test(item.externalUrl)),
           preview: false,
         }))
       : previewProducts.map((item) => ({
