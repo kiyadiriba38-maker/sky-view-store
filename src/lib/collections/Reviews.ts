@@ -28,7 +28,7 @@ export const Reviews: CollectionConfig = {
   access: {
     ...adminOnlyAccess,
     read: () => true,
-    create: () => true,
+    create: ({ req: { user } }) => Boolean(user),
   },
   hooks: {
     afterChange: [
