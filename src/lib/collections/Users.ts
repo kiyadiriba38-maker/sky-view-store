@@ -46,6 +46,7 @@ export const Users: CollectionConfig = {
       options: [
         { label: "admin", value: "admin" },
         { label: "customer", value: "customer" },
+        { label: "seller", value: "seller" },
       ],
       admin: {
         hidden: true,
