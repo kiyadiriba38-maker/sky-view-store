@@ -62,7 +62,7 @@ export const Reviews: CollectionConfig = {
           }>;
         }>;
         const hasEligiblePurchase = orderDocs.some((order) => {
-          if (order.isDemoOrder || order.status === "canceled" || order.status === "refunded") return false;
+          if (order.isDemoOrder || order.status !== "done") return false;
           return (order.items ?? []).some((item) => {
             const raw = item.product;
             const purchasedProductId = typeof raw === "object" && raw ? raw.id : raw;
