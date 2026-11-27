@@ -5,7 +5,6 @@ import { postgresAdapter } from "@payloadcms/db-postgres";
 import { nodemailerAdapter } from "@payloadcms/email-nodemailer";
 import { buildConfig } from "payload";
 import { en } from "payload/i18n/en";
-import { he } from "payload/i18n/he";
 import sharp from "sharp";
 
 import {
@@ -62,9 +61,11 @@ export default buildConfig({
   },
   globals: [SiteSettings],
 
+  // Keep the Payload admin UI in English; storefront language selection
+  // is handled independently by the customer-facing locale provider.
   i18n: {
-    fallbackLanguage: appConfig.LOCAL.lang,
-    supportedLanguages: appConfig.LOCAL.lang === "he" ? { he } : { en },
+    fallbackLanguage: "en",
+    supportedLanguages: { en },
   },
 
   sharp,
