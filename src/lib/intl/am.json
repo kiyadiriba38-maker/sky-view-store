@@ -253,6 +253,21 @@
     "approvedSeller": "የተፈቀደ ሻጭ",
     "storeProduct": "SKY VIEW STORE",
     "compare": "አወዳድር",
-    "compareLimit": "እስከ አራት ምርቶችን ያወዳድሩ"
+    "compareLimit": "እስከ አራት ምርቶችን ያወዳድሩ",
+    "noProductsYet": "እስካሁን የታተሙ ምርቶች የሉም",
+    "adminPublishedProducts": "የተፈቀዱ ምርቶች በአስተዳዳሪው ከታተሙ በኋላ እዚህ ይታያሉ።",
+    "searchProducts": "ምርቶችን ይፈልጉ...",
+    "allListings": "ሁሉም ዝርዝሮች",
+    "compareSelected": "ለንጽጽር ተጨምሯል",
+    "addToCompare": "አወዳድር",
+    "selectedOfFour": "ከ4 ምርቶች {count} ተመርጠዋል",
+    "compareDetails": "ዋጋን፣ ክምችትን፣ ሻጭን እና የምርት ዝርዝሮችን ያወዳድሩ።",
+    "clearSelection": "አጽዳ",
+    "compareNow": "አሁን አወዳድር",
+    "noProductsMatch": "ከእነዚህ ማጣሪያዎች ጋር የሚዛመድ ምርት የለም።",
+    "noCategories": "በአስተዳዳሪው ከታተሙ በኋላ ምድቦች እዚህ ይታያሉ።",
+    "collection": "ስብስብ",
+    "exploreProductsInCollection": "በዚህ ስብስብ ውስጥ ያሉ ምርቶችን ይመልከቱ።",
+    "exploreCollection": "ስብስቡን ይመልከቱ"
   }
 }
