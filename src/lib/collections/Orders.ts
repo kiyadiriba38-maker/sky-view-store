@@ -305,7 +305,10 @@ export const Orders: CollectionOverride = ({ defaultCollection }) => {
 
           const rawCart = data.cart;
           const cartId = typeof rawCart === "object" ? rawCart?.id : rawCart;
-          if (!cartId) return data;
+          if (!cartId) {
+            if (operation === "create") throw new Error("A valid cart is required to place an order.");
+            return data;
+          }
 
           if (operation === "create" && !req.user) {
             throw new Error("Sign in before placing an order.");
@@ -327,54 +330,49 @@ export const Orders: CollectionOverride = ({ defaultCollection }) => {
             }
           }
 
-          const items: CartItem[] = Array.isArray(cart?.items)
-            ? cart.items
-            : [];
+          const items: CartItem[] = Array.isArray(cart?.items) ? cart.items : [];
+          const verifiedItems: CartItem[] = [];
 
           if (operation === "create") {
-            if (!items.length) {
-              throw new Error("Your cart is empty.");
-            }
+            if (!items.length) throw new Error("Your cart is empty.");
+
             for (const item of items) {
               const quantity = Number(item?.quantity ?? 0);
               if (!Number.isSafeInteger(quantity) || quantity < 1) {
                 throw new Error("Cart quantities must be positive whole numbers.");
               }
 
-              const productId =
-                typeof item.product === "object"
-                  ? item.product?.id
-                  : item.product;
+              const productId = typeof item.product === "object"
+                ? item.product?.id
+                : item.product;
               if (!productId) throw new Error("A cart item is missing its product.");
 
-              const product = typeof item.product === "object" && item.product
-                ? item.product as Product
-                : await req.payload.findByID({
-                    collection: CollectionName.products,
-                    id: productId,
-                    depth: 0,
-                  });
-              const marketplaceProduct = product as Product & {
-                listingStatus?: string;
-                isDemo?: boolean;
-              };
-              if (marketplaceProduct._status !== "published" || marketplaceProduct.listingStatus === "pending" || marketplaceProduct.listingStatus === "rejected" || marketplaceProduct.listingStatus === "suspended") {
+              // Always re-read current product and variant records. Never trust
+              // prices, status, or inventory copied into a stale client cart.
+              const product = await req.payload.findByID({
+                collection: CollectionName.products,
+                id: productId,
+                depth: 0,
+              }) as Product & { listingStatus?: string; isDemo?: boolean };
+
+              if (
+                product._status !== "published" ||
+                ["pending", "rejected", "suspended"].includes(product.listingStatus ?? "")
+              ) {
                 throw new Error("A product in your cart is no longer available.");
               }
 
-              const variantId =
-                typeof item.variant === "object"
-                  ? item.variant?.id
-                  : item.variant;
+              const variantId = typeof item.variant === "object"
+                ? item.variant?.id
+                : item.variant;
               const variant = variantId
-                ? (typeof item.variant === "object" && item.variant
-                    ? item.variant as Variant
-                    : await req.payload.findByID({
-                        collection: "variants",
-                        id: variantId,
-                        depth: 0,
-                      }))
+                ? await req.payload.findByID({
+                    collection: "variants",
+                    id: variantId,
+                    depth: 0,
+                  }) as Variant
                 : null;
+
               if (variant) {
                 const variantProductId = typeof variant.product === "object"
                   ? variant.product?.id
@@ -388,43 +386,15 @@ export const Orders: CollectionOverride = ({ defaultCollection }) => {
               if (available < quantity) {
                 throw new Error(`Not enough stock for ${product.title}. Available: ${available}.`);
               }
+
+              verifiedItems.push({
+                ...item,
+                product,
+                ...(variant ? { variant } : {}),
+              } as CartItem);
             }
-          }
-
-          if (operation === "create") {
-            for (const item of items) {
-              const productId =
-                typeof item.product === "object"
-                  ? item.product?.id
-                  : item.product;
-              const variantId =
-                typeof item.variant === "object"
-                  ? item.variant?.id
-                  : item.variant;
-
-              if (!variantId) continue;
-
-              const variant =
-                typeof item.variant === "object" && item.variant
-                  ? item.variant
-                  : await req.payload.findByID({
-                      collection: "variants",
-                      id: variantId,
-                      depth: 0,
-                      select: { product: true },
-                    });
-              const variantProductId =
-                typeof variant.product === "object"
-                  ? variant.product?.id
-                  : variant.product;
-
-              if (
-                !productId ||
-                String(variantProductId) !== String(productId)
-              ) {
-                throw new Error("Cart variant does not belong to its product.");
-              }
-            }
+          } else {
+            verifiedItems.push(...items);
           }
 
           // Stripe integration touch point 2/2 — see @/lib/stripe/server
