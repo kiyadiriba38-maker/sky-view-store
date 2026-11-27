@@ -1,6 +1,7 @@
 import type { Access, CollectionConfig, PayloadRequest, Where } from "payload";
 
 import { isAdmin } from "@/lib/collections/base-fields";
+import { createStoreNotification } from "@/lib/core/notifications";
 
 const isDesignatedModerator = ({ req }: { req: PayloadRequest }) => {
   const moderatorEmail = process.env.LISTING_MODERATOR_EMAIL?.trim().toLowerCase();
@@ -42,6 +43,55 @@ export const Sellers: CollectionConfig = {
     admin: isAdmin,
   },
   hooks: {
+    afterChange: [
+      async ({ doc, operation, previousDoc, req }) => {
+        const ownerId = typeof doc.owner === "object" && doc.owner
+          ? doc.owner.id
+          : doc.owner;
+
+        if (operation === "create") {
+          if (ownerId) {
+            await createStoreNotification(req.payload, {
+              user: ownerId,
+              type: "seller_application",
+              title: "Seller application received",
+              message: "Your seller application is pending review by the designated store moderator.",
+              href: "/seller/dashboard",
+              relatedSeller: doc.id,
+            });
+          }
+
+          const admins = await req.payload.find({
+            collection: "users",
+            where: { roles: { contains: "admin" } },
+            limit: 50,
+            depth: 0,
+            overrideAccess: true,
+          });
+          for (const admin of admins.docs) {
+            await createStoreNotification(req.payload, {
+              user: admin.id,
+              type: "seller_application",
+              title: "Seller application needs review",
+              message: `${doc.storeName} submitted a seller application.`,
+              href: "/admin/collections/sellers",
+              relatedSeller: doc.id,
+            });
+          }
+        } else if (ownerId && previousDoc?.approvalStatus !== doc.approvalStatus) {
+          await createStoreNotification(req.payload, {
+            user: ownerId,
+            type: "seller_approval",
+            title: "Seller application updated",
+            message: `Your seller application status is now ${String(doc.approvalStatus)}.`,
+            href: "/seller/dashboard",
+            relatedSeller: doc.id,
+          });
+        }
+
+        return doc;
+      },
+    ],
     beforeValidate: [
       ({ data, req, operation, originalDoc }) => {
         if (!data || !req.user) return data;
