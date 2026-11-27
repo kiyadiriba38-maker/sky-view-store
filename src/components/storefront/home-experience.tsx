@@ -20,6 +20,7 @@ type CatalogProduct = {
   demoImageUrl?: string | null;
   productImageUrl?: string | null;
   category?: string;
+  categorySlug?: string;
   externalUrl?: string | null;
 };
 
@@ -68,7 +69,7 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
     const demo = Boolean(product.isDemo);
     return {
       id: `database-${product.slug}`, slug: product.slug, title: product.title,
-      category: product.category ?? "Marketplace", categorySlug: "marketplace",
+      category: product.category ?? "Marketplace", categorySlug: product.categorySlug ?? "marketplace",
       priceETB: product.price, originalPriceETB: product.originalPrice ?? product.price,
       image: (demo ? product.demoImageUrl : product.productImageUrl) || product.image || DEMO_CATEGORIES[2].image,
       demo,
@@ -89,7 +90,21 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
     });
   }, [realProducts, query, category, kind]);
 
-  const categories = DEMO_CATEGORIES;
+  const categories = useMemo(() => {
+    const bySlug = new Map<string, string>();
+    for (const product of realProducts) {
+      if (product.categorySlug && product.category && product.category !== "Marketplace") {
+        bySlug.set(product.categorySlug, product.category);
+      }
+    }
+    if (!bySlug.size) return DEMO_CATEGORIES;
+    return [...bySlug.entries()].map(([slug, name], index) => ({
+      slug,
+      name,
+      description: `Explore ${name.toLowerCase()} listings.`,
+      image: DEMO_CATEGORIES.find((item) => item.slug === slug)?.image ?? DEMO_CATEGORIES[index % DEMO_CATEGORIES.length].image,
+    }));
+  }, [realProducts]);
 
   const changeTheme = () => {
     const next = theme === "dark" ? "light" : "dark";
