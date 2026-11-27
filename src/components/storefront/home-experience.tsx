@@ -97,11 +97,13 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
               <span className="grid size-10 place-items-center rounded-xl border border-cyan-200/50 bg-cyan-200/10 text-sm font-black tracking-tighter text-cyan-100 shadow-[0_0_30px_rgba(103,232,249,.12)]">SV</span>
               <span className="text-[12px] font-extrabold uppercase tracking-[.2em]">SKY VIEW <span className="font-light text-white/45">STORE</span></span>
             </Link>
-            <nav className="hidden items-center gap-8 text-[10px] font-bold uppercase tracking-[.18em] text-white/55 lg:flex">
+            <nav className="hidden items-center gap-6 text-[10px] font-bold uppercase tracking-[.15em] text-white/55 lg:flex" aria-label="Main navigation">
               <a href="#discover" className="transition hover:text-cyan-200">Discover</a>
-              <a href="#categories" className="transition hover:text-cyan-200">Categories</a>
-              <a href="#catalogue" className="transition hover:text-cyan-200">Shop all</a>
-              <a href="#experience" className="transition hover:text-cyan-200">Why Sky View</a>
+              <Link href="/shop" className="transition hover:text-cyan-200">Shop</Link>
+              <Link href="/categories" className="transition hover:text-cyan-200">Categories</Link>
+              <Link href="/deals" className="transition hover:text-cyan-200">Deals</Link>
+              <Link href="/about" className="transition hover:text-cyan-200">About</Link>
+              <Link href="/help" className="transition hover:text-cyan-200">Help</Link>
             </nav>
             <div className="flex items-center gap-2">
               <Link href="/cart" className="hidden rounded-full border border-white/15 px-4 py-2.5 text-[9px] font-bold uppercase tracking-[.16em] text-white/75 transition hover:border-cyan-200 hover:text-cyan-100 sm:inline-flex">Your cart ↗</Link>
@@ -185,7 +187,7 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
 
         <section className="px-5 pb-20 sm:px-8 lg:px-14 lg:pb-28"><div className="relative mx-auto max-w-[1500px] overflow-hidden rounded-[26px] border border-cyan-100/20 bg-gradient-to-br from-[#142b40] via-[#101b2c] to-[#111327] p-8 sm:p-12 lg:p-16"><div className="absolute -right-16 -top-24 size-80 rounded-full border border-cyan-100/10 shadow-[0_0_100px_rgba(34,211,238,.12)]" /><div className="absolute -right-2 -top-10 size-52 rounded-full border border-cyan-100/10" /><div className="relative max-w-2xl"><p className="text-[9px] font-bold uppercase tracking-[.3em] text-cyan-200">Your next discovery starts here</p><h2 className="mt-4 text-3xl font-semibold leading-tight tracking-[-.04em] sm:text-5xl">A better way to find what you need.</h2><p className="mt-4 max-w-lg text-sm leading-7 text-white/50">Explore the catalogue, discover new categories and experience the next chapter of Sky View Store.</p><a href="#catalogue" className="mt-8 inline-flex items-center gap-8 rounded-full bg-cyan-200 px-6 py-4 text-[9px] font-extrabold uppercase tracking-[.17em] text-[#07111a] transition hover:-translate-y-1 hover:bg-white">Start exploring <span className="text-base">↗</span></a></div></div></section>
 
-        <footer className="border-t border-white/10 px-5 py-9 sm:px-8 lg:px-14"><div className="mx-auto flex max-w-[1500px] flex-col justify-between gap-5 sm:flex-row sm:items-center"><Link href="/" className="text-xs font-extrabold uppercase tracking-[.2em]">SKY VIEW <span className="font-light text-white/40">STORE</span></Link><div className="flex flex-wrap gap-5 text-[9px] font-bold uppercase tracking-[.16em] text-white/40"><a href="#discover" className="hover:text-cyan-100">Home</a><a href="#categories" className="hover:text-cyan-100">Categories</a><a href="#catalogue" className="hover:text-cyan-100">Catalogue</a><Link href="/admin" className="hover:text-cyan-100">Store admin</Link></div><span className="text-[9px] uppercase tracking-[.16em] text-white/25">© 2026 Sky View Store · Ethiopia</span></div></footer>
+        <footer className="border-t border-white/10 px-5 py-9 sm:px-8 lg:px-14"><div className="mx-auto flex max-w-[1500px] flex-col justify-between gap-5 sm:flex-row sm:items-center"><Link href="/" className="text-xs font-extrabold uppercase tracking-[.2em]">SKY VIEW <span className="font-light text-white/40">STORE</span></Link><div className="flex flex-wrap gap-5 text-[9px] font-bold uppercase tracking-[.16em] text-white/40"><a href="#discover" className="hover:text-cyan-100">Home</a><Link href="/shop" className="hover:text-cyan-100">Shop</Link><Link href="/categories" className="hover:text-cyan-100">Categories</Link><Link href="/deals" className="hover:text-cyan-100">Deals</Link><Link href="/about" className="hover:text-cyan-100">About</Link><Link href="/contact" className="hover:text-cyan-100">Contact</Link><Link href="/help" className="hover:text-cyan-100">Help</Link><Link href="/admin" className="hover:text-cyan-100">Store admin</Link></div><span className="text-[9px] uppercase tracking-[.16em] text-white/25">© 2026 Sky View Store · Ethiopia</span></div></footer>
       </div>
       <style jsx global>{`
         .sv-store { isolation: isolate; }
