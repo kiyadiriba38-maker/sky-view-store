@@ -75,7 +75,7 @@ export default buildConfig({
     },
     migrationDir: path.resolve(
       path.dirname(fileURLToPath(import.meta.url)),
-      "../payload-migrations",
+      "migrations",
     ),
   }),
   editor: baseEditor,
