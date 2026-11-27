@@ -284,6 +284,9 @@ export default class Queries extends BaseDal {
           categories: true,
           priceInUSD: true,
           originalPriceInUSD: true,
+          listingType: true,
+          externalMarketplace: true,
+          externalUrl: true,
         },
       },
     });
@@ -324,6 +327,9 @@ export default class Queries extends BaseDal {
         reviews: true,
         enableVariants: true,
         variantTypes: true,
+        listingType: true,
+        externalMarketplace: true,
+        externalUrl: true,
       },
     );
 
@@ -379,6 +385,9 @@ export default class Queries extends BaseDal {
       meta: product.meta,
       gallery: product.gallery,
       faqs: product.faqs,
+      listingType: product.listingType ?? "own_store",
+      externalMarketplace: product.externalMarketplace,
+      externalUrl: product.externalUrl,
       relatedProducts,
       reviews: product.reviews?.docs as Review[],
       purchase_section: buildProductPurchaseSectionData(product, combined),
