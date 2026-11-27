@@ -289,7 +289,8 @@
     "dealsEyebrow": "ቅናሾች / 02",
     "dealsTitle": "ሊታዩ የሚገቡ ቅናሾች።",
     "dealsDescription": "በአስተዳዳሪው የተቀመጠ የቀድሞ ዋጋ እና ዝቅተኛ የአሁኑ ዋጋ ያላቸው ምርቶች ብቻ እዚህ ይታያሉ።",
-    "newest": "አዲስ"
+    "newest": "አዲስ",
+    "reviewLabels": "የሙከራ እና የተረጋገጠ መለያ"
   },
   "notifications": {
     "title": "ማሳወቂያዎችዎ",
