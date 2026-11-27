@@ -155,7 +155,11 @@ export type ProductSinglePage = Pick<
   "title" | "description" | "updatedAt" | "meta" | "gallery" | "faqs" | "id"
 > & {
   purchase_section: ProductPurchaseSectionData;
-  listingType?: "own_store" | "external" | null;
+  listingType?: "own_store" | "marketplace_seller" | "external" | null;
+  isDemo?: boolean;
+  demoImageUrl?: string | null;
+  productImageUrl?: string | null;
+  seller?: number | { id: number; storeName: string; slug: string; approvalStatus: string; country?: string | null } | null;
   externalMarketplace?: "jiji" | "amazon" | "ebay" | "other" | null;
   externalUrl?: string | null;
   relatedProducts: Product[];
