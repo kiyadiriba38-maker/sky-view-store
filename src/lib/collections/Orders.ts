@@ -1,6 +1,6 @@
 import { addDataAndFileToRequest } from "payload";
 
-import type { Variant } from "@/lib/core/types/payload-types";
+import type { Product, Variant } from "@/lib/core/types/payload-types";
 import type { CollectionOverride } from "@payloadcms/plugin-ecommerce/types";
 import type {
   CollectionAfterChangeHook,
@@ -41,6 +41,11 @@ export const Orders: CollectionOverride = ({ defaultCollection }) => {
 
     access: {
       ...adminOnlyAccess,
+      read: ({ req }) => {
+        if (isAdmin({ req })) return true;
+        if (!req.user) return false;
+        return { customer: { equals: req.user.id } };
+      },
       create: () => true,
     },
 
@@ -102,6 +107,12 @@ export const Orders: CollectionOverride = ({ defaultCollection }) => {
         admin: { position: "sidebar", readOnly: true },
       },
       {
+        name: "isDemoOrder",
+        type: "checkbox",
+        defaultValue: true,
+        admin: { position: "sidebar", readOnly: true, description: "All orders remain simulated until real payments are approved and activated." },
+      },
+      {
         name: "demoPaymentMethod",
         type: "text",
         required: false,
@@ -146,6 +157,7 @@ export const Orders: CollectionOverride = ({ defaultCollection }) => {
           { name: "quantity", type: "number", required: true },
           { name: "unitPrice", type: "number", required: true },
           { name: "lineTotal", type: "number", required: true },
+          { name: "isDemo", type: "checkbox", defaultValue: false, admin: { readOnly: true } },
         ],
       },
     ],
@@ -285,7 +297,11 @@ export const Orders: CollectionOverride = ({ defaultCollection }) => {
         async ({ data, req, operation }) => {
           if (!data) return data;
 
-          if (operation === "create") data.status = OrderStatus.NEW;
+          if (operation === "create") {
+            data.status = OrderStatus.NEW;
+            data.isDemoOrder = true;
+            if (req.user) data.customer = req.user.id;
+          }
 
           const rawCart = data.cart;
           const cartId = typeof rawCart === "object" ? rawCart?.id : rawCart;
@@ -393,6 +409,7 @@ export const Orders: CollectionOverride = ({ defaultCollection }) => {
                 quantity,
                 unitPrice,
                 lineTotal: unitPrice * quantity,
+                isDemo: Boolean((product as Product & { isDemo?: boolean }).isDemo),
               };
             })
             .filter(
@@ -405,6 +422,7 @@ export const Orders: CollectionOverride = ({ defaultCollection }) => {
                 quantity: number;
                 unitPrice: number;
                 lineTotal: number;
+                isDemo: boolean;
               } => Boolean(x),
             );
 
