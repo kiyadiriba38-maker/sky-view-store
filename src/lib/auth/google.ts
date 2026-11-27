@@ -120,12 +120,12 @@ export async function authenticateGoogleCustomer({
 
   if (authConfig.useSessions) {
     sid = randomUUID();
-    const fullUser = await payload.findByID({
+    const fullUser = (await payload.findByID({
       collection: "users",
       id: user.id,
       overrideAccess: true,
       showHiddenFields: true,
-    });
+    })) as typeof user & { sessions?: Array<{ id: string; createdAt: Date | string; expiresAt: Date | string }> };
     const now = new Date();
     const sessions = Array.isArray(fullUser.sessions)
       ? fullUser.sessions.filter((session) => new Date(session.expiresAt).getTime() > now.getTime())
@@ -140,7 +140,7 @@ export async function authenticateGoogleCustomer({
     await payload.db.updateOne({
       collection: "users",
       id: user.id,
-      data: { sessions },
+      data: { sessions } as never,
       returning: false,
     });
   }
