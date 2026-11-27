@@ -19,6 +19,7 @@ import {
   Sellers,
   Notifications,
   Reports,
+  AuditLogs,
 } from "@/lib/collections";
 import { baseEditor } from "@/lib/collections/base-fields";
 import appConfig from "@/lib/core/config";
@@ -72,7 +73,7 @@ export default buildConfig({
 
   sharp,
 
-  collections: [Users, Pages, Category, Media, SeoMedia, GalleryMedia, Reviews, Sellers, Notifications, Reports],
+  collections: [Users, Pages, Category, Media, SeoMedia, GalleryMedia, Reviews, Sellers, Notifications, Reports, AuditLogs],
   db: postgresAdapter({
     pool: {
       connectionString: appConfig.DATABASE_URL,
