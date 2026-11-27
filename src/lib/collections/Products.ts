@@ -1,6 +1,6 @@
 import type { Product } from "@/lib/core/types/payload-types";
 import type { CollectionOverride } from "@payloadcms/plugin-ecommerce/types";
-import type { Access, CollectionBeforeChangeHook, Field } from "payload";
+import type { Access, CollectionBeforeChangeHook, Field, Where } from "payload";
 
 import {
   DESCRIPTION_FIELD,
@@ -23,7 +23,9 @@ const isSidebarField = (field: Field) =>
     ? field.admin.position === "sidebar"
     : false;
 
-const canCreateSellerProduct: Access = async ({ req }) => {
+const publicProductListings: Where = { and: [{ _status: { equals: "published" } }, { listingStatus: { equals: "approved" } }] };
+
+const readMarketplaceProducts: Access = async ({ req }) => {
   if (req.user?.roles?.includes("admin")) return true;
   if (!req.user) return false;
   const sellers = await req.payload.find({
@@ -145,7 +147,7 @@ export const Products: CollectionOverride = ({ defaultCollection }) => {
     {
       name: "productImageUrl",
       type: "text",
-      validate: (value) => {
+      validate: (value: unknown) => {
         if (!value) return true;
         try { return new URL(String(value)).protocol === "https:" ? true : "Use an HTTPS image URL."; }
         catch { return "Enter a valid HTTPS image URL."; }
@@ -180,7 +182,7 @@ export const Products: CollectionOverride = ({ defaultCollection }) => {
       type: "relationship",
       relationTo: "sellers",
       admin: { position: "sidebar" },
-    },
+    } as Field,
     {
       name: "listingType",
       type: "select",
@@ -286,7 +288,7 @@ export const Products: CollectionOverride = ({ defaultCollection }) => {
           where: { owner: { equals: req.user.id } },
         });
         const ids = (sellers.docs as Array<{ id: number }>).map((seller) => seller.id);
-        return ids.length ? { or: [publicListings, { seller: { in: ids } }] } : publicListings;
+        return ids.length ? ({ or: [publicProductListings, { seller: { in: ids } }] } as Where) : publicProductListings;
       },
       create: canCreateSellerProduct,
       update: canManageSellerProducts,
