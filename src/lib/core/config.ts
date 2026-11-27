@@ -3,9 +3,9 @@ type AppLocale = "en" | "he";
 type LocaleConfig = {
   lang: AppLocale;
   dir: "ltr" | "rtl";
-  locale: "en-US" | "he-IL";
+  locale: "en-ET" | "he-IL";
   isRtl: boolean;
-  currency: "USD" | "ILS";
+  currency: "ETB" | "ILS";
 };
 
 type StorageProvider = "vercel" | "s3";
@@ -14,9 +14,9 @@ const LOCALE_CONFIG: Record<AppLocale, LocaleConfig> = {
   en: {
     lang: "en",
     dir: "ltr",
-    locale: "en-US",
+    locale: "en-ET",
     isRtl: false,
-    currency: "USD",
+    currency: "ETB",
   },
   he: {
     lang: "he",
