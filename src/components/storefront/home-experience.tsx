@@ -15,13 +15,12 @@ type CatalogProduct = {
   image: string | null;
   price: number;
   originalPrice: number | null;
-  listingType?: "own_store" | "marketplace_seller" | "external" | null;
+  listingType?: "own_store" | "marketplace_seller" | null;
   isDemo?: boolean;
   demoImageUrl?: string | null;
   productImageUrl?: string | null;
   category?: string;
   categorySlug?: string;
-  externalUrl?: string | null;
 };
 
 type Currency = "ETB" | "USD" | "EUR" | "GBP" | "AED";
@@ -74,8 +73,6 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
       image: (demo ? product.demoImageUrl : product.productImageUrl) || product.image || DEMO_CATEGORIES[2].image,
       demo,
       databaseBacked: true as const,
-      external: product.listingType === "external" && Boolean(product.externalUrl),
-      externalUrl: product.externalUrl ?? undefined,
     };
   }), [catalogProducts]);
 
@@ -162,8 +159,8 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
         </div>
         <div className="sv-product-grid">
           {products.slice(0, 24).map((product) => {
-            const href = product.demo && !("databaseBacked" in product && product.databaseBacked) ? `/demo-product/${product.slug}` : product.external ? product.externalUrl! : `/product/${product.slug}`;
-            return <article className="sv-product-card" key={product.id}><Link href={href} target={!product.demo && product.external ? "_blank" : undefined} rel={!product.demo && product.external ? "noopener noreferrer" : undefined} className="sv-product-image"><Image src={product.image} alt={product.title} fill unoptimized sizes="(max-width: 640px) 50vw, 25vw" /><span className={product.demo ? "sv-label-demo" : "sv-label-real"}>{product.demo ? t.demo : t.real}</span></Link><div className="sv-product-info"><small>{product.category}</small><Link href={href} className="sv-product-title">{product.title}</Link><div className="sv-price-row"><b>{formatPrice(product.priceETB, currency, rates)}</b><del>{formatPrice(product.originalPriceETB, currency, rates)}</del></div><span className="sv-demo-note">{product.demo ? "Sample listing · simulated stock" : "Published marketplace listing"}</span></div></article>;
+            const href = product.demo && !("databaseBacked" in product && product.databaseBacked) ? `/demo-product/${product.slug}` : `/product/${product.slug}`;
+            return <article className="sv-product-card" key={product.id}><Link href={href} className="sv-product-image"><Image src={product.image} alt={product.title} fill unoptimized sizes="(max-width: 640px) 50vw, 25vw" /><span className={product.demo ? "sv-label-demo" : "sv-label-real"}>{product.demo ? t.demo : t.real}</span></Link><div className="sv-product-info"><small>{product.category}</small><Link href={href} className="sv-product-title">{product.title}</Link><div className="sv-price-row"><b>{formatPrice(product.priceETB, currency, rates)}</b><del>{formatPrice(product.originalPriceETB, currency, rates)}</del></div><span className="sv-demo-note">{product.demo ? "Sample listing · simulated stock" : "Published marketplace listing"}</span></div></article>;
           })}
         </div>
         {products.length === 0 ? <div className="sv-empty">No products match your search. Try another term or category.</div> : null}
