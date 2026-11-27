@@ -60,6 +60,18 @@ const richText = (text: string) => ({
 });
 
 async function main() {
+  // This script creates 1,000 demo products and up to 2,000 demo reviews.
+  // Require an explicit opt-in so it cannot be run accidentally against a
+  // production DATABASE_URL from a developer machine or deployment.
+  if (process.env.NODE_ENV === "production") {
+    throw new Error("Demo seeding is disabled in production.");
+  }
+  if (process.env.ALLOW_DEMO_SEED !== "true") {
+    throw new Error(
+      "Demo seeding is opt-in. Set ALLOW_DEMO_SEED=true only after confirming DATABASE_URL points to the dedicated development Neon branch.",
+    );
+  }
+
   const payload = await getPayload({ config: configPromise });
   const categoryIds: number[] = [];
 
