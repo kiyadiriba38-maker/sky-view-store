@@ -412,6 +412,16 @@
     "noCategories": "Categories will appear here when published by the store admin.",
     "collection": "COLLECTION",
     "exploreProductsInCollection": "Explore products in this collection.",
-    "exploreCollection": "Explore collection"
+    "exploreCollection": "Explore collection",
+    "communityFeedback": "Community / product feedback",
+    "reviewTransparency": "Reviews are labelled as demo samples or verified purchases so shoppers can distinguish illustrative content from genuine feedback.",
+    "verifiedPurchasesCount": "{count} verified customer reviews",
+    "demoSamplesCount": "{count} illustrative demo samples — excluded from the customer rating",
+    "demoReview": "DEMO REVIEW",
+    "verifiedPurchase": "VERIFIED PURCHASE",
+    "customerReview": "CUSTOMER REVIEW",
+    "noReviewsYet": "There are no reviews yet.",
+    "honestFeedback": "Share useful, honest feedback to help the next shopper.",
+    "reviewEmptyTitle": "Your experience belongs here."
   }
 }
