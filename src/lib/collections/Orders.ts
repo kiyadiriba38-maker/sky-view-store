@@ -230,11 +230,9 @@ export const Orders: CollectionOverride = ({ defaultCollection }) => {
           }
 
           const updated = await req.payload.update({
-            // Return fields are added by the dedicated migration and are not
-            // yet present in the generated Payload type declarations.
-            data: {
             collection: "orders",
             id: String(id),
+            data: {
               returnRequestStatus: "requested",
               returnReason: reason,
               returnRequestedAt: new Date().toISOString(),
