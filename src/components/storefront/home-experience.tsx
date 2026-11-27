@@ -31,7 +31,7 @@ const slides = [
   },
 ];
 
-type CatalogProduct = { title: string; slug: string; image: string | null; price: number; originalPrice: number | null };
+type CatalogProduct = { title: string; slug: string; image: string | null; price: number; originalPrice: number | null; listingType?: "own_store" | "external" | null; externalUrl?: string | null };
 
 const products = [
   { name: "Studio Wireless Headphones", type: "AUDIO · WIRELESS", price: "ETB 8,900", old: "ETB 10,500", badge: "−15%", image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=900&q=85" },
@@ -65,12 +65,13 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
         const discount = discounted ? Math.round(((item.originalPrice! - item.price) / item.originalPrice!) * 100) : 0;
         return {
           name: item.title,
-          type: "AVAILABLE IN STORE",
+          type: item.listingType === "external" ? "EXTERNAL MARKETPLACE LISTING" : "SKY VIEW STORE",
           price: formatETB(item.price),
           old: discounted ? formatETB(item.originalPrice!) : "",
           badge: discounted ? `−${discount}%` : "FEATURED",
           image: item.image || products[index % products.length].image,
-          href: `/product/${item.slug}`,
+          href: item.listingType === "external" && item.externalUrl ? item.externalUrl : `/product/${item.slug}`,
+          external: item.listingType === "external",
           sample: false,
         };
       })
@@ -138,7 +139,7 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
         <div className="mx-auto max-w-[1500px]">
           <div className="mb-10 flex flex-wrap items-end justify-between gap-5"><div><p className="text-[10px] uppercase tracking-[.3em] text-cyan-200">The selection / store catalogue</p><h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-5xl">Objects of interest.</h2><p className="mt-3 max-w-lg text-sm leading-6 text-white/45">{catalogProducts.length ? "Explore products published in the Sky View Store catalogue. Open any item to see its details and availability." : "These are visual sample listings only. Real products will appear here after they are added and published in the store admin."}</p></div><span className="text-[10px] uppercase tracking-[.2em] text-white/40">{String(featuredProducts.length).padStart(2, "0")} / {catalogProducts.length ? "LIVE CATALOGUE" : "SAMPLE PREVIEW"}</span></div>
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {featuredProducts.map((product, index) => <article key={product.name} className="group overflow-hidden rounded-2xl border border-white/10 bg-[#111a1f] transition duration-500 hover:-translate-y-2 hover:border-cyan-100/40 hover:shadow-[0_22px_55px_rgba(0,0,0,.3)]"><div className="relative aspect-[4/4.3] overflow-hidden bg-[#172329]"><Image src={product.image} alt={product.name} fill className="object-cover transition duration-700 group-hover:scale-105" sizes="(max-width: 768px) 100vw, 25vw" unoptimized /><span className="absolute left-4 top-4 rounded-full border border-white/20 bg-black/45 px-3 py-1.5 text-[9px] font-bold tracking-wider backdrop-blur">{product.badge}{product.sample ? " SAMPLE" : ""}</span><span className="absolute bottom-4 right-4 text-[9px] tracking-[.2em] text-white/70">0{index+1}</span></div><div className="p-5"><p className="text-[9px] font-semibold tracking-[.2em] text-cyan-100/60">{product.type}</p><h3 className="mt-3 min-h-12 text-base font-medium leading-6">{product.name}</h3><div className="mt-4 flex items-center gap-3"><span className="text-sm font-bold">{product.price}</span><span className="text-xs text-white/35 line-through">{product.old}</span></div><div className="mt-3 flex items-center justify-between border-t border-white/10 pt-3 text-[9px] uppercase tracking-[.18em]">{product.href ? <Link href={product.href} className="font-bold text-cyan-100 transition hover:tracking-[.24em]">View product ↗</Link> : <span className="text-white/35">Sample preview · not for sale</span>}<span className="text-white/35">{product.sample ? "PREVIEW" : "DETAILS"}</span></div></div></article>)}
+            {featuredProducts.map((product, index) => <article key={product.name} className="group overflow-hidden rounded-2xl border border-white/10 bg-[#111a1f] transition duration-500 hover:-translate-y-2 hover:border-cyan-100/40 hover:shadow-[0_22px_55px_rgba(0,0,0,.3)]"><div className="relative aspect-[4/4.3] overflow-hidden bg-[#172329]"><Image src={product.image} alt={product.name} fill className="object-cover transition duration-700 group-hover:scale-105" sizes="(max-width: 768px) 100vw, 25vw" unoptimized /><span className="absolute left-4 top-4 rounded-full border border-white/20 bg-black/45 px-3 py-1.5 text-[9px] font-bold tracking-wider backdrop-blur">{product.badge}{product.sample ? " SAMPLE" : ""}</span><span className="absolute bottom-4 right-4 text-[9px] tracking-[.2em] text-white/70">0{index+1}</span></div><div className="p-5"><p className="text-[9px] font-semibold tracking-[.2em] text-cyan-100/60">{product.type}</p><h3 className="mt-3 min-h-12 text-base font-medium leading-6">{product.name}</h3><div className="mt-4 flex items-center gap-3"><span className="text-sm font-bold">{product.price}</span><span className="text-xs text-white/35 line-through">{product.old}</span></div><div className="mt-3 flex items-center justify-between border-t border-white/10 pt-3 text-[9px] uppercase tracking-[.18em]">{product.href ? <a href={product.href} target={product.external ? "_blank" : undefined} rel={product.external ? "noopener noreferrer" : undefined} className="font-bold text-cyan-100 transition hover:tracking-[.24em]">{product.external ? "Visit seller ↗" : "View product ↗"}</a> : <span className="text-white/35">Sample preview · not for sale</span>}<span className="text-white/35">{product.sample ? "PREVIEW" : product.external ? "EXTERNAL" : "DETAILS"}</span></div></div></article>)}
           </div>
         </div>
       </section>
