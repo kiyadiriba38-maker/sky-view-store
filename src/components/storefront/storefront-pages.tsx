@@ -67,7 +67,8 @@ export function ProductGrid({ products }: { products: Product[] }) {
   }
 
   return (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+    <div className="space-y-6">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {products.map((product) => {
         const demo = Boolean((product as Product & { isDemo?: boolean }).isDemo);
         const demoImage = (product as Product & { demoImageUrl?: string }).demoImageUrl;
@@ -95,6 +96,8 @@ export function ProductGrid({ products }: { products: Product[] }) {
           </article>
         );
       })}
+      </div>
+      {selected.length ? <div className="sticky bottom-4 z-30 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-cyan-200/25 bg-[#0c1724]/95 p-4 shadow-2xl backdrop-blur-xl"><div><p className="text-sm font-semibold text-white">{selected.length} of 4 products selected</p><p className="mt-1 text-[10px] text-white/45">Compare price, stock, seller and product details.</p></div><div className="flex items-center gap-2"><button type="button" onClick={() => setSelected([])} className="rounded-full border border-white/15 px-4 py-2.5 text-[9px] font-bold uppercase tracking-wider text-white/60">Clear</button><Link href={`/compare?items=${encodeURIComponent(selected.join(","))}`} className="rounded-full bg-cyan-200 px-5 py-3 text-[9px] font-extrabold uppercase tracking-wider text-[#07111a]">Compare now ↗</Link></div></div> : null}
     </div>
   );
 }
