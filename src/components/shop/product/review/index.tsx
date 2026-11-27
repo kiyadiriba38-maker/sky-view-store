@@ -50,7 +50,7 @@ export default async function ProductReviews({
               <span className="pb-1 text-xs text-white/35">/ 5</span>
             </div>
             <Stars rating={average} className="mt-4" />
-            <p className="mt-3 text-[10px] text-white/40">{safeReviews.length ? `Based on ${safeReviews.length} customer ${safeReviews.length === 1 ? "review" : "reviews"}` : "No customer reviews yet"}</p>
+            <p className="mt-3 text-[10px] text-white/40">{safeReviews.length ? `Based on ${safeReviews.length} published review ${safeReviews.length === 1 ? "entry" : "entries"}` : "No customer reviews yet"}</p>
             <div className="mt-7 space-y-3">
               {distribution.map(({ rating, count }) => (
                 <div key={rating} className="flex items-center gap-3 text-[10px]">
@@ -66,7 +66,7 @@ export default async function ProductReviews({
           <div>
             <div className="mb-5 flex items-center justify-between gap-4">
               <div><p className="text-[9px] font-bold uppercase tracking-[.22em] text-cyan-200">Customer voices</p><p className="mt-1 text-sm font-semibold">{safeReviews.length ? `${safeReviews.length} published ${safeReviews.length === 1 ? "review" : "reviews"}` : "Be the first to share feedback"}</p></div>
-              <span className="rounded-full border border-white/10 px-3 py-2 text-[8px] font-bold uppercase tracking-[.15em] text-white/35">Verified by submission</span>
+              <span className="rounded-full border border-white/10 px-3 py-2 text-[8px] font-bold uppercase tracking-[.15em] text-white/35">Demo and verified labels</span>
             </div>
 
             {safeReviews.length ? (
