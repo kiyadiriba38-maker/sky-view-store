@@ -15,6 +15,7 @@ export default function SellerDashboard() {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("1200");
   const [inventory, setInventory] = useState("10");
+  const [imageUrl, setImageUrl] = useState("");
   const [busy, setBusy] = useState(false);
 
   const load = useCallback(async () => {
@@ -73,6 +74,7 @@ export default function SellerDashboard() {
             },
           },
           meta: { title: title.trim(), description: description.trim(), image: null },
+          productImageUrl: imageUrl.trim() || undefined,
           gallery: [],
         }),
       });
@@ -80,6 +82,7 @@ export default function SellerDashboard() {
       if (!response.ok) throw new Error(result?.errors?.[0]?.message || result?.message || "Product could not be submitted.");
       setTitle("");
       setDescription("");
+      setImageUrl("");
       setMessage("Product submitted for admin review. It will remain a draft until approved.");
       await load();
     } catch (error) {
@@ -115,6 +118,7 @@ export default function SellerDashboard() {
                   <h2 className="text-xl font-semibold">Submit a product</h2>
                   <p className="mt-2 text-xs leading-6 text-white/45">New seller listings are reviewed by an administrator before becoming visible.</p>
                   <label className="mt-5 block text-xs text-white/70">Product title<input required value={title} onChange={(event) => setTitle(event.target.value)} className="mt-2 w-full rounded-xl border border-white/15 bg-white/[.04] px-4 py-3 text-sm outline-none focus:border-cyan-200" /></label>
+                  <label className="mt-4 block text-xs text-white/70">Product image URL (HTTPS)<input type="url" pattern="https://.*" value={imageUrl} onChange={(event) => setImageUrl(event.target.value)} placeholder="https://..." className="mt-2 w-full rounded-xl border border-white/15 bg-white/[.04] px-4 py-3 text-sm outline-none focus:border-cyan-200" /></label>
                   <label className="mt-4 block text-xs text-white/70">Description<textarea required minLength={20} rows={4} value={description} onChange={(event) => setDescription(event.target.value)} className="mt-2 w-full rounded-xl border border-white/15 bg-white/[.04] px-4 py-3 text-sm outline-none focus:border-cyan-200" /></label>
                   <div className="mt-4 grid grid-cols-2 gap-3">
                     <label className="block text-xs text-white/70">Price (ETB)<input required type="number" min="1" value={price} onChange={(event) => setPrice(event.target.value)} className="mt-2 w-full rounded-xl border border-white/15 bg-white/[.04] px-3 py-3 text-sm outline-none focus:border-cyan-200" /></label>
