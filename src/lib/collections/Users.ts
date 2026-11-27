@@ -18,7 +18,11 @@ export const Users: CollectionConfig = {
     },
   },
   access: {
-    read: ({ req: { user } }) => Boolean(user),
+    read: ({ req: { user } }) => {
+      if (!user) return false;
+      if (user.roles?.includes("admin")) return true;
+      return { id: { equals: user.id } };
+    },
     // Public registration is safe because the hook below always assigns
     // the customer role to unauthenticated sign-ups.
     create: () => true,
