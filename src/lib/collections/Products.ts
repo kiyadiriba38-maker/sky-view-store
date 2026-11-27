@@ -24,6 +24,16 @@ const isSidebarField = (field: Field) =>
     ? field.admin.position === "sidebar"
     : false;
 
+const isListingModerator = ({ req }: { req: PayloadRequest }) => {
+  const moderatorEmail = process.env.LISTING_MODERATOR_EMAIL?.trim().toLowerCase();
+  return Boolean(
+    moderatorEmail &&
+    req.user &&
+    isAdmin({ req }) &&
+    req.user.email?.trim().toLowerCase() === moderatorEmail,
+  );
+};
+
 const publicProductListings: Where = { and: [{ _status: { equals: "published" } }, { listingStatus: { equals: "approved" } }, { or: [{ isDemo: { equals: true } }, { listingPolicyReviewed: { equals: true } }] }] };
 
 const readMarketplaceProducts: Access = async ({ req }) => {
@@ -85,15 +95,17 @@ const requirePolicyReviewForPublication: CollectionBeforeChangeHook = async ({
   originalDoc,
   req,
 }) => {
-  if (!data || !isAdmin({ req })) return data;
+  if (!data) return data;
 
   const listingStatus = data.listingStatus ?? originalDoc?.listingStatus;
   const documentStatus = data._status ?? originalDoc?._status;
   const isDemo = data.isDemo ?? originalDoc?.isDemo;
   const policyReviewed = data.listingPolicyReviewed ?? originalDoc?.listingPolicyReviewed;
 
-  if (!isDemo && listingStatus === "approved" && documentStatus === "published" && policyReviewed !== true) {
-    throw new Error("Complete the store listing policy review before publishing this product.");
+  if (!isDemo && listingStatus === "approved" && documentStatus === "published") {
+    if (!isListingModerator({ req }) || policyReviewed !== true) {
+      throw new Error("A designated store moderator must complete the policy review before publishing this listing.");
+    }
   }
 
   return data;
@@ -204,8 +216,8 @@ export const Products: CollectionOverride = ({ defaultCollection }) => {
       defaultValue: false,
       access: {
         read: ({ req }) => isAdmin({ req }),
-        create: ({ req }) => isAdmin({ req }),
-        update: ({ req }) => isAdmin({ req }),
+        create: ({ req }) => isListingModerator({ req }),
+        update: ({ req }) => isListingModerator({ req }),
       },
       admin: {
         position: "sidebar",
