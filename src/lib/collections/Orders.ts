@@ -1,5 +1,5 @@
 import { addDataAndFileToRequest } from "payload";
-import { and, eq, gte, sql } from "drizzle-orm";
+import { sql } from "@payloadcms/db-postgres";
 
 import type { Product, Variant } from "@/lib/core/types/payload-types";
 import type { CollectionOverride } from "@payloadcms/plugin-ecommerce/types";
@@ -46,28 +46,27 @@ const changeInventoryAtomically = async ({
   quantity: number;
   direction: "reserve" | "restore";
 }) => {
-  const adapter = req.payload.db;
+  const adapter = req.payload.db as unknown as {
+    execute: (args: { db?: unknown; sql: unknown }) => Promise<{ rows?: Array<{ id: number | string }> }>;
+    sessions?: Record<string, { db: unknown }>;
+  };
   const transactionID = await req.transactionID;
   const transaction = transactionID
-    ? adapter.sessions[transactionID]?.db
+    ? adapter.sessions?.[String(transactionID)]?.db
     : undefined;
-  const database = transaction ?? adapter.drizzle;
-  const table = adapter.tables[collection] as typeof adapter.tables.products;
+  const tableName = collection === "variants" ? '"variants"' : '"products"';
+  const statement = direction === "reserve"
+    ? sql`UPDATE ${sql.raw(tableName)}
+        SET "inventory" = "inventory" - ${quantity}
+        WHERE "id" = ${id} AND "inventory" >= ${quantity}
+        RETURNING "id"`
+    : sql`UPDATE ${sql.raw(tableName)}
+        SET "inventory" = "inventory" + ${quantity}
+        WHERE "id" = ${id}
+        RETURNING "id"`;
 
-  const inventoryExpression = direction === "reserve"
-    ? sql`${table.inventory} - ${quantity}`
-    : sql`${table.inventory} + ${quantity}`;
-  const condition = direction === "reserve"
-    ? and(eq(table.id, id), gte(table.inventory, quantity))
-    : eq(table.id, id);
-
-  const updated = await database
-    .update(table)
-    .set({ inventory: inventoryExpression })
-    .where(condition)
-    .returning({ id: table.id });
-
-  if (!updated.length) {
+  const result = await adapter.execute({ db: transaction, sql: statement });
+  if (!result.rows?.length) {
     throw new Error(
       direction === "reserve"
         ? "Stock changed while checkout was being completed. Please refresh your cart and try again."
