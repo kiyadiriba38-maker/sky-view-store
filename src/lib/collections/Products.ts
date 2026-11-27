@@ -102,6 +102,30 @@ export const Products: CollectionOverride = ({ defaultCollection }) => {
       },
     },
     {
+      name: "isDemo",
+      type: "checkbox",
+      defaultValue: false,
+      admin: { position: "sidebar", description: "Sample listing. Demo orders and reviews must remain clearly labelled." },
+    },
+    {
+      name: "listingStatus",
+      type: "select",
+      defaultValue: "approved",
+      options: [
+        { label: "Pending review", value: "pending" },
+        { label: "Approved", value: "approved" },
+        { label: "Rejected", value: "rejected" },
+        { label: "Suspended", value: "suspended" },
+      ],
+      admin: { position: "sidebar" },
+    },
+    {
+      name: "seller",
+      type: "relationship",
+      relationTo: "sellers",
+      admin: { position: "sidebar" },
+    },
+    {
       name: "listingType",
       type: "select",
       required: true,
@@ -201,6 +225,9 @@ export const Products: CollectionOverride = ({ defaultCollection }) => {
       ...defaultCollection?.admin,
       defaultColumns: [
         "title",
+        "isDemo",
+        "listingStatus",
+        "seller",
         "enableVariants",
         "_status",
         "variants.variants",
