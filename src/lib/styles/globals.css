@@ -108,3 +108,32 @@ html, html[data-theme="light"], html[data-theme="dark"] {
     transition-duration: .01ms !important;
   }
 }
+
+
+/* Marketplace theme adaptation */
+html[data-theme="light"] .sv-store,
+html[data-theme="light"] .sv-page {
+  background: #f4f7fb !important;
+  color: #111827 !important;
+}
+html[data-theme="light"] .sv-store header,
+html[data-theme="light"] .sv-page header {
+  background: rgba(255,255,255,.92) !important;
+  border-color: rgba(15,23,42,.12) !important;
+}
+html[data-theme="light"] .sv-store [class*="bg-[#"],
+html[data-theme="light"] .sv-page [class*="bg-[#"] {
+  background-color: #ffffff !important;
+}
+html[data-theme="light"] .sv-store [class*="text-white"],
+html[data-theme="light"] .sv-page [class*="text-white"] {
+  color: #172033 !important;
+}
+html[data-theme="light"] .sv-store [class*="border-white"],
+html[data-theme="light"] .sv-page [class*="border-white"] {
+  border-color: rgba(15,23,42,.13) !important;
+}
+html[data-theme="light"] .sv-store [class*="bg-white/"],
+html[data-theme="light"] .sv-page [class*="bg-white/"] {
+  background-color: rgba(15,23,42,.035) !important;
+}
