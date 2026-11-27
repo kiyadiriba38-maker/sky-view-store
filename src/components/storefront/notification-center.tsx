@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 
 import { useStoreLocale } from "@/lib/providers/intl";
@@ -25,7 +25,7 @@ export default function NotificationCenter() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  async function load() {
+  const load = useCallback(async () => {
     setLoading(true);
     setError("");
     try {
@@ -45,13 +45,11 @@ export default function NotificationCenter() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [router, t]);
 
   useEffect(() => {
     void load();
-    // Load once when the page opens.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [load]);
 
   async function markRead(id: number | string) {
     const response = await fetch(`/api/notifications/${encodeURIComponent(String(id))}/read`, {
