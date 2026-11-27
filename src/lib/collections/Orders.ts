@@ -407,6 +407,47 @@ export const Orders: CollectionOverride = ({ defaultCollection }) => {
             }
           }
 
+          const completedOrder = doc as typeof doc & { isDemoOrder?: boolean };
+          if (
+            operation === "update" &&
+            completedOrder.status === OrderStatus.DONE &&
+            previousDoc?.status !== OrderStatus.DONE &&
+            completedOrder.isDemoOrder !== true
+          ) {
+            const sellerIds = new Set<number | string>();
+            const completedItems: OrderItem[] = Array.isArray(doc.items) ? doc.items : [];
+            for (const item of completedItems) {
+              const productId = typeof item.product === "object" ? item.product?.id : item.product;
+              if (!productId) continue;
+              const product = await req.payload.findByID({
+                collection: CollectionName.products,
+                id: productId,
+                depth: 0,
+                overrideAccess: true,
+              }) as Product & { seller?: number | string | { id: number | string } };
+              const sellerId = typeof product.seller === "object" && product.seller
+                ? product.seller.id
+                : product.seller;
+              if (sellerId) sellerIds.add(sellerId);
+            }
+
+            for (const sellerId of sellerIds) {
+              const seller = await req.payload.findByID({
+                collection: "sellers" as never,
+                id: sellerId,
+                depth: 0,
+                overrideAccess: true,
+              } as never) as unknown as { completedOrders?: number };
+              await req.payload.update({
+                collection: "sellers" as never,
+                id: sellerId,
+                data: { completedOrders: Number(seller.completedOrders ?? 0) + 1 },
+                overrideAccess: true,
+                req,
+              } as never);
+            }
+          }
+
           if (operation !== "create" || req.context?.skipOrderNotification)
             return doc;
 
