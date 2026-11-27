@@ -95,9 +95,10 @@ export const Products: CollectionOverride = ({ defaultCollection }) => {
       name: "originalPriceInUSD",
       type: "number",
       min: 0,
+      label: "Original price (ETB)",
       admin: {
         description:
-          "Original price before discount (optional). Shown as a strikethrough price when set.",
+          "Original price in Ethiopian birr (ETB), before discount. Shown as a strikethrough price when set.",
       },
     },
     DESCRIPTION_FIELD,
