@@ -17,7 +17,7 @@
     "seed": "pnpm tsx  seed/run.ts",
     "reset": "yes | payload migrate:fresh",
     "generate:importmap": "payload generate:importmap",
-    "generate:types": "payload generate:types",
+    "generate:types": "PAYLOAD_CONFIG_PATH=src/payload.config.ts payload generate:types",
     "reinstall": "rm -rf tsconfig.tsbuildinfo .next node_modules  pnpm-lock.yaml && pnpm install",
     "reinstall:full": "rm -rf pnpm-lock.yaml .next .turbo node_modules && pnpm store prune && pnpm install",
     "seed:marketplace": "pnpm tsx seed/marketplace-demo.ts"
