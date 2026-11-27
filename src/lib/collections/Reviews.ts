@@ -31,6 +31,17 @@ export const Reviews: CollectionConfig = {
     create: ({ req: { user } }) => Boolean(user),
   },
   hooks: {
+    beforeValidate: [
+      async ({ data, req }) => {
+        if (!data || !req.user) return data;
+        // Never allow a signed-in reviewer to impersonate another author.
+        return {
+          ...data,
+          authorName: req.user.email,
+          authorEmail: req.user.email,
+        };
+      },
+    ],
     afterChange: [
       async ({ doc, req }) => {
         await revalidateProductFromReview(doc, req);
