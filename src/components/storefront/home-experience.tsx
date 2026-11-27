@@ -70,8 +70,8 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
           old: discounted ? formatETB(item.originalPrice!) : "",
           badge: discounted ? `−${discount}%` : "FEATURED",
           image: item.image || products[index % products.length].image,
-          href: item.listingType === "external" && item.externalUrl ? item.externalUrl : `/product/${item.slug}`,
-          external: item.listingType === "external",
+          href: item.listingType === "external" && item.externalUrl && /^https?:\/\//i.test(item.externalUrl) ? item.externalUrl : `/product/${item.slug}`,
+          external: item.listingType === "external" && Boolean(item.externalUrl && /^https?:\/\//i.test(item.externalUrl)),
           sample: false,
         };
       })
