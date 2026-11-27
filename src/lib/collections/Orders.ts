@@ -236,6 +236,7 @@ export const Orders: CollectionOverride = ({ defaultCollection }) => {
             previousDoc?.status !== OrderStatus.CANCELED
           ) {
             const cancelledItems: OrderItem[] = Array.isArray(doc.items) ? doc.items : [];
+            const restoredProductIds = new Set<number>();
             for (const item of cancelledItems) {
               const quantity = Number(item?.quantity ?? 0);
               if (!Number.isSafeInteger(quantity) || quantity < 1) continue;
@@ -249,6 +250,21 @@ export const Orders: CollectionOverride = ({ defaultCollection }) => {
                 data: { inventory: { $inc: quantity } },
                 req,
               });
+              if (productId) restoredProductIds.add(productId);
+            }
+
+            if (restoredProductIds.size) {
+              const products = await req.payload.find({
+                collection: CollectionName.products,
+                depth: 0,
+                pagination: false,
+                limit: restoredProductIds.size,
+                where: { id: { in: Array.from(restoredProductIds) } },
+                select: { slug: true },
+              });
+              for (const product of products.docs) {
+                if (product.slug) revalidate(`${CollectionName.products}-${product.slug}`);
+              }
             }
           }
 
