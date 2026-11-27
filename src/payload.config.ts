@@ -73,6 +73,10 @@ export default buildConfig({
     pool: {
       connectionString: appConfig.DATABASE_URL,
     },
+    migrationDir: path.resolve(
+      path.dirname(fileURLToPath(import.meta.url)),
+      "../payload-migrations",
+    ),
   }),
   editor: baseEditor,
   email: appConfig.SEND_EMAIL_WHATSAPP
