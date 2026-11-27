@@ -298,9 +298,13 @@ export const Orders: CollectionOverride = ({ defaultCollection }) => {
           if (!data) return data;
 
           if (operation === "create") {
+            if (!req.user) throw new Error("Sign in before placing an order.");
             data.status = OrderStatus.NEW;
             data.isDemoOrder = true;
-            data.customer = req.user?.id ?? null;
+            data.customer = req.user.id;
+            // Order notifications must go only to the authenticated account
+            // address, never an arbitrary address supplied in the request.
+            data.email = req.user.email;
           }
 
           const rawCart = data.cart;
