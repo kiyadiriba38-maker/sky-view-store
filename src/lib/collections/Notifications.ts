@@ -62,7 +62,7 @@ export const Notifications: CollectionConfig = {
     },
     { name: "read", type: "checkbox", defaultValue: false, index: true, access: { create: isAdmin, update: ({ req }) => Boolean(req.user) } },
     { name: "relatedOrder", type: "relationship", relationTo: "orders", access: { create: isAdmin, update: () => false } },
-    { name: "relatedSeller", type: "relationship", relationTo: "sellers", access: { create: isAdmin, update: () => false } },
+    { name: "relatedSeller", type: "relationship", relationTo: "sellers" as never, access: { create: isAdmin, update: () => false } },
     { name: "relatedProduct", type: "relationship", relationTo: "products", access: { create: isAdmin, update: () => false } },
   ],
   endpoints: [
@@ -94,7 +94,9 @@ export const Notifications: CollectionConfig = {
           id: String(id),
           depth: 0,
           overrideAccess: true,
-        });
+        } as never) as unknown as {
+          user: number | string | { id: number | string };
+        };
         const owner = typeof notification.user === "object" && notification.user
           ? notification.user.id
           : notification.user;
@@ -107,7 +109,7 @@ export const Notifications: CollectionConfig = {
           data: { read: true },
           overrideAccess: true,
           req,
-        });
+        } as never);
         return Response.json({ notification: updated });
       },
     },
@@ -122,7 +124,7 @@ export const Notifications: CollectionConfig = {
           limit: 100,
           depth: 0,
           overrideAccess: true,
-        });
+        } as never) as unknown as { docs: Array<{ id: number | string }> };
         for (const item of result.docs) {
           await req.payload.update({
             collection: "notifications" as never,
@@ -130,7 +132,7 @@ export const Notifications: CollectionConfig = {
             data: { read: true },
             overrideAccess: true,
             req,
-          });
+          } as never);
         }
         return Response.json({ updated: result.docs.length });
       },
