@@ -1,8 +1,8 @@
-import type { CollectionConfig } from "payload";
+import type { Access, CollectionAfterChangeHook, CollectionConfig, CollectionBeforeChangeHook } from "payload";
 
 import { isAdmin } from "@/lib/collections/base-fields";
 
-const isOwnerOrAdmin = ({ req, id }: { req: { user?: { id?: number | string; roles?: string[] } | null }; id?: number | string }) => {
+const isOwnerOrAdmin: Access = ({ req }) => {
   if (!req.user) return false;
   if (req.user.roles?.includes("admin")) return true;
   return {
@@ -46,6 +46,19 @@ export const Sellers: CollectionConfig = {
           };
         }
         return data;
+      },
+    ],
+    beforeChange: [
+      ({ data, req, operation, originalDoc }) => {
+        if (!data || !req.user || isAdmin({ req })) return data;
+        if (operation === "create") {
+          return { ...data, owner: req.user.id, approvalStatus: "pending" };
+        }
+        return {
+          ...data,
+          owner: originalDoc?.owner ?? req.user.id,
+          approvalStatus: originalDoc?.approvalStatus ?? "pending",
+        };
       },
     ],
   },
