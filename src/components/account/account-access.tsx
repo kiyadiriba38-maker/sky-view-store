@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import GoogleSignInButton from "@/components/account/google-sign-in-button";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FormEvent, useState } from "react";
 
@@ -77,6 +78,23 @@ export default function AccountAccess({ mode }: { mode: Mode }) {
             {message ? <p role="alert" className="rounded-xl border border-rose-300/20 bg-rose-300/10 px-4 py-3 text-xs leading-5 text-rose-100">{message}</p> : null}
             <button disabled={busy} type="submit" className="flex w-full items-center justify-center rounded-xl bg-cyan-200 px-5 py-4 text-xs font-extrabold uppercase tracking-[.17em] text-[#07111a] transition hover:-translate-y-0.5 hover:bg-white disabled:cursor-not-allowed disabled:opacity-50">{busy ? "Please wait…" : mode === "login" ? "Sign in" : "Create account"} <span className="ml-2">↗</span></button>
           </form>
+          <div className="mt-7">
+            <div className="flex items-center gap-3 text-[9px] font-bold uppercase tracking-[.2em] text-white/25">
+              <span className="h-px flex-1 bg-white/10" />
+              or continue with
+              <span className="h-px flex-1 bg-white/10" />
+            </div>
+            {process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ? (
+              <GoogleSignInButton
+                clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}
+                redirectTo={redirectTo}
+              />
+            ) : (
+              <p className="mt-4 text-center text-[10px] leading-5 text-white/35">
+                Google sign-in will appear once the store's Google client ID is configured.
+              </p>
+            )}
+          </div>
           <p className="mt-7 text-center text-xs text-white/45">{mode === "login" ? "New to Sky View Store?" : "Already have an account?"} <Link className="font-semibold text-cyan-200 hover:text-white" href={`${mode === "login" ? "/account/register" : "/account/login"}${requestedNext ? `?next=${encodeURIComponent(redirectTo)}` : ""}`}>{mode === "login" ? "Create account" : "Sign in"}</Link></p>
           <p className="mt-8 text-center text-[10px] leading-5 text-white/25">Your account is for customer shopping features. Payments on this site remain demo-only.</p>
         </section>
