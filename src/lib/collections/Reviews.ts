@@ -53,7 +53,15 @@ export const Reviews: CollectionConfig = {
           select: { status: true, items: true, isDemoOrder: true },
         });
 
-        const hasEligiblePurchase = orders.docs.some((order) => {
+        const orderDocs = orders.docs as unknown as Array<{
+          isDemoOrder?: boolean;
+          status?: string;
+          items?: Array<{
+            product: number | string | { id: number | string } | null;
+            isDemo?: boolean;
+          }>;
+        }>;
+        const hasEligiblePurchase = orderDocs.some((order) => {
           if (order.isDemoOrder || order.status === "canceled" || order.status === "refunded") return false;
           return (order.items ?? []).some((item) => {
             const raw = item.product;
