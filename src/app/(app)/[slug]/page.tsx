@@ -8,9 +8,8 @@ import RenderBlocks from "@/components/blocks/render-blocks";
 import RenderHero from "@/components/blocks/render-hero";
 import { JsonLdViewScript } from "@/components/shared/elements-ssr";
 import DAL from "@/lib/core/dal";
-import { resolveMediaUrl } from "@/lib/core/util";
 import { CollectionName } from "@/lib/core/types/types";
-import { getDecodedSlug } from "@/lib/core/util";
+import { getDecodedSlug, resolveMediaUrl } from "@/lib/core/util";
 import { buildMetadataByModel } from "@/lib/seo/metadata";
 
 export const dynamic = "force-static";
