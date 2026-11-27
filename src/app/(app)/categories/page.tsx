@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Categories | Sky View Store", description: "Explore marketplace categories from technology and fashion to home, sports and more." };
 
 export default async function CategoriesPage() {
-  const categories = await DAL.fetchArchiveCategories();
+  const categories = await DAL.queryArchiveCategories({ limit: 0 });
   return <StorefrontShell eyebrow="Browse by interest / 03" title="Explore every category." description="Discover products across technology, fashion, home, beauty, sports, automotive, hobbies and more. Demo catalogue categories are available immediately; real product availability depends on published listings.">
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
       {DEMO_CATEGORIES.map((category,index)=><Link key={category.slug} href={`/shop?category=${category.slug}`} className="group relative min-h-48 overflow-hidden rounded-2xl border border-white/10 bg-[#101a28]">
