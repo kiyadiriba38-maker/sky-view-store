@@ -1,6 +1,9 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { useState } from "react";
 
 import type { Category, Product } from "@/lib/core/types/payload-types";
 import { formatPrice, resolveMediaUrl } from "@/lib/core/util";
@@ -57,6 +60,8 @@ export function StorefrontShell({
 }
 
 export function ProductGrid({ products }: { products: Product[] }) {
+  const [selected, setSelected] = useState<string[]>([]);
+  const toggleCompare = (slug: string) => setSelected((current) => current.includes(slug) ? current.filter((item) => item !== slug) : current.length < 4 ? [...current, slug] : current);
   if (!products.length) {
     return <div className="rounded-3xl border border-dashed border-white/15 bg-white/[.025] px-6 py-16 text-center"><p className="text-lg font-semibold">No published products yet</p><p className="mt-2 text-sm text-white/45">Products will appear here after the store admin publishes authorized listings.</p></div>;
   }
@@ -86,6 +91,7 @@ export function ProductGrid({ products }: { products: Product[] }) {
                 </div>
               </div>
             </Link>
+            {!external ? <div className="px-4 pb-4"><button type="button" onClick={() => toggleCompare(product.slug)} aria-pressed={selected.includes(product.slug)} className={`rounded-full border px-3 py-2 text-[9px] font-bold uppercase tracking-wider transition ${selected.includes(product.slug) ? "border-cyan-200 bg-cyan-200 text-[#07111a]" : "border-white/15 text-white/55 hover:border-cyan-200/50 hover:text-cyan-100"}`}>{selected.includes(product.slug) ? "Added to compare" : "Compare"}</button></div> : null}
           </article>
         );
       })}
