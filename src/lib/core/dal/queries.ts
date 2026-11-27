@@ -388,6 +388,7 @@ export default class Queries extends BaseDal {
 
     return {
       id: product.id,
+      slug,
       title: product.title,
       description: product.description,
       updatedAt: product.updatedAt,
