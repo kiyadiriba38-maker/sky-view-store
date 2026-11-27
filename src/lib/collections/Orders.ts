@@ -19,6 +19,7 @@ import appConfig from "@/lib/core/config";
 import { getOrderDashboard } from "@/lib/core/dal/order-dashboard";
 import { OrderNotifier } from "@/lib/core/OrderNotifier";
 import { createStoreNotification } from "@/lib/core/notifications";
+import { createStoreAuditLog } from "@/lib/core/audit-log";
 import {
   type CartItem,
   type OrderItem,
@@ -300,6 +301,13 @@ export const Orders: CollectionOverride = ({ defaultCollection }) => {
             href: "/account/orders",
             relatedOrder: order.id,
           });
+          await createStoreAuditLog(req.payload, {
+            actor: req.user.id,
+            action: "return_requested",
+            targetCollection: "orders",
+            targetId: order.id,
+            summary: `Return request submitted for order #${order.id}.`,
+          });
           return Response.json({
             message: isDemo
               ? "Demo return request recorded. This only simulates the review process; no real refund or payment is involved."
@@ -517,6 +525,15 @@ export const Orders: CollectionOverride = ({ defaultCollection }) => {
               relatedOrder: doc.id,
             });
           } else if (customerId && operation === "update" && previousDoc?.status !== doc.status) {
+            if (req.user?.roles?.includes("admin")) {
+              await createStoreAuditLog(req.payload, {
+                actor: req.user.id,
+                action: "order_status_changed",
+                targetCollection: "orders",
+                targetId: doc.id,
+                summary: `Order #${doc.id} status changed from ${String(previousDoc?.status ?? "unknown")} to ${String(doc.status ?? "unknown")}.`,
+              });
+            }
             await createStoreNotification(req.payload, {
               user: customerId,
               type: "order_update",
