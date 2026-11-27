@@ -433,7 +433,8 @@
     "dealsEyebrow": "Offers / 02",
     "dealsTitle": "Deals worth discovering.",
     "dealsDescription": "Only products with an original price and a lower current price set by the store admin appear here.",
-    "newest": "Newest"
+    "newest": "Newest",
+    "reviewLabels": "DEMO AND VERIFIED LABELS"
   },
   "notifications": {
     "title": "Your notifications",
