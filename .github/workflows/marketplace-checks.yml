@@ -34,3 +34,42 @@ jobs:
         run: pnpm typecheck
       - name: ESLint
         run: pnpm lint
+
+  production-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.0
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Generate Payload types
+        run: pnpm generate:types
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/skyview_ci
+          PAYLOAD_SECRET: ci-only-payload-secret-not-used-for-deployment
+          PREVIEW_SECRET: ci-only-preview-secret-not-used-for-deployment
+          NEXT_PUBLIC_SITE_NAME: Sky View Store
+          NEXT_PUBLIC_BASE_URL: https://example.invalid
+          NEXT_PUBLIC_SERVER_URL: https://example.invalid
+          NEXT_PUBLIC_LANG: en
+      - name: Build Next.js
+        run: pnpm exec next build
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/skyview_ci
+          PAYLOAD_SECRET: ci-only-payload-secret-not-used-for-deployment
+          PREVIEW_SECRET: ci-only-preview-secret-not-used-for-deployment
+          NEXT_PUBLIC_SITE_NAME: Sky View Store
+          NEXT_PUBLIC_BASE_URL: https://example.invalid
+          NEXT_PUBLIC_SERVER_URL: https://example.invalid
+          NEXT_PUBLIC_LANG: en
+          NEXT_PUBLIC_ENABLE_STRIPE: "false"
+          SEND_EMAIL_WHATSAPP: "false"
