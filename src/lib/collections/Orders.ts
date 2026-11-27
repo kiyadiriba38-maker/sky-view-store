@@ -46,7 +46,8 @@ export const Orders: CollectionOverride = ({ defaultCollection }) => {
         if (!req.user) return false;
         return { customer: { equals: req.user.id } };
       },
-      // Checkout is account-only; never allow anonymous order creation.\n      create: ({ req }) => Boolean(req.user),
+      // Checkout is account-only; never allow anonymous order creation.
+      create: ({ req }) => Boolean(req.user),
     },
 
     fields: [
