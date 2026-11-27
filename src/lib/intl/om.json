@@ -320,5 +320,24 @@
     "error": "Beeksisa fe'uun hin danda'amne. Irra deebi'ii yaali.",
     "signIn": "Beeksisa ilaaluuf seeni.",
     "back": "Gara herregaatti deebi'i"
+  },
+  "reports": {
+    "button": "Tarree gabaasi",
+    "title": "Tarree kana gabaasi",
+    "description": "Gareen to'annoo suuqii maal akka qoratu barbaaddu ibsi. Gabaasni iccitii dha.",
+    "reason": "Sababa",
+    "misleading": "Tarree dogoggorsaa",
+    "counterfeit": "Shakkii oomisha sobaa",
+    "unsafe": "Qabiyyee nageenya hin qabne",
+    "seller": "Amala gurguraa",
+    "review": "Miidhaa yaadaa",
+    "other": "Kan biraa",
+    "details": "Ibsa dabalataa",
+    "detailsPlaceholder": "Rakkoo jiru ifatti ibsi (hanga qubee 2,000).",
+    "submit": "Gabaasa ergi",
+    "cancel": "Dhiisi",
+    "success": "Gabaasni kee qorannooaf ergameera.",
+    "signIn": "Tarree gabaasuuf seeni.",
+    "error": "Gabaasa erguun hin danda'amne. Irra deebi'ii yaali."
   }
 }
