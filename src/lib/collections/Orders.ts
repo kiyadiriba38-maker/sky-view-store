@@ -1,10 +1,12 @@
 import { addDataAndFileToRequest } from "payload";
+import { and, eq, gte, sql } from "drizzle-orm";
 
 import type { Product, Variant } from "@/lib/core/types/payload-types";
 import type { CollectionOverride } from "@payloadcms/plugin-ecommerce/types";
 import type {
   CollectionAfterChangeHook,
   CollectionBeforeValidateHook,
+  PayloadRequest,
 } from "payload";
 
 import {
@@ -28,6 +30,51 @@ import {
   stripePaymentIntentField,
   verifyStripePaymentIntent,
 } from "@/lib/stripe/server";
+
+type InventoryCollection = typeof CollectionName.products | "variants";
+
+const changeInventoryAtomically = async ({
+  req,
+  collection,
+  id,
+  quantity,
+  direction,
+}: {
+  req: PayloadRequest;
+  collection: InventoryCollection;
+  id: number | string;
+  quantity: number;
+  direction: "reserve" | "restore";
+}) => {
+  const adapter = req.payload.db;
+  const transactionID = await req.transactionID;
+  const transaction = transactionID
+    ? adapter.sessions[transactionID]?.db
+    : undefined;
+  const database = transaction ?? adapter.drizzle;
+  const table = adapter.tables[collection] as typeof adapter.tables.products;
+
+  const inventoryExpression = direction === "reserve"
+    ? sql`${table.inventory} - ${quantity}`
+    : sql`${table.inventory} + ${quantity}`;
+  const condition = direction === "reserve"
+    ? and(eq(table.id, id), gte(table.inventory, quantity))
+    : eq(table.id, id);
+
+  const updated = await database
+    .update(table)
+    .set({ inventory: inventoryExpression })
+    .where(condition)
+    .returning({ id: table.id });
+
+  if (!updated.length) {
+    throw new Error(
+      direction === "reserve"
+        ? "Stock changed while checkout was being completed. Please refresh your cart and try again."
+        : "Could not restore inventory for the cancelled order.",
+    );
+  }
+};
 
 export const Orders: CollectionOverride = ({ defaultCollection }) => {
   return {
@@ -325,11 +372,12 @@ export const Orders: CollectionOverride = ({ defaultCollection }) => {
               const productId = typeof item.product === "object" ? item.product?.id : item.product;
               const targetId = variantId ?? productId;
               if (!targetId) continue;
-              await req.payload.db.updateOne({
+              await changeInventoryAtomically({
+                req,
                 collection: variantId ? "variants" : CollectionName.products,
                 id: targetId,
-                data: { inventory: { $inc: quantity } },
-                req,
+                quantity,
+                direction: "restore",
               });
               if (productId) restoredProductIds.add(productId);
             }
@@ -371,11 +419,12 @@ export const Orders: CollectionOverride = ({ defaultCollection }) => {
             const targetId = variantId ?? productId;
             if (!targetId) continue;
 
-            await req.payload.db.updateOne({
+            await changeInventoryAtomically({
+              req,
               collection: variantId ? "variants" : CollectionName.products,
               id: targetId,
-              data: { inventory: { $inc: quantity * -1 } },
-              req,
+              quantity,
+              direction: "reserve",
             });
 
             if (productId) touchedProductIds.add(productId);
