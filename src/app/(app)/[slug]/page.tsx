@@ -46,6 +46,8 @@ export default async function PagePage({ params }: PropsSlug) {
         typeof product.originalPriceInUSD === "number"
           ? product.originalPriceInUSD
           : null,
+      listingType: product.listingType ?? "own_store",
+      externalUrl: product.externalUrl ?? null,
     }));
     return <HomeExperience catalogProducts={catalogProducts} />;
   }
