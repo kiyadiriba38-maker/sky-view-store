@@ -29,3 +29,9 @@ After the preview is verified, add the same two variables to the production serv
 Open `/account/login` on the preview service. The Google button appears after the public client ID is configured. Test both a first-time customer account and an existing account with the same verified Google email.
 
 Never paste credentials or private keys into source control or chat. The client ID is public; this implementation does not require a client secret.
+
+## 4. Seller listing moderation
+
+Seller listings remain drafts until reviewed. To enable publication, a responsible adult store moderator must have an administrator account and configure `LISTING_MODERATOR_EMAIL` in the Render environment to their own account email. Only that designated account can mark a listing as policy-reviewed and publish it.
+
+Leave this variable unset until the responsible adult moderator is ready. Do not use a minor's account as the moderator.
