@@ -32,9 +32,10 @@ const copy = {
   om: { search: "Oomisha, maqaa daldalaa fi ramaddii barbaadi", hero: "Gabaa guutuu. Muuxannoo bittaa haaraa.", sub: "Meeshaalee guyyaa guyyaa, teeknooloojii, faashinii fi kanneen biroo bakka tokkotti argadhu.", shop: "Gabaa ilaali", categories: "Ramaddii irratti bitadhu", popular: "Oomisha beekamoo", demo: "YAALI", real: "OOMISHA DHUGAA", all: "Hunda", demoOnly: "Oomisha yaalii", realOnly: "Oomisha dhugaa", searchButton: "Barbaadi", browse: "Oomisha hunda ilaali" },
 };
 
-const formatPrice = (amount: number, currency: Currency, rates: Record<string, number>) => {
+const formatPrice = (amount: number, currency: Currency, rates: Record<string, number>, locale: Language) => {
   const converted = currency === "ETB" ? amount : rates[currency] ? amount * rates[currency] : amount;
-  return new Intl.NumberFormat(currency === "ETB" ? "en-ET" : "en-US", {
+  const localeTag = locale === "am" ? "am-ET" : locale === "om" ? "om-ET" : currency === "ETB" ? "en-ET" : "en-US";
+  return new Intl.NumberFormat(localeTag, {
     style: "currency", currency, maximumFractionDigits: currency === "ETB" ? 0 : 2,
   }).format(converted);
 };
@@ -160,7 +161,7 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
         <div className="sv-product-grid">
           {products.slice(0, 24).map((product) => {
             const href = product.demo && !("databaseBacked" in product && product.databaseBacked) ? `/demo-product/${product.slug}` : `/product/${product.slug}`;
-            return <article className="sv-product-card" key={product.id}><Link href={href} className="sv-product-image"><Image src={product.image} alt={product.title} fill unoptimized sizes="(max-width: 640px) 50vw, 25vw" /><span className={product.demo ? "sv-label-demo" : "sv-label-real"}>{product.demo ? t.demo : t.real}</span></Link><div className="sv-product-info"><small>{product.category}</small><Link href={href} className="sv-product-title">{product.title}</Link><div className="sv-price-row"><b>{formatPrice(product.priceETB, currency, rates)}</b><del>{formatPrice(product.originalPriceETB, currency, rates)}</del></div><span className="sv-demo-note">{product.demo ? "Sample listing · simulated stock" : "Published marketplace listing"}</span></div></article>;
+            return <article className="sv-product-card" key={product.id}><Link href={href} className="sv-product-image"><Image src={product.image} alt={product.title} fill unoptimized sizes="(max-width: 640px) 50vw, 25vw" /><span className={product.demo ? "sv-label-demo" : "sv-label-real"}>{product.demo ? t.demo : t.real}</span></Link><div className="sv-product-info"><small>{product.category}</small><Link href={href} className="sv-product-title">{product.title}</Link><div className="sv-price-row"><b>{formatPrice(product.priceETB, currency, rates, locale)}</b><del>{formatPrice(product.originalPriceETB, currency, rates, locale)}</del></div><span className="sv-demo-note">{product.demo ? "Sample listing · simulated stock" : "Published marketplace listing"}</span></div></article>;
           })}
         </div>
         {products.length === 0 ? <div className="sv-empty">No products match your search. Try another term or category.</div> : null}
