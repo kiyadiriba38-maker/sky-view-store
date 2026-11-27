@@ -134,7 +134,8 @@
     "googlePending": "የGoogle መግቢያ የመደብሩ የGoogle መለያ መለያ ሲዋቀር ይታያል።",
     "newToStore": "አዲስ ደንበኛ ነዎት?",
     "alreadyHaveAccount": "መለያ አለዎት?",
-    "paymentsDemoOnly": "መለያዎ ለግዢ ብቻ ነው። ክፍያዎች የሙከራ ብቻ ናቸው።"
+    "paymentsDemoOnly": "መለያዎ ለግዢ ብቻ ነው። ክፍያዎች የሙከራ ብቻ ናቸው።",
+    "notificationsLink": "ማሳወቂያዎች"
   },
   "seller": {
     "accountLink": "የደንበኛ መለያ",
@@ -289,5 +290,18 @@
     "dealsTitle": "ሊታዩ የሚገቡ ቅናሾች።",
     "dealsDescription": "በአስተዳዳሪው የተቀመጠ የቀድሞ ዋጋ እና ዝቅተኛ የአሁኑ ዋጋ ያላቸው ምርቶች ብቻ እዚህ ይታያሉ።",
     "newest": "አዲስ"
+  },
+  "notifications": {
+    "title": "ማሳወቂያዎችዎ",
+    "description": "ስለ ትዕዛዞችዎ፣ የሻጭ ማመልከቻዎ እና የመደብሩ እንቅስቃሴ ዝመናዎች።",
+    "markAll": "ሁሉንም እንደተነበቡ ምልክት አድርግ",
+    "unread": "ያልተነበቡ",
+    "read": "የተነበቡ",
+    "empty": "ሁሉንም ዝመናዎች አይተዋል።",
+    "open": "ዝመናውን ክፈት",
+    "loading": "ማሳወቂያዎች በመጫን ላይ…",
+    "error": "ማሳወቂያዎችን መጫን አልተቻለም። እንደገና ይሞክሩ።",
+    "signIn": "ማሳወቂያዎችን ለማየት ይግቡ።",
+    "back": "ወደ መለያ ተመለስ"
   }
 }
