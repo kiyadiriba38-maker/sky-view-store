@@ -39,7 +39,7 @@ const canManageSellerProducts: Access = async ({ req }) => {
   if (req.user?.roles?.includes("admin")) return true;
   if (!req.user) return false;
   const sellers = await req.payload.find({
-    collection: "sellers",
+    collection: "sellers" as never,
     depth: 0,
     limit: 100,
     where: { and: [{ owner: { equals: req.user.id } }, { approvalStatus: { equals: "approved" } }] },
@@ -51,7 +51,7 @@ const canManageSellerProducts: Access = async ({ req }) => {
 const enforceSellerListing: CollectionBeforeChangeHook = async ({ data, req, operation, originalDoc }) => {
   if (!data || !req.user || req.user.roles?.includes("admin")) return data;
   const sellers = await req.payload.find({
-    collection: "sellers",
+    collection: "sellers" as never,
     depth: 0,
     limit: 1,
     where: { and: [{ owner: { equals: req.user.id } }, { approvalStatus: { equals: "approved" } }] },
@@ -280,12 +280,12 @@ export const Products: CollectionOverride = ({ defaultCollection }) => {
         const publicListings = { and: [{ _status: { equals: "published" } }, { listingStatus: { equals: "approved" } }] };
         if (!req.user) return publicListings;
         const sellers = await req.payload.find({
-          collection: "sellers",
+          collection: "sellers" as never,
           depth: 0,
           limit: 100,
           where: { owner: { equals: req.user.id } },
         });
-        const ids = sellers.docs.map((seller) => seller.id);
+        const ids = (sellers.docs as Array<{ id: number }>).map((seller) => seller.id);
         return ids.length ? { or: [publicListings, { seller: { in: ids } }] } : publicListings;
       },
       create: canCreateSellerProduct,
