@@ -9,7 +9,6 @@ import {
   type CheckoutFormProps,
 } from "@/lib/core/types/form";
 import { postJson } from "@/lib/core/util";
-import CheckoutPayment from "@/lib/stripe/CheckoutPayment";
 import { stripeConfig } from "@/lib/stripe/config";
 
 const demoPaymentMethods = [
