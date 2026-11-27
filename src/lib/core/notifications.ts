@@ -28,7 +28,7 @@ export async function createStoreNotification(
       ? input.href
       : undefined;
     await payload.create({
-      collection: "notifications",
+      collection: "notifications" as never,
       data: { ...input, href, read: false } as never,
       overrideAccess: true,
     });
