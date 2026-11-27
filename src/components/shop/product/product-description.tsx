@@ -51,7 +51,7 @@ export default function ProductDescription({
           <p className="mt-2 text-sm leading-6 text-muted-foreground">
             This item is listed by an independent seller. Sky View Store does not stock or sell it, and checkout takes place on the seller&apos;s website.
           </p>
-          {product.externalUrl ? (
+          {product.externalUrl && /^https?:\/\//i.test(product.externalUrl) ? (
             <a
               href={product.externalUrl}
               target="_blank"
