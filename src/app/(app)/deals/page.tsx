@@ -9,7 +9,7 @@ export const metadata: Metadata = { title: "Deals | Sky View Store", description
 export default async function DealsPage() {
   const products = await DAL.queryAllProducts();
   const deals = products.filter((product) => Number(product.originalPriceInUSD ?? 0) > Number(product.priceInUSD ?? 0));
-  return <StorefrontShell eyebrow="Offers / 02" title="Deals worth discovering." description="Only products with an original price and a lower current price set by the store admin appear here.">
+  return <StorefrontShell page="deals" eyebrow="Offers / 02" title="Deals worth discovering." description="Only products with an original price and a lower current price set by the store admin appear here.">
     <ProductGrid products={deals} />
   </StorefrontShell>;
 }
