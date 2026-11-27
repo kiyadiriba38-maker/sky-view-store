@@ -4,9 +4,11 @@ import type { ReactNode } from "react";
 
 import appConfig from "@/lib/core/config";
 import { IntlProvider } from "@/lib/providers/intl";
+import { ThemeProvider } from "@/lib/providers/theme";
 
 export default function Providers({ children }: { children: ReactNode }) {
   return (
+    <ThemeProvider>
     <IntlProvider>
       <EcommerceProvider
         enableVariants={true}
@@ -35,5 +37,6 @@ export default function Providers({ children }: { children: ReactNode }) {
         {children}
       </EcommerceProvider>
     </IntlProvider>
+    </ThemeProvider>
   );
 }
