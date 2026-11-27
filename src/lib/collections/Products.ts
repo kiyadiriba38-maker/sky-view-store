@@ -14,6 +14,7 @@ import {
   isAdmin,
 } from "@/lib/collections/base-fields";
 import { makeRevalidateHooks, normalizeFaqs } from "@/lib/collections/hooks";
+import { createStoreNotification } from "@/lib/core/notifications";
 import { CollectionName, RoutePath } from "@/lib/core/types/types";
 
 const getFieldName = (field: Field) =>
@@ -152,6 +153,7 @@ const enhanceVariantField = (field: Field): Field => {
 };
 
 export const Products: CollectionOverride = ({ defaultCollection }) => {
+  const revalidateHooks = makeRevalidateHooks(CollectionName.products);
   const pluginFields = ((defaultCollection.fields || []) as Field[])
     .filter((field) => getFieldName(field) !== "layout")
     .map((field) => {
@@ -323,7 +325,57 @@ export const Products: CollectionOverride = ({ defaultCollection }) => {
       useAsTitle: "title",
     },
     hooks: {
-      ...makeRevalidateHooks(CollectionName.products),
+      ...revalidateHooks,
+      afterChange: [
+        ...revalidateHooks.afterChange,
+        async ({ doc, operation, previousDoc, req }) => {
+          const sellerId = typeof doc.seller === "object" && doc.seller
+            ? doc.seller.id
+            : doc.seller;
+          const statusChanged = operation === "create" ||
+            previousDoc?.listingStatus !== doc.listingStatus ||
+            previousDoc?._status !== doc._status;
+
+          if (sellerId && statusChanged) {
+            const listingStatus = doc.listingStatus ?? "pending";
+            const statusLabel = listingStatus === "approved" && doc._status === "published"
+              ? "approved and published"
+              : listingStatus === "pending"
+                ? "pending review"
+                : String(listingStatus);
+            await createStoreNotification(req.payload, {
+              user: sellerId,
+              type: "listing_review",
+              title: "Product listing updated",
+              message: `Your listing "${doc.title}" is ${statusLabel}.`,
+              href: "/seller/dashboard",
+              relatedProduct: doc.id,
+            });
+          }
+
+          if (operation === "create" && doc.listingStatus === "pending") {
+            const admins = await req.payload.find({
+              collection: "users",
+              where: { roles: { contains: "admin" } },
+              limit: 50,
+              depth: 0,
+              overrideAccess: true,
+            });
+            for (const admin of admins.docs) {
+              await createStoreNotification(req.payload, {
+                user: admin.id,
+                type: "listing_review",
+                title: "Product listing needs review",
+                message: `A seller submitted "${doc.title}" for review.`,
+                href: "/admin/collections/products",
+                relatedProduct: doc.id,
+              });
+            }
+          }
+
+          return doc;
+        },
+      ],
       beforeChange: [populateSlugOnCreate, enforceSellerListing, requirePolicyReviewForPublication],
       beforeValidate: [
         ({ data }) => {
