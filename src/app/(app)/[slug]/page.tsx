@@ -47,6 +47,8 @@ export default async function PagePage({ params }: PropsSlug) {
           ? product.originalPriceInUSD
           : null,
       listingType: product.listingType ?? "own_store",
+      isDemo: Boolean((product as typeof product & { isDemo?: boolean }).isDemo),
+      demoImageUrl: (product as typeof product & { demoImageUrl?: string | null }).demoImageUrl ?? null,
       externalUrl: product.externalUrl ?? null,
     }));
     return <HomeExperience catalogProducts={catalogProducts} />;
