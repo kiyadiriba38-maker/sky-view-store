@@ -10,7 +10,9 @@ type CatalogProduct = {
   image: string | null;
   price: number;
   originalPrice: number | null;
-  listingType?: "own_store" | "external" | null;
+  listingType?: "own_store" | "marketplace_seller" | "external" | null;
+  isDemo?: boolean;
+  demoImageUrl?: string | null;
   externalUrl?: string | null;
 };
 
@@ -57,13 +59,13 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
       ? catalogProducts.slice(0, 24).map((item, index) => ({
           name: item.title,
           category: "Store catalogue",
-          image: item.image || previewProducts[index % previewProducts.length].image,
-          tag: item.listingType === "external" ? "EXTERNAL LISTING" : "SKY VIEW STORE",
+          image: item.image || item.demoImageUrl || previewProducts[index % previewProducts.length].image,
+          tag: item.isDemo ? "DEMO PRODUCT" : item.listingType === "external" ? "EXTERNAL LISTING" : item.listingType === "marketplace_seller" ? "APPROVED SELLER" : "SKY VIEW STORE",
           price: formatETB(item.price),
           oldPrice: item.originalPrice && item.originalPrice > item.price ? formatETB(item.originalPrice) : null,
           href: item.listingType === "external" && item.externalUrl && /^https?:\/\//i.test(item.externalUrl) ? item.externalUrl : `/product/${item.slug}`,
           external: item.listingType === "external" && Boolean(item.externalUrl && /^https?:\/\//i.test(item.externalUrl)),
-          preview: false,
+          preview: Boolean(item.isDemo),
         }))
       : previewProducts.map((item) => ({
           name: item.name,
