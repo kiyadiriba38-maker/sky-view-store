@@ -234,6 +234,7 @@ export const Products: CollectionOverride = ({ defaultCollection }) => {
         { label: "Rejected", value: "rejected" },
         { label: "Suspended", value: "suspended" },
       ],
+      access: { read: ({ req }) => isAdmin({ req }), update: ({ req }) => isListingModerator({ req }) },
       admin: { position: "sidebar" },
     },
     {
