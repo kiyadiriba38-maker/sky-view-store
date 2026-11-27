@@ -89,15 +89,14 @@ export function ProductGrid({ products }: { products: Product[] }) {
         const demoImage = (product as Product & { demoImageUrl?: string }).demoImageUrl;
         const sellerImage = (product as Product & { productImageUrl?: string }).productImageUrl;
         const image = product.meta?.image && typeof product.meta.image === "object" ? resolveMediaUrl(product.meta.image) : demo ? demoImage ?? null : sellerImage ?? null;
-        const external = product.listingType === "external" && Boolean(product.externalUrl);
         const price = Number(product.priceInUSD ?? 0);
-        const href = external ? product.externalUrl! : `/product/${product.slug}`;
+        const href = `/product/${product.slug}`;
         return (
           <article key={product.id} className="group overflow-hidden rounded-2xl border border-white/10 bg-[#101a28] transition duration-300 hover:-translate-y-1 hover:border-cyan-200/50 hover:shadow-[0_20px_60px_rgba(0,0,0,.28)]">
             <Link href={href} target={external ? "_blank" : undefined} rel={external ? "noopener noreferrer" : undefined} className="block">
               <div className="relative aspect-square overflow-hidden bg-[#172436]">
                 {image ? <Image src={image} alt={product.title} fill unoptimized sizes="(max-width: 768px) 100vw, 25vw" className="object-cover transition duration-700 group-hover:scale-105" /> : <div className="grid h-full place-items-center text-4xl text-cyan-100/30">✦</div>}
-                <span className="absolute left-3 top-3 rounded-full border border-white/15 bg-black/55 px-3 py-1.5 text-[8px] font-bold uppercase tracking-[.12em]">{demo ? "DEMO PRODUCT" : external ? "External seller" : "Sky View Store"}</span>
+                <span className="absolute left-3 top-3 rounded-full border border-white/15 bg-black/55 px-3 py-1.5 text-[8px] font-bold uppercase tracking-[.12em]">{demo ? "DEMO PRODUCT" : product.listingType === "marketplace_seller" ? "APPROVED SELLER" : "SKY VIEW STORE"}</span>
               </div>
               <div className="p-4">
                 <h2 className="line-clamp-2 min-h-10 text-sm font-semibold leading-5">{product.title}</h2>
@@ -108,7 +107,7 @@ export function ProductGrid({ products }: { products: Product[] }) {
                 </div>
               </div>
             </Link>
-            {!external ? <div className="px-4 pb-4"><button type="button" onClick={() => toggleCompare(product.slug)} aria-pressed={selected.includes(product.slug)} className={`rounded-full border px-3 py-2 text-[9px] font-bold uppercase tracking-wider transition ${selected.includes(product.slug) ? "border-cyan-200 bg-cyan-200 text-[#07111a]" : "border-white/15 text-white/55 hover:border-cyan-200/50 hover:text-cyan-100"}`}>{selected.includes(product.slug) ? "Added to compare" : "Compare"}</button></div> : null}
+            <div className="px-4 pb-4"><button type="button" onClick={() => toggleCompare(product.slug)} aria-pressed={selected.includes(product.slug)} className={`rounded-full border px-3 py-2 text-[9px] font-bold uppercase tracking-wider transition ${selected.includes(product.slug) ? "border-cyan-200 bg-cyan-200 text-[#07111a]" : "border-white/15 text-white/55 hover:border-cyan-200/50 hover:text-cyan-100"}`}>{selected.includes(product.slug) ? "Added to compare" : "Compare"}</button></div>
           </article>
         );
       })}
