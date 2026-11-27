@@ -47,5 +47,66 @@
       "yourCart": "የግዢ ጋሪዎ",
       "total": "ጠቅላላ"
     }
+  },
+  "blocks": {
+    "gallery": {
+      "select_image": "ምስል ይምረጡ"
+    }
+  },
+  "review_form": {
+    "open_button": "ግምገማ ይጻፉ",
+    "title": "ግምገማ ያክሉ",
+    "subtitle": "ስለዚህ ምርት ያጋጠመዎትን ያካፍሉ",
+    "close_button": "ዝጋ",
+    "cancel_button": "ሰርዝ",
+    "submit_button": "ግምገማ አስገባ",
+    "submit_sending": "በመላክ ላይ...",
+    "close_aria": "መስኮቱን ዝጋ",
+    "toast_success": "እናመሰግናለን! ግምገማዎ ተጨምሯል።",
+    "toast_failed": "ግምገማውን ማስገባት አልተሳካም",
+    "validation": {
+      "too_short": "{field} በጣም አጭር ነው (ቢያንስ {min})",
+      "too_long": "{field} በጣም ረጅም ነው (ከፍተኛ {max})"
+    },
+    "fields": {
+      "authorName": {
+        "label": "ስም",
+        "required": "ያስፈልጋል"
+      },
+      "authorEmail": {
+        "label": "ኢሜይል (አማራጭ)",
+        "invalid": "ትክክለኛ ኢሜይል ያስገቡ"
+      },
+      "title": {
+        "label": "ርዕስ",
+        "required": "ያስፈልጋል"
+      },
+      "rating": {
+        "label": "ደረጃ",
+        "aria": "ከ5 ውስጥ {value} ደረጃ ይስጡ"
+      },
+      "body": {
+        "label": "ግምገማ",
+        "required": "ያስፈልጋል"
+      }
+    }
+  },
+  "order_notifier": {
+    "whatsappAdmin": "📦 አዲስ ትዕዛዝ ተቀብለናል → ",
+    "email": {
+      "subjectPrefix": "የትዕዛዝ ማረጋገጫ - ቁጥር",
+      "greeting": "ሰላም",
+      "confirmation": "ትዕዛዝዎ በተሳካ ሁኔታ ተቀብሏል።",
+      "total": "የሚከፈለው ጠቅላላ:",
+      "orderNumber": "የትዕዛዝ ቁጥር:",
+      "thanks": "ከእኛ ጋር ስለገዙ እናመሰግናለን 💚",
+      "headers": {
+        "image": "ምስል",
+        "product": "ምርት",
+        "quantity": "ብዛት",
+        "price": "ዋጋ",
+        "total": "ጠቅላላ"
+      }
+    }
   }
 }
