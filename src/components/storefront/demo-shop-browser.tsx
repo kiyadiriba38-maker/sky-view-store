@@ -39,11 +39,11 @@ export default function DemoShopBrowser({ realProducts }: Props) {
     const matchKind=kind==="all"||(kind==="demo"?item.demo:!item.demo);
     return matchText&&matchCategory&&matchKind;
   }),[real,demoFallback,query,category,kind]);
-  const shown=filtered.slice(0,page*24);
+  const sorted=useMemo(()=>[...filtered].sort((a,b)=>sort==="price-low"?a.priceETB-b.priceETB:sort==="price-high"?b.priceETB-a.priceETB:sort==="name"?a.title.localeCompare(b.title):0),[filtered,sort]);\n  const shown=sorted.slice(0,page*24);
   return <div>
-    <div className="mb-6 grid gap-3 rounded-2xl border border-white/10 bg-[#101a28] p-4 md:grid-cols-[1fr_220px]">
+    <div className="mb-6 grid gap-3 rounded-2xl border border-white/10 bg-[#101a28] p-4 md:grid-cols-[1fr_220px_180px]">
       <input value={query} onChange={e=>{setQuery(e.target.value);setPage(1)}} placeholder="Search 1,000+ sample listings and real products" className="w-full rounded-xl border border-white/15 bg-[#091321] px-4 py-3 text-sm text-white outline-none focus:border-cyan-300"/>
-      <select value={category} onChange={e=>{setCategory(e.target.value);setPage(1)}} className="rounded-xl border border-white/15 bg-[#091321] px-4 py-3 text-sm text-white"><option value="all">All categories</option>{categoryOptions.map(c=><option key={c.slug} value={c.slug}>{c.name}</option>)}<option value="real-products">Real products</option></select>
+      <select value={category} onChange={e=>{setCategory(e.target.value);setPage(1)}} className="rounded-xl border border-white/15 bg-[#091321] px-4 py-3 text-sm text-white"><option value="all">All categories</option>{categoryOptions.map(c=><option key={c.slug} value={c.slug}>{c.name}</option>)}<option value="real-products">Real products</option></select>\n      <select value={sort} onChange={e=>{setSort(e.target.value);setPage(1)}} className="rounded-xl border border-white/15 bg-[#091321] px-4 py-3 text-sm text-white"><option value="featured">Featured</option><option value="price-low">Price: low to high</option><option value="price-high">Price: high to low</option><option value="name">Name: A to Z</option></select>
       <div className="flex flex-wrap gap-2 md:col-span-2">{[["all","All products"],["demo","Demo products"],["real","Real products"]].map(([value,label])=><button key={value} onClick={()=>{setKind(value);setPage(1)}} className={`rounded-full border px-4 py-2 text-xs font-bold ${kind===value?"border-cyan-300 bg-cyan-300 text-slate-950":"border-white/15 text-white/65"}`}>{label}</button>)}</div>
     </div>
     <div className="mb-4 flex items-center justify-between text-xs text-white/45"><span>{filtered.length.toLocaleString()} products found</span><span>Showing {shown.length.toLocaleString()}</span></div>
