@@ -15,6 +15,10 @@ import { generateMetadataLayout } from "@/lib/seo/metadata";
 
 import "@/lib/styles/globals.css";
 
+// This layout reads CMS settings from Postgres; keep it request-time so
+// production builds do not require a live database during static prerendering.
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata(): Promise<Metadata> {
   return generateMetadataLayout();
 }
