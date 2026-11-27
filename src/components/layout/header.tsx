@@ -15,6 +15,7 @@ import type { PayloadAdminBarProps } from "@payloadcms/admin-bar";
 import type { ReactNode } from "react";
 
 import AccessibilityBar from "@/components/layout/accessibility-bar";
+import LanguageSwitcher from "@/components/layout/language-switcher";
 import Search from "@/components/layout/search";
 import CmsLink from "@/components/shared/cms-link";
 import ImageVideo from "@/components/shared/image-video";
@@ -256,6 +257,7 @@ const HeaderBar = ({
 
           <div className="flex shrink-0 items-center justify-end gap-2 md:gap-4">
             {headerContent}
+            <LanguageSwitcher />
             <ThemeToggle />
             <CartModal />
           </div>
