@@ -1,8 +1,8 @@
-import type { CollectionConfig } from "payload";
+import type { Access, CollectionConfig } from "payload";
 
 import { isAdmin } from "@/lib/collections/base-fields";
 
-const ownerAccess = ({ req }: { req: { user?: { id: number | string; roles?: string[] } | null } }) => {
+const ownerAccess: Access = ({ req }) => {
   if (!req.user) return false;
   if (req.user.roles?.includes("admin")) return true;
   return { user: { equals: req.user.id } };
@@ -53,7 +53,7 @@ export const Notifications: CollectionConfig = {
       type: "text",
       validate: (value: unknown) => {
         if (value == null || value === "") return true;
-        if (typeof value !== "string" || !value.startsWith("/") || value.startsWith("//") || value.includes("\\\\")) {
+        if (typeof value !== "string" || !value.startsWith("/") || value.startsWith("//") || value.includes("\\")) {
           return "Notification links must be relative paths inside the store.";
         }
         return true;
