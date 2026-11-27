@@ -52,7 +52,7 @@ export const Reports: CollectionConfig = {
       },
     ],
     afterChange: [
-      async ({ doc, operation, req }) => {
+      async ({ doc, operation, previousDoc, req }) => {
         if (operation === "create") {
           if (req.user) {
             await createStoreAuditLog(req.payload, {
