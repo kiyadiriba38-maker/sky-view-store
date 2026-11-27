@@ -103,15 +103,9 @@ export const Orders: CollectionOverride = ({ defaultCollection }) => {
       },
       {
         name: "demoPaymentMethod",
-        type: "select",
-        required: true,
+        type: "text",
+        required: false,
         defaultValue: "telebirr",
-        options: [
-          { label: "Telebirr (demo only)", value: "telebirr" },
-          { label: "CBE Birr (demo only)", value: "cbe_birr" },
-          { label: "Bank transfer (demo only)", value: "bank_transfer" },
-          { label: "Cash on delivery (demo only)", value: "cash_on_delivery" },
-        ],
         admin: {
           position: "sidebar",
           readOnly: true,
