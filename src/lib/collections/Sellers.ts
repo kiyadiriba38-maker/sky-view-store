@@ -1,4 +1,4 @@
-import type { Access, CollectionAfterChangeHook, CollectionConfig, CollectionBeforeChangeHook } from "payload";
+import type { Access, CollectionConfig } from "payload";
 
 import { isAdmin } from "@/lib/collections/base-fields";
 
