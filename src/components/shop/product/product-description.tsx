@@ -43,15 +43,40 @@ export default function ProductDescription({
         </div>
       </div>
 
-      <div
-        className={
-          product.purchase_section.variants.length
-            ? "min-h-[12rem]"
-            : "min-h-[3rem]"
-        }
-      >
-        <ProductPurchaseSection product={product.purchase_section} />
-      </div>
+      {product.listingType === "external" ? (
+        <div className="rounded-2xl border border-cyan-500/30 bg-cyan-500/5 p-5">
+          <p className="text-sm font-semibold text-cyan-700 dark:text-cyan-300">
+            External marketplace listing
+          </p>
+          <p className="mt-2 text-sm leading-6 text-muted-foreground">
+            This item is listed by an independent seller. Sky View Store does not stock or sell it, and checkout takes place on the seller&apos;s website.
+          </p>
+          {product.externalUrl ? (
+            <a
+              href={product.externalUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 inline-flex items-center justify-center rounded-full bg-cyan-500 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:-translate-y-0.5 hover:bg-cyan-400"
+            >
+              Visit original seller ↗
+            </a>
+          ) : (
+            <p className="mt-3 text-sm font-medium text-amber-600">
+              Seller link not added yet. This listing cannot be purchased here.
+            </p>
+          )}
+        </div>
+      ) : (
+        <div
+          className={
+            product.purchase_section.variants.length
+              ? "min-h-[12rem]"
+              : "min-h-[3rem]"
+          }
+        >
+          <ProductPurchaseSection product={product.purchase_section} />
+        </div>
+      )}
 
       <div className="border-t pt-1 text-[1.125rem] leading-relaxed">
         <RichText
