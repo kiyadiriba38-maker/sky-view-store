@@ -300,7 +300,7 @@ export const Orders: CollectionOverride = ({ defaultCollection }) => {
           if (operation === "create") {
             data.status = OrderStatus.NEW;
             data.isDemoOrder = true;
-            if (req.user) data.customer = req.user.id;
+            data.customer = req.user?.id ?? null;
           }
 
           const rawCart = data.cart;
