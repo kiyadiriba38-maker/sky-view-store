@@ -72,7 +72,7 @@ export const Notifications: CollectionConfig = {
       handler: async (req) => {
         if (!req.user) return Response.json({ message: "Sign in to view notifications." }, { status: 401 });
         const result = await req.payload.find({
-          collection: "notifications",
+          collection: "notifications" as never,
           where: { user: { equals: req.user.id } },
           sort: "-createdAt",
           limit: 50,
@@ -90,7 +90,7 @@ export const Notifications: CollectionConfig = {
         const id = req.routeParams?.id;
         if (!id) return Response.json({ message: "Notification ID is required." }, { status: 400 });
         const notification = await req.payload.findByID({
-          collection: "notifications",
+          collection: "notifications" as never,
           id: String(id),
           depth: 0,
           overrideAccess: true,
@@ -102,7 +102,7 @@ export const Notifications: CollectionConfig = {
           return Response.json({ message: "You can only update your own notifications." }, { status: 403 });
         }
         const updated = await req.payload.update({
-          collection: "notifications",
+          collection: "notifications" as never,
           id: String(id),
           data: { read: true },
           overrideAccess: true,
@@ -117,7 +117,7 @@ export const Notifications: CollectionConfig = {
       handler: async (req) => {
         if (!req.user) return Response.json({ message: "Sign in to update notifications." }, { status: 401 });
         const result = await req.payload.find({
-          collection: "notifications",
+          collection: "notifications" as never,
           where: { and: [{ user: { equals: req.user.id } }, { read: { equals: false } }] },
           limit: 100,
           depth: 0,
@@ -125,7 +125,7 @@ export const Notifications: CollectionConfig = {
         });
         for (const item of result.docs) {
           await req.payload.update({
-            collection: "notifications",
+            collection: "notifications" as never,
             id: item.id,
             data: { read: true },
             overrideAccess: true,
