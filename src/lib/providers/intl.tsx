@@ -36,14 +36,14 @@ export const IntlProvider = ({ children }: { children: ReactNode }) => {
   const setLocale = (next: StoreLocale) => setLocaleState(next);
 
   useEffect(() => {
-    const saved = window.localStorage.getItem("sky-view-locale");
+    const saved = window.localStorage.getItem("sv-language");
     if (saved === "en" || saved === "am" || saved === "om") setLocaleState(saved);
     setReady(true);
   }, []);
 
   useEffect(() => {
     if (!ready) return;
-    window.localStorage.setItem("sky-view-locale", locale);
+    window.localStorage.setItem("sv-language", locale);
     document.documentElement.lang = locale;
     document.documentElement.dir = "ltr";
   }, [locale, ready]);
