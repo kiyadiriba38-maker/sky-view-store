@@ -194,6 +194,11 @@ export interface Product {
   slug: string;
   title: string;
   listingType?: "own_store" | "marketplace_seller" | null;
+  listingStatus?: "pending" | "approved" | "rejected" | "suspended" | null;
+  listingPolicyReviewed?: boolean | null;
+  isDemo?: boolean | null;
+  demoImageUrl?: string | null;
+  productImageUrl?: string | null;
   inventory?: number | null;
   priceInUSDEnabled?: boolean | null;
   priceInUSD?: number | null;
