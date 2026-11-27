@@ -444,20 +444,6 @@ export const Orders: CollectionOverride = ({ defaultCollection }) => {
             verifiedItems.push(...items);
           }
 
-          // Stripe integration touch point 2/2 — see @/lib/stripe/server
-          if (
-            stripeConfig.ENABLED &&
-            operation === "create" &&
-            !isAdmin({ req })
-          ) {
-            await verifyStripePaymentIntent({
-              paymentIntentId: data.paymentIntentId,
-              cartId,
-              expectedAmount: cart?.subtotal ?? 0,
-              payload: req.payload,
-            });
-          }
-
           const snapshot = verifiedItems
             .map((it) => {
               const quantity = Number(it?.quantity ?? 0);
@@ -517,8 +503,25 @@ export const Orders: CollectionOverride = ({ defaultCollection }) => {
               } => Boolean(x),
             );
 
+          const verifiedTotal = snapshot.reduce((total, item) => total + item.lineTotal, 0);
+
+          // Verify payment against the same server-calculated amount stored
+          // on the order, not a potentially stale cart subtotal.
+          if (
+            stripeConfig.ENABLED &&
+            operation === "create" &&
+            !isAdmin({ req })
+          ) {
+            await verifyStripePaymentIntent({
+              paymentIntentId: data.paymentIntentId,
+              cartId,
+              expectedAmount: verifiedTotal,
+              payload: req.payload,
+            });
+          }
+
           data.items = snapshot;
-          data.amount = snapshot.reduce((total, item) => total + item.lineTotal, 0);
+          data.amount = verifiedTotal;
 
           return data;
         },
