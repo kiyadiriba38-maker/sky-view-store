@@ -97,7 +97,7 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
               <span className="grid size-10 place-items-center rounded-xl border border-cyan-200/50 bg-cyan-200/10 text-sm font-black tracking-tighter text-cyan-100 shadow-[0_0_30px_rgba(103,232,249,.12)]">SV</span>
               <span className="text-[12px] font-extrabold uppercase tracking-[.2em]">SKY VIEW <span className="font-light text-white/45">STORE</span></span>
             </Link>
-            <nav className="hidden items-center gap-6 text-[10px] font-bold uppercase tracking-[.15em] text-white/55 lg:flex" aria-label="Main navigation">
+            <nav className="order-3 flex w-full items-center gap-5 overflow-x-auto whitespace-nowrap pb-1 text-[9px] font-bold uppercase tracking-[.14em] text-white/55 lg:order-none lg:w-auto lg:gap-6 lg:text-[10px]" aria-label="Main navigation">
               <a href="#discover" className="transition hover:text-cyan-200">Discover</a>
               <Link href="/shop" className="transition hover:text-cyan-200">Shop</Link>
               <Link href="/categories" className="transition hover:text-cyan-200">Categories</Link>
