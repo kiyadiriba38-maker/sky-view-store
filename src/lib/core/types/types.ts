@@ -152,7 +152,7 @@ export type CombinedVariantData = {
 
 export type ProductSinglePage = Pick<
   Product,
-  "title" | "description" | "updatedAt" | "meta" | "gallery" | "faqs" | "id"
+  "title" | "description" | "updatedAt" | "meta" | "gallery" | "faqs" | "id" | "slug" | "priceInUSD" | "originalPriceInUSD" | "inventory" | "categories" | "enableVariants"
 > & {
   purchase_section: ProductPurchaseSectionData;
   listingType?: "own_store" | "marketplace_seller" | "external" | null;
