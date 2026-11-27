@@ -14,13 +14,22 @@ export function StorefrontShell({
   title,
   description,
   children,
+  page,
 }: {
   eyebrow: string;
   title: string;
   description: string;
   children: ReactNode;
+  page?: "shop" | "categories" | "deals";
 }) {
   const t = useTranslations("marketplace");
+  const localizedCopy = page === "shop"
+    ? { eyebrow: t("shopEyebrow"), title: t("shopTitle"), description: t("shopDescription") }
+    : page === "categories"
+      ? { eyebrow: t("categoriesEyebrow"), title: t("categoriesTitle"), description: t("categoriesDescription") }
+      : page === "deals"
+        ? { eyebrow: t("dealsEyebrow"), title: t("dealsTitle"), description: t("dealsDescription") }
+        : { eyebrow, title, description };
   return (
     <div className="sv-page min-h-screen bg-[#070b12] text-white">
       <header className="sticky top-0 z-40 border-b border-white/10 bg-[#080e18]/90 backdrop-blur-xl">
@@ -42,9 +51,9 @@ export function StorefrontShell({
       </header>
       <main className="mx-auto min-h-[65vh] max-w-[1440px] px-5 py-12 sm:px-8 sm:py-16">
         <div className="mb-10 max-w-3xl">
-          <p className="text-[10px] font-bold uppercase tracking-[.28em] text-cyan-200">{eyebrow}</p>
-          <h1 className="mt-4 text-4xl font-semibold leading-[1.04] tracking-[-.055em] sm:text-6xl">{title}</h1>
-          <p className="mt-5 max-w-2xl text-sm leading-7 text-white/55 sm:text-base">{description}</p>
+          <p className="text-[10px] font-bold uppercase tracking-[.28em] text-cyan-200">{localizedCopy.eyebrow}</p>
+          <h1 className="mt-4 text-4xl font-semibold leading-[1.04] tracking-[-.055em] sm:text-6xl">{localizedCopy.title}</h1>
+          <p className="mt-5 max-w-2xl text-sm leading-7 text-white/55 sm:text-base">{localizedCopy.description}</p>
         </div>
         {children}
       </main>
