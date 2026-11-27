@@ -27,6 +27,11 @@ export default function DemoShopBrowser({ realProducts }: Props) {
     return {id:`database-${product.id}`,slug:product.slug,title:product.title,category,categorySlug,price:Number(product.priceInUSD??0),image,demo,databaseBacked:true as const};
   }),[realProducts]);
   const demoFallback=real.some(item=>item.demo)?[]:DEMO_PRODUCTS;
+  const categoryOptions=useMemo(()=>{
+    const options=new Map<string,string>();
+    for(const item of real){if(item.categorySlug&&item.category!=="Marketplace")options.set(item.categorySlug,item.category)}
+    return options.size?[...options].map(([slug,name])=>({slug,name})):DEMO_CATEGORIES.map(({slug,name})=>({slug,name}));
+  },[real]);
   const filtered=useMemo(()=>[...real,...demoFallback].filter(item=>{
     const matchText=`${item.title} ${item.category}`.toLowerCase().includes(query.toLowerCase());
     const matchCategory=category==="all"||item.categorySlug===category||item.category===category;
@@ -37,7 +42,7 @@ export default function DemoShopBrowser({ realProducts }: Props) {
   return <div>
     <div className="mb-6 grid gap-3 rounded-2xl border border-white/10 bg-[#101a28] p-4 md:grid-cols-[1fr_220px]">
       <input value={query} onChange={e=>{setQuery(e.target.value);setPage(1)}} placeholder="Search 1,000+ sample listings and real products" className="w-full rounded-xl border border-white/15 bg-[#091321] px-4 py-3 text-sm text-white outline-none focus:border-cyan-300"/>
-      <select value={category} onChange={e=>{setCategory(e.target.value);setPage(1)}} className="rounded-xl border border-white/15 bg-[#091321] px-4 py-3 text-sm text-white"><option value="all">All categories</option>{DEMO_CATEGORIES.map(c=><option key={c.slug} value={c.slug}>{c.name}</option>)}<option value="real-products">Real products</option></select>
+      <select value={category} onChange={e=>{setCategory(e.target.value);setPage(1)}} className="rounded-xl border border-white/15 bg-[#091321] px-4 py-3 text-sm text-white"><option value="all">All categories</option>{categoryOptions.map(c=><option key={c.slug} value={c.slug}>{c.name}</option>)}<option value="real-products">Real products</option></select>
       <div className="flex flex-wrap gap-2 md:col-span-2">{[["all","All products"],["demo","Demo products"],["real","Real products"]].map(([value,label])=><button key={value} onClick={()=>{setKind(value);setPage(1)}} className={`rounded-full border px-4 py-2 text-xs font-bold ${kind===value?"border-cyan-300 bg-cyan-300 text-slate-950":"border-white/15 text-white/65"}`}>{label}</button>)}</div>
     </div>
     <div className="mb-4 flex items-center justify-between text-xs text-white/45"><span>{filtered.length.toLocaleString()} products found</span><span>Showing {shown.length.toLocaleString()}</span></div>
