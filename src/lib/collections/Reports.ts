@@ -1,9 +1,9 @@
-import type { CollectionConfig } from "payload";
+import type { Access, CollectionConfig } from "payload";
 
 import { isAdmin } from "@/lib/collections/base-fields";
 import { createStoreNotification } from "@/lib/core/notifications";
 
-const reportReadAccess = ({ req }: { req: { user?: { id: number | string; roles?: string[] } | null } }) => {
+const reportReadAccess: Access = ({ req }) => {
   if (!req.user) return false;
   if (req.user.roles?.includes("admin")) return true;
   return { reporter: { equals: req.user.id } };
@@ -25,6 +25,22 @@ export const Reports: CollectionConfig = {
     admin: isAdmin,
   },
   hooks: {
+    beforeValidate: [
+      ({ data, req, operation }) => {
+        if (!data || !req.user) return data;
+        if (operation === "create") {
+          const targetType = data.targetType;
+          const targetIsPresent =
+            (targetType === "product" && Boolean(data.targetProduct)) ||
+            (targetType === "seller" && Boolean(data.targetSeller)) ||
+            (targetType === "review" && Boolean(data.targetReview)) ||
+            (targetType === "order" && Boolean(data.targetOrder));
+          if (!targetIsPresent) throw new Error("Choose a valid item to report.");
+          return { ...data, reporter: req.user.id, status: "pending", moderatorNotes: undefined };
+        }
+        return data;
+      },
+    ],
     beforeChange: [
       ({ data, req, operation }) => {
         if (!data || !req.user) return data;
