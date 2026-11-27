@@ -124,6 +124,29 @@ export const Orders: CollectionOverride = ({ defaultCollection }) => {
           description: "Demo selection only. No payment was processed.",
         },
       },
+      {
+        name: "returnRequestStatus",
+        type: "select",
+        defaultValue: "none",
+        options: [
+          { label: "No request", value: "none" },
+          { label: "Requested", value: "requested" },
+          { label: "Approved", value: "approved" },
+          { label: "Rejected", value: "rejected" },
+          { label: "Completed", value: "completed" },
+        ],
+        admin: { position: "sidebar", description: "Customer return request review status." },
+      },
+      {
+        name: "returnReason",
+        type: "textarea",
+        admin: { position: "sidebar", readOnly: true },
+      },
+      {
+        name: "returnRequestedAt",
+        type: "date",
+        admin: { position: "sidebar", readOnly: true },
+      },
       // Stripe integration touch point 1/2 — see @/lib/stripe/server
       stripePaymentIntentField,
       {
@@ -169,6 +192,64 @@ export const Orders: CollectionOverride = ({ defaultCollection }) => {
         path: "/dashboard",
         method: "get",
         handler: getOrderDashboard,
+      },
+      {
+        path: "/:id/return-request",
+        method: "post",
+        handler: async (req) => {
+          if (!req.user) {
+            return Response.json({ message: "Sign in to request a return." }, { status: 401 });
+          }
+
+          await addDataAndFileToRequest(req);
+          const id = req.routeParams?.id;
+          const reason = typeof req.data?.reason === "string" ? req.data.reason.trim() : "";
+          if (!id || reason.length < 10 || reason.length > 1000) {
+            return Response.json({ message: "Please provide a return reason between 10 and 1,000 characters." }, { status: 400 });
+          }
+
+          const order = await req.payload.findByID({
+            collection: "orders",
+            id: String(id),
+            depth: 0,
+            req,
+          });
+          const customer = typeof order.customer === "object" && order.customer
+            ? order.customer.id
+            : order.customer;
+          if (String(customer ?? "") !== String(req.user.id)) {
+            return Response.json({ message: "You can only request a return for your own order." }, { status: 403 });
+          }
+          if (order.status !== OrderStatus.DONE) {
+            return Response.json({ message: "Return requests are available after an order is marked delivered." }, { status: 400 });
+          }
+
+          const returnStatus = (order as typeof order & { returnRequestStatus?: string }).returnRequestStatus ?? "none";
+          if (returnStatus !== "none") {
+            return Response.json({ message: "A return request has already been submitted for this order." }, { status: 409 });
+          }
+
+          const updated = await req.payload.update({
+            collection: "orders",
+            id: String(id),
+            data: {
+              returnRequestStatus: "requested",
+              returnReason: reason,
+              returnRequestedAt: new Date().toISOString(),
+            },
+            overrideAccess: true,
+            req,
+            context: { skipOrderNotification: true },
+          });
+
+          const isDemo = Boolean((order as typeof order & { isDemoOrder?: boolean }).isDemoOrder);
+          return Response.json({
+            message: isDemo
+              ? "Demo return request recorded. This only simulates the review process; no real refund or payment is involved."
+              : "Your return request has been submitted for review.",
+            order: updated,
+          });
+        },
       },
       {
         path: "/:id/status",
