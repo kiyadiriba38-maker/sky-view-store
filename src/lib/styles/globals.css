@@ -50,6 +50,8 @@ html[data-theme="dark"] {
   body {
     @apply bg-background text-foreground min-h-[100vh] flex flex-col;
     font-family:
+      Inter,
+      ui-sans-serif,
       system-ui,
       -apple-system,
       BlinkMacSystemFont,
@@ -58,6 +60,11 @@ html[data-theme="dark"] {
       Helvetica,
       Arial,
       sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-kerning: normal;
+    font-optical-sizing: auto;
   }
 
   a,
@@ -91,4 +98,46 @@ html[data-theme="dark"] {
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+
+/* Sky View Store typography and motion foundation */
+.sv-store,
+.sv-page {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-kerning: normal;
+  font-optical-sizing: auto;
+}
+
+.sv-store h1,
+.sv-store h2,
+.sv-store h3,
+.sv-page h1,
+.sv-page h2,
+.sv-page h3 {
+  text-wrap: balance;
+}
+
+.sv-store p,
+.sv-page p {
+  text-wrap: pretty;
+}
+
+.sv-page a,
+.sv-page button,
+.sv-page summary {
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sv-page *,
+  .sv-page *::before,
+  .sv-page *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
 }
