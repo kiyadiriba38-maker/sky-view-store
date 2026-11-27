@@ -40,14 +40,25 @@ export default function CheckoutForm({
   }
 
   return (
-    <GenericForm
-      config={checkoutFormConfig}
+    <div className="w-full">
+      <div
+        role="status"
+        className="mb-4 rounded-xl border border-cyan-500/30 bg-cyan-500/5 px-4 py-3 text-sm text-foreground"
+      >
+        <p className="font-semibold">Demo checkout — no real payment will be taken.</p>
+        <p className="mt-1 text-muted-foreground">
+          Submitting this form records a test order only. Do not enter card or bank details.
+        </p>
+      </div>
+      <GenericForm
+        config={checkoutFormConfig}
       onSubmit={submitOrder}
       onSuccess={async (orderId) => {
         onSuccess(orderId);
         await clearCart?.();
       }}
-      disabled={!cartId}
-    />
+        disabled={!cartId}
+      />
+    </div>
   );
 }
