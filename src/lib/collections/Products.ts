@@ -265,7 +265,19 @@ export const Products: CollectionOverride = ({ defaultCollection }) => {
   return {
     ...defaultCollection,
     access: {
-      read: ({ req }) => req.user?.roles?.includes("admin") ? true : { and: [{ _status: { equals: "published" } }, { listingStatus: { equals: "approved" } }] },
+      read: async ({ req }) => {
+        if (req.user?.roles?.includes("admin")) return true;
+        const publicListings = { and: [{ _status: { equals: "published" } }, { listingStatus: { equals: "approved" } }] };
+        if (!req.user) return publicListings;
+        const sellers = await req.payload.find({
+          collection: "sellers",
+          depth: 0,
+          limit: 100,
+          where: { owner: { equals: req.user.id } },
+        });
+        const ids = sellers.docs.map((seller) => seller.id);
+        return ids.length ? { or: [publicListings, { seller: { in: ids } }] } : publicListings;
+      },
       create: canCreateSellerProduct,
       update: canManageSellerProducts,
       delete: adminOnlyAccess.delete,
