@@ -195,7 +195,7 @@ export const Products: CollectionOverride = ({ defaultCollection }) => {
       type: "relationship",
       relationTo: "sellers",
       admin: { position: "sidebar" },
-    } as Field,
+    } as unknown as Field,
     {
       name: "listingType",
       type: "select",
