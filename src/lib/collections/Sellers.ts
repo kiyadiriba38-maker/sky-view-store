@@ -2,6 +2,7 @@ import type { Access, CollectionConfig, PayloadRequest, Where } from "payload";
 
 import { isAdmin } from "@/lib/collections/base-fields";
 import { createStoreNotification } from "@/lib/core/notifications";
+import { createStoreAuditLog } from "@/lib/core/audit-log";
 
 const isDesignatedModerator = ({ req }: { req: PayloadRequest }) => {
   const moderatorEmail = process.env.LISTING_MODERATOR_EMAIL?.trim().toLowerCase();
@@ -152,6 +153,15 @@ export const Sellers: CollectionConfig = {
           : doc.owner;
 
         if (operation === "create") {
+          if (req.user) {
+            await createStoreAuditLog(req.payload, {
+              actor: req.user.id,
+              action: "seller_application_submitted",
+              targetCollection: "sellers",
+              targetId: doc.id,
+              summary: `Seller application submitted for ${doc.storeName}.`,
+            });
+          }
           if (ownerId) {
             await createStoreNotification(req.payload, {
               user: ownerId,
@@ -181,6 +191,15 @@ export const Sellers: CollectionConfig = {
             });
           }
         } else if (ownerId && previousDoc?.approvalStatus !== doc.approvalStatus) {
+          if (req.user && isAdmin({ req })) {
+            await createStoreAuditLog(req.payload, {
+              actor: req.user.id,
+              action: "seller_approval_changed",
+              targetCollection: "sellers",
+              targetId: doc.id,
+              summary: `Seller application for ${doc.storeName} changed to ${String(doc.approvalStatus)}.`,
+            });
+          }
           await createStoreNotification(req.payload, {
             user: ownerId,
             type: "seller_approval",
