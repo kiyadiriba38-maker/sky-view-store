@@ -1,6 +1,6 @@
 import type { Product } from "@/lib/core/types/payload-types";
 import type { CollectionOverride } from "@payloadcms/plugin-ecommerce/types";
-import type { Field } from "payload";
+import type { Access, CollectionBeforeChangeHook, Field } from "payload";
 
 import {
   DESCRIPTION_FIELD,
@@ -22,6 +22,47 @@ const isSidebarField = (field: Field) =>
   field.admin && "position" in field.admin
     ? field.admin.position === "sidebar"
     : false;
+
+const canCreateSellerProduct: Access = async ({ req }) => {
+  if (adminOnlyAccess.create && typeof adminOnlyAccess.create === "function" && await adminOnlyAccess.create({ req } as never)) return true;
+  if (!req.user) return false;
+  const sellers = await req.payload.find({
+    collection: "sellers",
+    depth: 0,
+    limit: 1,
+    where: { and: [{ owner: { equals: req.user.id } }, { approvalStatus: { equals: "approved" } }] },
+  });
+  return sellers.docs.length > 0;
+};
+
+const canManageSellerProducts: Access = async ({ req }) => {
+  if (req.user?.roles?.includes("admin")) return true;
+  if (!req.user) return false;
+  const sellers = await req.payload.find({
+    collection: "sellers",
+    depth: 0,
+    limit: 100,
+    where: { and: [{ owner: { equals: req.user.id } }, { approvalStatus: { equals: "approved" } }] },
+  });
+  const ids = sellers.docs.map((seller) => seller.id);
+  return ids.length ? { seller: { in: ids } } : false;
+};
+
+const enforceSellerListing: CollectionBeforeChangeHook = async ({ data, req, operation, originalDoc }) => {
+  if (!data || !req.user || req.user.roles?.includes("admin")) return data;
+  const sellers = await req.payload.find({
+    collection: "sellers",
+    depth: 0,
+    limit: 1,
+    where: { and: [{ owner: { equals: req.user.id } }, { approvalStatus: { equals: "approved" } }] },
+  });
+  const seller = sellers.docs[0];
+  if (!seller) throw new Error("An approved seller account is required to manage products.");
+  if (operation === "create") {
+    return { ...data, seller: seller.id, listingType: "marketplace_seller", isDemo: false, listingStatus: "pending", _status: "draft" };
+  }
+  return { ...data, seller: seller.id, listingType: "marketplace_seller", isDemo: false, listingStatus: originalDoc?.listingStatus ?? "pending", _status: "draft" };
+};
 
 const enhanceVariantField = (field: Field): Field => {
   const name = getFieldName(field);
@@ -132,6 +173,7 @@ export const Products: CollectionOverride = ({ defaultCollection }) => {
       defaultValue: "own_store",
       options: [
         { label: "Sky View Store product", value: "own_store" },
+        { label: "Approved marketplace seller", value: "marketplace_seller" },
         { label: "External marketplace listing", value: "external" },
       ],
       admin: {
@@ -218,8 +260,11 @@ export const Products: CollectionOverride = ({ defaultCollection }) => {
   return {
     ...defaultCollection,
     access: {
-      ...adminOnlyAccess,
-      read: () => true,
+      read: ({ req }) => req.user?.roles?.includes("admin") ? true : { and: [{ _status: { equals: "published" } }, { listingStatus: { equals: "approved" } }] },
+      create: canCreateSellerProduct,
+      update: canManageSellerProducts,
+      delete: adminOnlyAccess.delete,
+      admin: adminOnlyAccess.admin,
     },
     admin: {
       ...defaultCollection?.admin,
@@ -237,7 +282,7 @@ export const Products: CollectionOverride = ({ defaultCollection }) => {
     },
     hooks: {
       ...makeRevalidateHooks(CollectionName.products),
-      beforeChange: [populateSlugOnCreate],
+      beforeChange: [populateSlugOnCreate, enforceSellerListing],
       beforeValidate: [
         ({ data }) => {
           if (!data) return data;
