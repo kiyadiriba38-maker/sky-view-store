@@ -27,7 +27,7 @@ const canCreateSellerProduct: Access = async ({ req }) => {
   if (req.user?.roles?.includes("admin")) return true;
   if (!req.user) return false;
   const sellers = await req.payload.find({
-    collection: "sellers",
+    collection: "sellers" as never,
     depth: 0,
     limit: 1,
     where: { and: [{ owner: { equals: req.user.id } }, { approvalStatus: { equals: "approved" } }] },
@@ -44,7 +44,7 @@ const canManageSellerProducts: Access = async ({ req }) => {
     limit: 100,
     where: { and: [{ owner: { equals: req.user.id } }, { approvalStatus: { equals: "approved" } }] },
   });
-  const ids = sellers.docs.map((seller) => seller.id);
+  const ids = (sellers.docs as Array<{ id: number }>).map((seller) => seller.id);
   return ids.length ? { seller: { in: ids } } : false;
 };
 
@@ -56,7 +56,7 @@ const enforceSellerListing: CollectionBeforeChangeHook = async ({ data, req, ope
     limit: 1,
     where: { and: [{ owner: { equals: req.user.id } }, { approvalStatus: { equals: "approved" } }] },
   });
-  const seller = sellers.docs[0];
+  const seller = (sellers.docs as Array<{ id: number }>)[0];
   if (!seller) throw new Error("An approved seller account is required to manage products.");
   if (operation === "create") {
     return { ...data, seller: seller.id, listingType: "marketplace_seller", isDemo: false, listingStatus: "pending", _status: "draft" };
