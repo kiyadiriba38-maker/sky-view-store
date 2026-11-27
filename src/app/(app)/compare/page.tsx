@@ -12,16 +12,17 @@ export const metadata: Metadata = { title: "Compare products | Sky View Store", 
 export default async function ComparePage({ searchParams }: { searchParams: Promise<{ items?: string }> }) {
   const params = await searchParams;
   const slugs = [...new Set((params.items ?? "").split(",").map((slug) => slug.trim()).filter(Boolean))].slice(0, 4);
-  const products = (await Promise.all(slugs.map((slug) => DAL.queryProductBySlug(slug)))).filter(Boolean);
+  const fetchedProducts = await Promise.all(slugs.map((slug) => DAL.queryProductBySlug(slug)));
+  const products = fetchedProducts.filter((product): product is NonNullable<typeof product> => product !== null);
   if (!products.length) {
     return <StorefrontShell eyebrow="Product tools / Compare" title="Compare products." description="Choose up to four products from the catalogue to compare them side by side."><div className="rounded-2xl border border-dashed border-white/15 p-10 text-center"><p className="text-sm text-white/60">No products selected yet.</p><Link href="/shop" className="mt-5 inline-flex rounded-full bg-cyan-200 px-5 py-3 text-xs font-bold text-[#07111a]">Browse products ↗</Link></div></StorefrontShell>;
   }
 
   const rows = [
-    { label: "Price", value: (product: NonNullable<(typeof products)[number]>) => formatPrice(Number(product.priceInUSD ?? product.purchase_section.price ?? 0)) },
+    { label: "Price", value: (product: (typeof products)[number]) => formatPrice(Number(product.priceInUSD ?? product.purchase_section.price ?? 0)) },
     { label: "Original price", value: (product: NonNullable<(typeof products)[number]>) => product.originalPriceInUSD ? formatPrice(product.originalPriceInUSD) : "—" },
     { label: "Availability", value: (product: NonNullable<(typeof products)[number]>) => Number(product.inventory ?? 0) > 0 ? `In stock · ${product.inventory}` : "Check variants / availability" },
-    { label: "Listing type", value: (product: NonNullable<(typeof products)[number]>) => (product as typeof product & { isDemo?: boolean }).isDemo ? "DEMO product · simulated order" : product.listingType === "marketplace_seller" ? "Approved marketplace seller" : "Sky View Store" },
+    { label: "Listing type", value: (product: NonNullable<(typeof products)[number]>) => (product as typeof product & { isDemo?: boolean }).isDemo ? "DEMO product · simulated order" : (product as typeof product & { listingType?: string }).listingType === "marketplace_seller" ? "Approved marketplace seller" : "Sky View Store" },
     { label: "Categories", value: (product: NonNullable<(typeof products)[number]>) => product.categories?.map((category) => typeof category === "object" ? category.title : "").filter(Boolean).join(", ") || "—" },
     { label: "Variants", value: (product: NonNullable<(typeof products)[number]>) => product.enableVariants ? "Available" : "Single listing" },
   ];
