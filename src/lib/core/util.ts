@@ -194,8 +194,8 @@ export const ORDER_STATUS_FLOW: Record<OrderStatus, OrderStatus[]> = {
   ],
   [OrderStatus.READY]: [OrderStatus.DONE, OrderStatus.CANCELED],
   [OrderStatus.DONE]: [OrderStatus.REFUNDED],
-  [OrderStatus.CANCELED]: [OrderStatus.NEW],
-  [OrderStatus.REFUNDED]: [OrderStatus.NEW],
+  [OrderStatus.CANCELED]: [],
+  [OrderStatus.REFUNDED]: [],
 };
 
 export const isValidOrderStatusTransition = (
