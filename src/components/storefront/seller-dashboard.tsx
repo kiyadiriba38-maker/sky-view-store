@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import type { FormEvent } from "react";
 import { useCallback, useEffect, useState } from "react";
 
 type Seller = { id: number; storeName: string; approvalStatus: "pending" | "approved" | "suspended" | "rejected"; city?: string };
@@ -50,7 +51,7 @@ export default function SellerDashboard() {
 
   useEffect(() => { void load(); }, [load]);
 
-  async function addProduct(event: React.FormEvent<HTMLFormElement>) {
+  async function addProduct(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!seller || seller.approvalStatus !== "approved") return;
     setBusy(true);
