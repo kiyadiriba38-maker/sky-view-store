@@ -119,7 +119,7 @@ export function ProductGrid({ products }: { products: Product[] }) {
                 </div>
               </div>
             </Link>
-            <div className="px-4 pb-4"><button type="button" onClick={() => toggleCompare(product.slug)} aria-pressed={selected.includes(product.slug)} className={`rounded-full border px-3 py-2 text-[9px] font-bold uppercase tracking-wider transition ${selected.includes(product.slug) ? "border-cyan-200 bg-cyan-200 text-[#07111a]" : "border-white/15 text-white/55 hover:border-cyan-200/50 hover:text-cyan-100"}`}>{selected.includes(product.slug) ? "Added to compare" : "Compare"}</button></div>
+            <div className="px-4 pb-4"><button type="button" onClick={() => toggleCompare(product.slug)} aria-pressed={selected.includes(product.slug)} className={`rounded-full border px-3 py-2 text-[9px] font-bold uppercase tracking-wider transition ${selected.includes(product.slug) ? "border-cyan-200 bg-cyan-200 text-[#07111a]" : "border-white/15 text-white/55 hover:border-cyan-200/50 hover:text-cyan-100"}`}>{selected.includes(product.slug) ? t("compareSelected") : t("addToCompare")}</button></div>
           </article>
         );
       })}
