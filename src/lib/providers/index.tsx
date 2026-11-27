@@ -9,8 +9,8 @@ import { ThemeProvider } from "@/lib/providers/theme";
 export default function Providers({ children }: { children: ReactNode }) {
   return (
     <ThemeProvider>
-    <IntlProvider>
-      <EcommerceProvider
+      <IntlProvider>
+        <EcommerceProvider
         enableVariants={true}
         api={{
           serverURL: appConfig.SERVER_URL,
@@ -35,8 +35,8 @@ export default function Providers({ children }: { children: ReactNode }) {
         }}
       >
         {children}
-      </EcommerceProvider>
-    </IntlProvider>
+        </EcommerceProvider>
+      </IntlProvider>
     </ThemeProvider>
   );
 }
