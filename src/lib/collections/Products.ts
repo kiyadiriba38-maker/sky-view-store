@@ -24,7 +24,7 @@ const isSidebarField = (field: Field) =>
     : false;
 
 const canCreateSellerProduct: Access = async ({ req }) => {
-  if (adminOnlyAccess.create && typeof adminOnlyAccess.create === "function" && await adminOnlyAccess.create({ req } as never)) return true;
+  if (req.user?.roles?.includes("admin")) return true;
   if (!req.user) return false;
   const sellers = await req.payload.find({
     collection: "sellers",
