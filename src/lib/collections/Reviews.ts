@@ -37,7 +37,7 @@ export const Reviews: CollectionConfig = {
         // Never allow a signed-in reviewer to impersonate another author.
         return {
           ...data,
-          authorName: req.user.email,
+          authorName: "Customer",
           authorEmail: req.user.email,
           isDemo: false,
           verifiedPurchase: false,
@@ -73,7 +73,7 @@ export const Reviews: CollectionConfig = {
       name: "authorEmail",
       type: "email",
       access: {
-        read: ({ req }) => Boolean(req.user),
+        read: adminOnlyAccess.read,
       },
     },
     { name: "title", type: "text", required: true },
