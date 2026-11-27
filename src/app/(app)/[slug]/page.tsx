@@ -51,6 +51,7 @@ export default async function PagePage({ params }: PropsSlug) {
       demoImageUrl: (product as typeof product & { demoImageUrl?: string | null }).demoImageUrl ?? null,
       productImageUrl: (product as typeof product & { productImageUrl?: string | null }).productImageUrl ?? null,
       category: product.categories?.map((category) => typeof category === "object" ? category.title : "").filter(Boolean)[0] ?? "Marketplace",
+      categorySlug: product.categories?.map((category) => typeof category === "object" ? category.slug : "").filter(Boolean)[0] ?? "marketplace",
       externalUrl: product.externalUrl ?? null,
     }));
     return <HomeExperience catalogProducts={catalogProducts} />;
