@@ -1,6 +1,6 @@
 import type { Product } from "@/lib/core/types/payload-types";
 import type { CollectionOverride } from "@payloadcms/plugin-ecommerce/types";
-import type { Field } from "payload";
+import type { Access, CollectionBeforeChangeHook, Field, Where } from "payload";
 
 import {
   DESCRIPTION_FIELD,
@@ -22,6 +22,62 @@ const isSidebarField = (field: Field) =>
   field.admin && "position" in field.admin
     ? field.admin.position === "sidebar"
     : false;
+
+const publicProductListings: Where = { and: [{ _status: { equals: "published" } }, { listingStatus: { equals: "approved" } }] };
+
+const readMarketplaceProducts: Access = async ({ req }) => {
+  if (req.user?.roles?.includes("admin")) return true;
+  if (!req.user) return publicProductListings;
+  const sellers = await req.payload.find({
+    collection: "sellers" as never,
+    depth: 0,
+    limit: 100,
+    where: { owner: { equals: req.user.id } },
+  });
+  const ids = (sellers.docs as Array<{ id: number }>).map((seller) => seller.id);
+  return ids.length ? ({ or: [publicProductListings, { seller: { in: ids } }] } as Where) : publicProductListings;
+};
+
+const canCreateSellerProduct: Access = async ({ req }) => {
+  if (req.user?.roles?.includes("admin")) return true;
+  if (!req.user) return false;
+  const sellers = await req.payload.find({
+    collection: "sellers" as never,
+    depth: 0,
+    limit: 1,
+    where: { and: [{ owner: { equals: req.user.id } }, { approvalStatus: { equals: "approved" } }] },
+  });
+  return sellers.docs.length > 0;
+};
+
+const canManageSellerProducts: Access = async ({ req }) => {
+  if (req.user?.roles?.includes("admin")) return true;
+  if (!req.user) return false;
+  const sellers = await req.payload.find({
+    collection: "sellers" as never,
+    depth: 0,
+    limit: 100,
+    where: { and: [{ owner: { equals: req.user.id } }, { approvalStatus: { equals: "approved" } }] },
+  });
+  const ids = (sellers.docs as Array<{ id: number }>).map((seller) => seller.id);
+  return ids.length ? { seller: { in: ids } } : false;
+};
+
+const enforceSellerListing: CollectionBeforeChangeHook = async ({ data, req, operation }) => {
+  if (!data || !req.user || req.user.roles?.includes("admin")) return data;
+  const sellers = await req.payload.find({
+    collection: "sellers" as never,
+    depth: 0,
+    limit: 1,
+    where: { and: [{ owner: { equals: req.user.id } }, { approvalStatus: { equals: "approved" } }] },
+  });
+  const seller = (sellers.docs as Array<{ id: number }>)[0];
+  if (!seller) throw new Error("An approved seller account is required to manage products.");
+  if (operation === "create") {
+    return { ...data, seller: seller.id, listingType: "marketplace_seller", isDemo: false, listingStatus: "pending", _status: "draft" };
+  }
+  return { ...data, seller: seller.id, listingType: "marketplace_seller", isDemo: false, listingStatus: "pending", _status: "draft" };
+};
 
 const enhanceVariantField = (field: Field): Field => {
   const name = getFieldName(field);
@@ -102,12 +158,52 @@ export const Products: CollectionOverride = ({ defaultCollection }) => {
       },
     },
     {
+      name: "productImageUrl",
+      type: "text",
+      validate: (value: unknown) => {
+        if (!value) return true;
+        try { return new URL(String(value)).protocol === "https:" ? true : "Use an HTTPS image URL."; }
+        catch { return "Enter a valid HTTPS image URL."; }
+      },
+      admin: { position: "sidebar", description: "Seller-supplied product image URL. Only use images you are authorized to publish." },
+    },
+    {
+      name: "demoImageUrl",
+      type: "text",
+      admin: { position: "sidebar", description: "Image URL used for clearly labelled demo listings only." },
+    },
+    {
+      name: "isDemo",
+      type: "checkbox",
+      defaultValue: false,
+      admin: { position: "sidebar", description: "Sample listing. Demo orders and reviews must remain clearly labelled." },
+    },
+    {
+      name: "listingStatus",
+      type: "select",
+      defaultValue: "approved",
+      options: [
+        { label: "Pending review", value: "pending" },
+        { label: "Approved", value: "approved" },
+        { label: "Rejected", value: "rejected" },
+        { label: "Suspended", value: "suspended" },
+      ],
+      admin: { position: "sidebar" },
+    },
+    {
+      name: "seller",
+      type: "relationship",
+      relationTo: "sellers",
+      admin: { position: "sidebar" },
+    } as unknown as Field,
+    {
       name: "listingType",
       type: "select",
       required: true,
       defaultValue: "own_store",
       options: [
         { label: "Sky View Store product", value: "own_store" },
+        { label: "Approved marketplace seller", value: "marketplace_seller" },
         { label: "External marketplace listing", value: "external" },
       ],
       admin: {
@@ -133,7 +229,7 @@ export const Products: CollectionOverride = ({ defaultCollection }) => {
     {
       name: "externalUrl",
       type: "text",
-      validate: (value) => {
+      validate: (value: unknown) => {
         if (!value) return true;
         try {
           const url = new URL(String(value));
@@ -194,13 +290,19 @@ export const Products: CollectionOverride = ({ defaultCollection }) => {
   return {
     ...defaultCollection,
     access: {
-      ...adminOnlyAccess,
-      read: () => true,
+      read: readMarketplaceProducts,
+      create: canCreateSellerProduct,
+      update: canManageSellerProducts,
+      delete: adminOnlyAccess.delete,
+      admin: adminOnlyAccess.admin,
     },
     admin: {
       ...defaultCollection?.admin,
       defaultColumns: [
         "title",
+        "isDemo",
+        "listingStatus",
+        "seller",
         "enableVariants",
         "_status",
         "variants.variants",
@@ -210,7 +312,7 @@ export const Products: CollectionOverride = ({ defaultCollection }) => {
     },
     hooks: {
       ...makeRevalidateHooks(CollectionName.products),
-      beforeChange: [populateSlugOnCreate],
+      beforeChange: [populateSlugOnCreate, enforceSellerListing],
       beforeValidate: [
         ({ data }) => {
           if (!data) return data;

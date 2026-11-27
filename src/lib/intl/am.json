@@ -1,0 +1,51 @@
+{
+  "product": {
+    "not_found": "ምርቱ አልተገኘም።",
+    "relatedProducts": "ተዛማጅ ምርቶች",
+    "customer_reviews": "የደንበኞች ግምገማዎች",
+    "stock": {
+      "onlyLeft": "በመጋዘን ውስጥ {count} ብቻ ቀርቷል",
+      "inStock": "በመጋዘን ውስጥ አለ",
+      "outOfStock": "ከመጋዘን ውጭ ነው"
+    },
+    "addToCart": {
+      "button": "ወደ ጋሪ ጨምር",
+      "chooseOptions": "አማራጮችን ምረጥ",
+      "soldOut": "አልቋል",
+      "selectVariant": "እባክዎ አማራጭ ይምረጡ።",
+      "added": "ምርቱ ወደ ጋሪ ተጨምሯል።"
+    }
+  },
+  "general": {
+    "products": "ምርቶች",
+    "search": "ፈልግ...",
+    "noMatch": "ምንም ምርት አልተገኘም",
+    "clear": "ፍለጋን አጽዳ",
+    "faq": "ብዙ ጊዜ የሚጠየቁ ጥያቄዎች",
+    "toggle_theme": "ገጽታ ቀይር",
+    "pageNotFound": "የፈለጉት ገጽ አልተገኘም።",
+    "goHome": "ወደ መነሻ ተመለስ",
+    "somethingWentWrongTitle": "ችግር ተፈጥሯል",
+    "somethingWentWrongDescription": "በመደብሩ ላይ ችግር ተፈጥሯል። እባክዎ እንደገና ይሞክሩ።",
+    "tryAgain": "እንደገና ሞክር"
+  },
+  "cart": {
+    "title": "የግዢ ጋሪዬ",
+    "description": "የግዢ ጋሪዎን እዚህ ያስተዳድሩ።",
+    "emptyTitle": "የግዢ ጋሪዎ ባዶ ነው።",
+    "total": "ጠቅላላ",
+    "checkout": "ወደ ክፍያ ቀጥል"
+  },
+  "checkout": {
+    "page": {
+      "emptyCart": "የግዢ ጋሪዎ ባዶ ነው።",
+      "continueShopping": "ግዢውን ይቀጥሉ?",
+      "title": "ክፍያ",
+      "orderReceived": "ትዕዛዙ ደርሷል።",
+      "orderId": "የትዕዛዝ ቁጥር፦ {id}",
+      "backToShop": "ወደ መደብሩ ተመለስ",
+      "yourCart": "የግዢ ጋሪዎ",
+      "total": "ጠቅላላ"
+    }
+  }
+}

@@ -37,7 +37,7 @@ export default async function ProductReviews({
           <div>
             <p className="text-[9px] font-bold uppercase tracking-[.3em] text-cyan-200">Community / product feedback</p>
             <h2 className="mt-3 text-2xl font-semibold tracking-[-.035em] sm:text-4xl">{t("customer_reviews")}</h2>
-            <p className="mt-2 max-w-lg text-xs leading-6 text-white/45">Real feedback helps everyone make a more confident choice. Reviews shown here come from this product's review submissions.</p>
+            <p className="mt-2 max-w-lg text-xs leading-6 text-white/45">Reviews are labelled as demo samples or verified purchases so shoppers can distinguish illustrative content from genuine feedback.</p>
           </div>
           <div className="shrink-0"><ReviewForm productId={productId} /></div>
         </div>
@@ -50,7 +50,7 @@ export default async function ProductReviews({
               <span className="pb-1 text-xs text-white/35">/ 5</span>
             </div>
             <Stars rating={average} className="mt-4" />
-            <p className="mt-3 text-[10px] text-white/40">{safeReviews.length ? `Based on ${safeReviews.length} customer ${safeReviews.length === 1 ? "review" : "reviews"}` : "No customer reviews yet"}</p>
+            <p className="mt-3 text-[10px] text-white/40">{safeReviews.length ? `Based on ${safeReviews.length} published review ${safeReviews.length === 1 ? "entry" : "entries"}` : "No customer reviews yet"}</p>
             <div className="mt-7 space-y-3">
               {distribution.map(({ rating, count }) => (
                 <div key={rating} className="flex items-center gap-3 text-[10px]">
@@ -66,7 +66,7 @@ export default async function ProductReviews({
           <div>
             <div className="mb-5 flex items-center justify-between gap-4">
               <div><p className="text-[9px] font-bold uppercase tracking-[.22em] text-cyan-200">Customer voices</p><p className="mt-1 text-sm font-semibold">{safeReviews.length ? `${safeReviews.length} published ${safeReviews.length === 1 ? "review" : "reviews"}` : "Be the first to share feedback"}</p></div>
-              <span className="rounded-full border border-white/10 px-3 py-2 text-[8px] font-bold uppercase tracking-[.15em] text-white/35">Verified by submission</span>
+              <span className="rounded-full border border-white/10 px-3 py-2 text-[8px] font-bold uppercase tracking-[.15em] text-white/35">Demo and verified labels</span>
             </div>
 
             {safeReviews.length ? (
@@ -74,7 +74,7 @@ export default async function ProductReviews({
                 {safeReviews.map((review) => (
                   <article key={review.id} className="rounded-2xl border border-white/10 bg-white/[.025] p-5 transition hover:border-cyan-200/25 sm:p-6">
                     <div className="flex flex-wrap items-start justify-between gap-3">
-                      <div><p className="text-sm font-semibold">{review.authorName}</p><Stars rating={review.rating} className="mt-2" /></div>
+                      <div><p className="text-sm font-semibold">{review.authorName}</p><div className="mt-2 flex flex-wrap items-center gap-2"><Stars rating={review.rating} /><span className={`rounded-full px-2 py-1 text-[8px] font-bold uppercase tracking-wider ${(review as Review & { isDemo?: boolean }).isDemo ? "border border-amber-300/30 bg-amber-300/10 text-amber-200" : (review as Review & { verifiedPurchase?: boolean }).verifiedPurchase ? "border border-emerald-300/30 bg-emerald-300/10 text-emerald-200" : "border border-white/10 text-white/40"}`}>{(review as Review & { isDemo?: boolean }).isDemo ? "DEMO REVIEW" : (review as Review & { verifiedPurchase?: boolean }).verifiedPurchase ? "VERIFIED PURCHASE" : "CUSTOMER REVIEW"}</span></div></div>
                       <time className="text-[9px] uppercase tracking-[.12em] text-white/35">{formatDate(review.createdAt)}</time>
                     </div>
                     <h3 className="mt-4 text-base font-semibold">{review.title}</h3>

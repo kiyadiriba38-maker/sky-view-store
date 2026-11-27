@@ -11,3 +11,5 @@ export { Users } from "./Users";
 export { Variants } from "./Variants";
 export { VariantOptions } from "./VariantOptions";
 export { VariantTypes } from "./VariantTypes";
+
+export { Sellers } from "./Sellers";

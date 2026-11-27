@@ -1,0 +1,51 @@
+{
+  "product": {
+    "not_found": "Oomishni hin argamne.",
+    "relatedProducts": "Oomishaalee walqabatan",
+    "customer_reviews": "Yaada maamiltootaa",
+    "stock": {
+      "onlyLeft": "Kuusaa keessatti {count} qofa hafe",
+      "inStock": "Kuusaa keessa jira",
+      "outOfStock": "Kuusaa keessa hin jiru"
+    },
+    "addToCart": {
+      "button": "Gara gaarii bituutti dabali",
+      "chooseOptions": "Filannoo filadhu",
+      "soldOut": "Dhumeera",
+      "selectVariant": "Maaloo filannoo filadhu.",
+      "added": "Oomishni gara gaarii bituutti dabalame."
+    }
+  },
+  "general": {
+    "products": "Oomishaalee",
+    "search": "Barbaadi...",
+    "noMatch": "Oomishni hin argamne",
+    "clear": "Barbaacha qulqulleessi",
+    "faq": "Gaaffilee yeroo baay'ee gaafataman",
+    "toggle_theme": "Bifa jijjiiri",
+    "pageNotFound": "Fuulli barbaadde hin argamne.",
+    "goHome": "Gara jalqabaatti deebi'i",
+    "somethingWentWrongTitle": "Rakkoon uumame",
+    "somethingWentWrongDescription": "Rakkoon suuqii irratti uumame. Maaloo irra deebi'ii yaali.",
+    "tryAgain": "Irra deebi'ii yaali"
+  },
+  "cart": {
+    "title": "Gaarii bituu koo",
+    "description": "Gaarii bituu kee asitti bulchi.",
+    "emptyTitle": "Gaariin bituu kee duwwaa dha.",
+    "total": "Waliigala",
+    "checkout": "Gara kaffaltiitti ce'i"
+  },
+  "checkout": {
+    "page": {
+      "emptyCart": "Gaariin bituu kee duwwaa dha.",
+      "continueShopping": "Bittaa itti fufuu?",
+      "title": "Kaffaltii",
+      "orderReceived": "Ajajni fudhatameera.",
+      "orderId": "Lakkoofsa ajajaa: {id}",
+      "backToShop": "Gara suuqii deebi'i",
+      "yourCart": "Gaarii bituu kee",
+      "total": "Waliigala"
+    }
+  }
+}

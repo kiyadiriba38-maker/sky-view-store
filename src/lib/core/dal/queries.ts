@@ -273,7 +273,7 @@ export default class Queries extends BaseDal {
         limit: 0,
         pagination: false,
         sort: "-updatedAt",
-        depth: 0,
+        depth: 1,
         where: {
           _status: { equals: "published" },
         },
@@ -287,7 +287,12 @@ export default class Queries extends BaseDal {
           listingType: true,
           externalMarketplace: true,
           externalUrl: true,
-        },
+          isDemo: true,
+          demoImageUrl: true,
+          productImageUrl: true,
+          listingStatus: true,
+          seller: true,
+        } as never,
       },
     });
 
@@ -330,7 +335,11 @@ export default class Queries extends BaseDal {
         listingType: true,
         externalMarketplace: true,
         externalUrl: true,
-      },
+        isDemo: true,
+        demoImageUrl: true,
+        productImageUrl: true,
+        seller: true,
+      } as never,
     );
 
     if (!product) {
@@ -379,6 +388,12 @@ export default class Queries extends BaseDal {
 
     return {
       id: product.id,
+      slug,
+      priceInUSD: product.priceInUSD,
+      originalPriceInUSD: product.originalPriceInUSD,
+      inventory: product.inventory,
+      categories: product.categories,
+      enableVariants: product.enableVariants,
       title: product.title,
       description: product.description,
       updatedAt: product.updatedAt,
@@ -388,6 +403,10 @@ export default class Queries extends BaseDal {
       listingType: product.listingType ?? "own_store",
       externalMarketplace: product.externalMarketplace,
       externalUrl: product.externalUrl,
+      isDemo: Boolean((product as Product & { isDemo?: boolean }).isDemo),
+      demoImageUrl: (product as Product & { demoImageUrl?: string | null }).demoImageUrl ?? null,
+      productImageUrl: (product as Product & { productImageUrl?: string | null }).productImageUrl ?? null,
+      seller: (product as Product & { seller?: ProductSinglePage["seller"] }).seller ?? null,
       relatedProducts,
       reviews: product.reviews?.docs as Review[],
       purchase_section: buildProductPurchaseSectionData(product, combined),
