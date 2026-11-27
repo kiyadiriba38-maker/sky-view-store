@@ -39,6 +39,8 @@ export const Reviews: CollectionConfig = {
           ...data,
           authorName: req.user.email,
           authorEmail: req.user.email,
+          isDemo: false,
+          verifiedPurchase: false,
         };
       },
     ],
@@ -77,5 +79,7 @@ export const Reviews: CollectionConfig = {
     { name: "title", type: "text", required: true },
     { name: "body", type: "textarea", required: true },
     { name: "rating", type: "number", min: 1, max: 5, required: true },
+    { name: "isDemo", type: "checkbox", defaultValue: false, admin: { position: "sidebar", description: "Clearly labelled sample review; never present as a genuine customer review." } },
+    { name: "verifiedPurchase", type: "checkbox", defaultValue: false, admin: { position: "sidebar", readOnly: true, description: "Only set by verified order workflows." } },
   ],
 };
