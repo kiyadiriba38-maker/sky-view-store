@@ -193,6 +193,9 @@ export interface Product {
   generateSlug?: boolean | null;
   slug: string;
   title: string;
+  listingType?: "own_store" | "external" | null;
+  externalMarketplace?: "jiji" | "amazon" | "ebay" | "other" | null;
+  externalUrl?: string | null;
   inventory?: number | null;
   priceInUSDEnabled?: boolean | null;
   priceInUSD?: number | null;
