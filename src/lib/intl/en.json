@@ -20,17 +20,28 @@
       "too_long": "{field} is too long (max {max})"
     },
     "fields": {
-      "authorName": { "label": "Name", "required": "Required" },
+      "authorName": {
+        "label": "Name",
+        "required": "Required"
+      },
       "authorEmail": {
         "label": "Email (optional)",
         "invalid": "Invalid email"
       },
-      "title": { "label": "Title", "required": "Required" },
-      "rating": { "label": "Rating", "aria": "Rate {value} out of 5" },
-      "body": { "label": "Review", "required": "Required" }
+      "title": {
+        "label": "Title",
+        "required": "Required"
+      },
+      "rating": {
+        "label": "Rating",
+        "aria": "Rate {value} out of 5"
+      },
+      "body": {
+        "label": "Review",
+        "required": "Required"
+      }
     }
   },
-
   "order_notifier": {
     "whatsappAdmin": "📦 New order received → ",
     "email": {
@@ -53,7 +64,6 @@
     "not_found": "No products found.",
     "relatedProducts": "Related Products",
     "customer_reviews": "Customer Reviews",
-
     "stock": {
       "onlyLeft": "Only {count} left in stock",
       "inStock": "In stock",
@@ -69,7 +79,6 @@
       "added": "Product added to cart."
     }
   },
-
   "archive": {
     "notFound": {
       "product": "No products found.",
@@ -77,14 +86,12 @@
       "pages": "No pages found."
     }
   },
-
   "general": {
     "products": "Products",
     "search": "Search...",
     "noMatch": "No products found",
     "clear": "Clear search",
     "faq": "Frequently Asked Questions",
-
     "toggle_theme": "Toggle theme",
     "pageNotFound": "This page could not be found.",
     "goHome": "Go home",
@@ -245,5 +252,89 @@
     "invert": "Invert Colors",
     "readableFont": "Readable Font",
     "reset": "Reset"
+  },
+  "account": {
+    "heroEyebrow": "Your world, in one place",
+    "heroTitle": "A smarter way to shop.",
+    "heroDescription": "Sign in to manage your account and keep your shopping journey connected.",
+    "customerAccess": "Customer account",
+    "welcomeBack": "Welcome back.",
+    "createAccountTitle": "Create your account.",
+    "loginDescription": "Sign in with your email and password to continue.",
+    "registerDescription": "Join Sky View Store with a secure customer account.",
+    "email": "Email address",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "emailPlaceholder": "you@example.com",
+    "passwordPlaceholder": "At least 8 characters",
+    "confirmPasswordPlaceholder": "Enter your password again",
+    "passwordMismatch": "Your passwords do not match.",
+    "requestFailed": "We could not complete that request. Check your details and try again.",
+    "connectionError": "A connection problem occurred. Please try again.",
+    "wait": "Please wait…",
+    "signIn": "Sign in",
+    "createAccount": "Create account",
+    "orContinueWith": "or continue with",
+    "googlePending": "Google sign-in will appear once the store's Google client ID is configured.",
+    "newToStore": "New to Sky View Store?",
+    "alreadyHaveAccount": "Already have an account?",
+    "paymentsDemoOnly": "Your account is for customer shopping features. Payments on this site remain demo-only."
+  },
+  "seller": {
+    "accountLink": "Customer account",
+    "eyebrow": "Seller Center / Application",
+    "title": "Open your store.",
+    "description": "Apply to become a Sky View Store seller. Your store remains pending until a designated responsible adult moderator reviews and approves the application.",
+    "checkingAccount": "Checking your customer account…",
+    "signInBeforeApply": "Sign in before applying.",
+    "signInDescription": "Seller applications are linked to a customer account. A designated responsible adult moderator must approve your application and review each listing before it can appear publicly.",
+    "signIn": "Sign in",
+    "createAccount": "Create account",
+    "storeName": "Store name",
+    "storeSlug": "Store address / URL name",
+    "city": "City in Ethiopia",
+    "whatWillSell": "What will your store sell?",
+    "submitting": "Submitting…",
+    "submittedButton": "Application submitted",
+    "submit": "Submit seller application",
+    "applicationSuccess": "Your seller application has been submitted. A designated responsible adult moderator must approve your store and review each listing before it can appear publicly.",
+    "errorFallback": "We could not submit your application. Sign in and try again.",
+    "connectionError": "A connection error occurred. Please try again."
+  },
+  "orders": {
+    "accountLink": "My account",
+    "eyebrow": "Customer / Orders",
+    "title": "Your orders.",
+    "description": "Order history and simulated shipment status.",
+    "loading": "Loading orders…",
+    "signInRequired": "Sign in to view your orders.",
+    "loadError": "Could not load your orders.",
+    "order": "Order",
+    "items": "items",
+    "demoOrder": "DEMO ORDER",
+    "customerOrder": "CUSTOMER ORDER",
+    "dateUnavailable": "Date unavailable",
+    "total": "Total",
+    "demoItem": "Demo",
+    "needReturn": "Need to return this order?",
+    "returnDescription": "Submit a request for the store team to review. Demo orders only simulate this process; no real refund is issued.",
+    "returnPlaceholder": "Tell us why you are requesting a return…",
+    "returnReasonShort": "Please explain the reason in at least 10 characters.",
+    "submittingReturn": "Submitting…",
+    "submitReturn": "Submit return request",
+    "returnSubmitted": "Return request submitted.",
+    "returnFailed": "Could not submit the return request.",
+    "returnStatus": "Return request:",
+    "demoRefund": "Demo simulation only — no payment or refund was processed.",
+    "teamReview": "The store team will review your request.",
+    "noOrders": "You have no orders yet.",
+    "explore": "Explore products",
+    "orderStatus": {
+      "new": "New",
+      "ready": "Ready",
+      "done": "Done",
+      "canceled": "Canceled",
+      "refunded": "Refunded"
+    }
   }
 }
