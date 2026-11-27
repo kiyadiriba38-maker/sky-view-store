@@ -1,51 +1,51 @@
 {
   "product": {
-    "not_found": "Oomishni hin argamne.",
-    "relatedProducts": "Oomishaalee walqabatan",
-    "customer_reviews": "Yaada maamiltootaa",
+    "not_found": "ምርቱ አልተገኘም።",
+    "relatedProducts": "ተዛማጅ ምርቶች",
+    "customer_reviews": "የደንበኞች ግምገማዎች",
     "stock": {
-      "onlyLeft": "Kuusaa keessatti {count} qofa hafe",
-      "inStock": "Kuusaa keessa jira",
-      "outOfStock": "Kuusaa keessa hin jiru"
+      "onlyLeft": "በመጋዘን ውስጥ {count} ብቻ ቀርቷል",
+      "inStock": "በመጋዘን ውስጥ አለ",
+      "outOfStock": "ከመጋዘን ውጭ ነው"
     },
     "addToCart": {
-      "button": "Gara gaarii bituutti dabali",
-      "chooseOptions": "Filannoo filadhu",
-      "soldOut": "Dhumeera",
-      "selectVariant": "Maaloo filannoo filadhu.",
-      "added": "Oomishni gara gaarii bituutti dabalame."
+      "button": "ወደ ጋሪ ጨምር",
+      "chooseOptions": "አማራጮችን ምረጥ",
+      "soldOut": "አልቋል",
+      "selectVariant": "እባክዎ አማራጭ ይምረጡ።",
+      "added": "ምርቱ ወደ ጋሪ ተጨምሯል።"
     }
   },
   "general": {
-    "products": "Oomishaalee",
-    "search": "Barbaadi...",
-    "noMatch": "Oomishni hin argamne",
-    "clear": "Barbaacha qulqulleessi",
-    "faq": "Gaaffilee yeroo baay'ee gaafataman",
-    "toggle_theme": "Bifa jijjiiri",
-    "pageNotFound": "Fuulli barbaadde hin argamne.",
-    "goHome": "Gara jalqabaatti deebi'i",
-    "somethingWentWrongTitle": "Rakkoon uumame",
-    "somethingWentWrongDescription": "Rakkoon suuqii irratti uumame. Maaloo irra deebi'ii yaali.",
-    "tryAgain": "Irra deebi'ii yaali"
+    "products": "ምርቶች",
+    "search": "ፈልግ...",
+    "noMatch": "ምንም ምርት አልተገኘም",
+    "clear": "ፍለጋን አጽዳ",
+    "faq": "ብዙ ጊዜ የሚጠየቁ ጥያቄዎች",
+    "toggle_theme": "ገጽታ ቀይር",
+    "pageNotFound": "የፈለጉት ገጽ አልተገኘም።",
+    "goHome": "ወደ መነሻ ተመለስ",
+    "somethingWentWrongTitle": "ችግር ተፈጥሯል",
+    "somethingWentWrongDescription": "በመደብሩ ላይ ችግር ተፈጥሯል። እባክዎ እንደገና ይሞክሩ።",
+    "tryAgain": "እንደገና ሞክር"
   },
   "cart": {
-    "title": "Gaarii bituu koo",
-    "description": "As irratti gaarii bituu kee bulchi.",
-    "emptyTitle": "Gaariin bituu kee duwwaa dha.",
-    "total": "Waliigala",
-    "checkout": "Gara kaffaltiitti ce'i"
+    "title": "የግዢ ጋሪዬ",
+    "description": "የግዢ ጋሪዎን እዚህ ያስተዳድሩ።",
+    "emptyTitle": "የግዢ ጋሪዎ ባዶ ነው።",
+    "total": "ጠቅላላ",
+    "checkout": "ወደ ክፍያ ቀጥል"
   },
   "checkout": {
     "page": {
-      "emptyCart": "Gaariin bituu kee duwwaa dha.",
-      "continueShopping": "Bittaa itti fufuu?",
-      "title": "Kaffaltii",
-      "orderReceived": "Ajajni fudhatameera.",
-      "orderId": "Lakkoofsa ajajaa: {id}",
-      "backToShop": "Gara suuqii deebi'i",
-      "yourCart": "Gaarii bituu kee",
-      "total": "Waliigala"
+      "emptyCart": "የግዢ ጋሪዎ ባዶ ነው።",
+      "continueShopping": "ግዢውን ይቀጥሉ?",
+      "title": "ክፍያ",
+      "orderReceived": "ትዕዛዙ ደርሷል።",
+      "orderId": "የትዕዛዝ ቁጥር፦ {id}",
+      "backToShop": "ወደ መደብሩ ተመለስ",
+      "yourCart": "የግዢ ጋሪዎ",
+      "total": "ጠቅላላ"
     }
   }
 }
