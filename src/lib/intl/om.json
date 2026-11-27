@@ -253,6 +253,21 @@
     "approvedSeller": "GURGURAA RAGGAASIFAME",
     "storeProduct": "SKY VIEW STORE",
     "compare": "Wal bira qabi",
-    "compareLimit": "Hanga oomisha afur wal bira qabi"
+    "compareLimit": "Hanga oomisha afur wal bira qabi",
+    "noProductsYet": "Oomishni maxxanfame ammaaf hin jiru",
+    "adminPublishedProducts": "Oomishni hayyamame erga bulchaan maxxanse booda asitti mul'ata.",
+    "searchProducts": "Oomisha barbaadi...",
+    "allListings": "Tarree hunda",
+    "compareSelected": "Wal bira qabuuf dabalame",
+    "addToCompare": "Wal bira qabi",
+    "selectedOfFour": "Oomisha 4 keessaa {count} filatame",
+    "compareDetails": "Gatii, kuusaa, gurguraa fi ibsa oomishaa wal bira qabi.",
+    "clearSelection": "Qulqulleessi",
+    "compareNow": "Amma wal bira qabi",
+    "noProductsMatch": "Oomishni filannoo kanaan wal simu hin jiru.",
+    "noCategories": "Ramaddiin erga bulchaan maxxanse booda asitti mul'ata.",
+    "collection": "WALITTI QABAMA",
+    "exploreProductsInCollection": "Oomishaalee walitti qabama kana keessa jiran ilaali.",
+    "exploreCollection": "Walitti qabama ilaali"
   }
 }
