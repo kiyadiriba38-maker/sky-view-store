@@ -466,5 +466,24 @@
     "error": "We couldn't load your notifications. Please try again.",
     "signIn": "Sign in to view your notifications.",
     "back": "Back to account"
+  },
+  "reports": {
+    "button": "Report listing",
+    "title": "Report this listing",
+    "description": "Tell the store moderation team what needs review. Reports are private and are reviewed by the designated moderator.",
+    "reason": "Reason",
+    "misleading": "Misleading listing",
+    "counterfeit": "Counterfeit concern",
+    "unsafe": "Unsafe content",
+    "seller": "Seller conduct",
+    "review": "Review abuse",
+    "other": "Other",
+    "details": "Additional details",
+    "detailsPlaceholder": "Describe the concern clearly (up to 2,000 characters).",
+    "submit": "Submit report",
+    "cancel": "Cancel",
+    "success": "Your report was submitted for moderation.",
+    "signIn": "Sign in to report a listing.",
+    "error": "We couldn't submit the report. Please try again."
   }
 }
