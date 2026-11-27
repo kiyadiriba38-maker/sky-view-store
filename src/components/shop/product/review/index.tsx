@@ -23,10 +23,15 @@ export default async function ProductReviews({
 }) {
   const t = await getTranslations("product");
   const safeReviews = reviews ?? [];
-  const average = safeReviews.length ? calculateAverageRating(safeReviews) : 0;
+  const demoReviews = safeReviews.filter((review) => Boolean((review as Review & { isDemo?: boolean }).isDemo));
+  const genuineReviews = safeReviews.filter((review) =>
+    !(review as Review & { isDemo?: boolean }).isDemo &&
+    Boolean((review as Review & { verifiedPurchase?: boolean }).verifiedPurchase),
+  );
+  const average = genuineReviews.length ? calculateAverageRating(genuineReviews) : 0;
   const distribution = [5, 4, 3, 2, 1].map((rating) => ({
     rating,
-    count: safeReviews.filter((review) => Math.round(review.rating) === rating).length,
+    count: genuineReviews.filter((review) => Math.round(review.rating) === rating).length,
   }));
 
   return (
@@ -44,19 +49,19 @@ export default async function ProductReviews({
 
         <div className="grid gap-8 py-8 lg:grid-cols-[.72fr_1.28fr]">
           <aside className="rounded-2xl border border-white/10 bg-white/[.035] p-6">
-            <p className="text-[9px] font-bold uppercase tracking-[.22em] text-white/40">Overall rating</p>
+            <p className="text-[9px] font-bold uppercase tracking-[.22em] text-white/40">Verified customer rating</p>
             <div className="mt-3 flex items-end gap-2">
-              <span className="text-6xl font-semibold leading-none tracking-[-.07em]">{safeReviews.length ? average.toFixed(1) : "—"}</span>
+              <span className="text-6xl font-semibold leading-none tracking-[-.07em]">{genuineReviews.length ? average.toFixed(1) : "—"}</span>
               <span className="pb-1 text-xs text-white/35">/ 5</span>
             </div>
             <Stars rating={average} className="mt-4" />
-            <p className="mt-3 text-[10px] text-white/40">{safeReviews.length ? `Based on ${safeReviews.length} published review ${safeReviews.length === 1 ? "entry" : "entries"}` : "No customer reviews yet"}</p>
+            <p className="mt-3 text-[10px] text-white/40">{genuineReviews.length ? `Based on ${genuineReviews.length} verified purchase ${genuineReviews.length === 1 ? "review" : "reviews"}` : "No verified customer rating yet"}</p>
             <div className="mt-7 space-y-3">
               {distribution.map(({ rating, count }) => (
                 <div key={rating} className="flex items-center gap-3 text-[10px]">
                   <span className="w-3 text-white/50">{rating}</span>
                   <FaStar className="h-3 w-3 text-cyan-300" />
-                  <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-white/10"><div className="h-full rounded-full bg-cyan-200 transition-all" style={{ width: safeReviews.length ? `${(count / safeReviews.length) * 100}%` : "0%" }} /></div>
+                  <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-white/10"><div className="h-full rounded-full bg-cyan-200 transition-all" style={{ width: genuineReviews.length ? `${(count / genuineReviews.length) * 100}%` : "0%" }} /></div>
                   <span className="w-5 text-right tabular-nums text-white/35">{count}</span>
                 </div>
               ))}
@@ -65,7 +70,7 @@ export default async function ProductReviews({
 
           <div>
             <div className="mb-5 flex items-center justify-between gap-4">
-              <div><p className="text-[9px] font-bold uppercase tracking-[.22em] text-cyan-200">Customer voices</p><p className="mt-1 text-sm font-semibold">{safeReviews.length ? `${safeReviews.length} published ${safeReviews.length === 1 ? "review" : "reviews"}` : "Be the first to share feedback"}</p></div>
+              <div><p className="text-[9px] font-bold uppercase tracking-[.22em] text-cyan-200">Customer voices</p><p className="mt-1 text-sm font-semibold">{genuineReviews.length ? `${genuineReviews.length} verified customer ${genuineReviews.length === 1 ? "review" : "reviews"}` : "Be the first verified customer to share feedback"}</p>{demoReviews.length ? <p className="mt-1 text-[10px] text-amber-200/70">{demoReviews.length} illustrative demo {demoReviews.length === 1 ? "sample" : "samples"} — excluded from the customer rating</p> : null}</div>
               <span className="rounded-full border border-white/10 px-3 py-2 text-[8px] font-bold uppercase tracking-[.15em] text-white/35">Demo and verified labels</span>
             </div>
 
