@@ -50,7 +50,7 @@ export default function SellerApplication() {
         return;
       }
       setState("pending");
-      setMessage("Your seller application has been submitted. An administrator must approve your store before you can list products.");
+      setMessage("Your seller application has been submitted. A designated responsible adult moderator must approve your store and review each listing before it can appear publicly.");
     } catch {
       setState("error");
       setMessage("A connection error occurred. Please try again.");
@@ -63,13 +63,13 @@ export default function SellerApplication() {
         <Link href="/account" className="text-xs text-cyan-200 hover:text-white">← Customer account</Link>
         <p className="mt-8 text-[10px] font-bold uppercase tracking-[.25em] text-cyan-200">Seller Center / Application</p>
         <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">Open your store.</h1>
-        <p className="mt-4 text-sm leading-7 text-white/55">Apply to become a Sky View Store seller. Your store remains pending until an administrator reviews and approves the application.</p>
+        <p className="mt-4 text-sm leading-7 text-white/55">Apply to become a Sky View Store seller. Your store remains pending until a designated responsible adult moderator reviews and approves the application.</p>
         {authStatus === "loading" ? (
           <p className="mt-8 text-sm text-white/50">Checking your customer account…</p>
         ) : authStatus === "signed-out" ? (
           <div className="mt-8 rounded-2xl border border-cyan-200/20 bg-cyan-200/5 p-6">
             <p className="text-sm font-semibold">Sign in before applying.</p>
-            <p className="mt-2 text-xs leading-6 text-white/55">Seller applications are linked to a verified customer account. An administrator must approve your application before you can publish listings.</p>
+            <p className="mt-2 text-xs leading-6 text-white/55">Seller applications are linked to a verified customer account. A designated responsible adult moderator must approve your application and review each listing before it can appear publicly.</p>
             <div className="mt-5 flex flex-wrap gap-3">
               <Link href="/account/login?next=%2Fseller%2Fapply" className="rounded-full bg-cyan-200 px-5 py-3 text-xs font-bold text-[#07111a]">Sign in</Link>
               <Link href="/account/register?next=%2Fseller%2Fapply" className="rounded-full border border-white/20 px-5 py-3 text-xs font-bold">Create account</Link>
