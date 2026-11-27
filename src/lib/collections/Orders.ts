@@ -18,6 +18,7 @@ import { revalidate } from "@/lib/collections/hooks";
 import appConfig from "@/lib/core/config";
 import { getOrderDashboard } from "@/lib/core/dal/order-dashboard";
 import { OrderNotifier } from "@/lib/core/OrderNotifier";
+import { createStoreNotification } from "@/lib/core/notifications";
 import {
   type CartItem,
   type OrderItem,
@@ -289,6 +290,16 @@ export const Orders: CollectionOverride = ({ defaultCollection }) => {
           });
 
           const isDemo = Boolean((order as typeof order & { isDemoOrder?: boolean }).isDemoOrder);
+          await createStoreNotification(req.payload, {
+            user: req.user.id,
+            type: "return_update",
+            title: "Return request received",
+            message: isDemo
+              ? "Your demo return request has been recorded. No payment or refund was processed."
+              : "Your return request has been submitted for review.",
+            href: "/account/orders",
+            relatedOrder: order.id,
+          });
           return Response.json({
             message: isDemo
               ? "Demo return request recorded. This only simulates the review process; no real refund or payment is involved."
@@ -446,6 +457,34 @@ export const Orders: CollectionOverride = ({ defaultCollection }) => {
             }
           }
 
+          return doc;
+        },
+
+        async (args) => {
+          const { operation, doc, req, previousDoc } = args;
+          if (req.context?.skipOrderNotification) return doc;
+          const customerId = typeof doc.customer === "object" && doc.customer
+            ? doc.customer.id
+            : doc.customer;
+          if (customerId && operation === "create") {
+            await createStoreNotification(req.payload, {
+              user: customerId,
+              type: "order_update",
+              title: "Order received",
+              message: `Order #${doc.id} was created in demo mode. No payment was processed.`,
+              href: "/account/orders",
+              relatedOrder: doc.id,
+            });
+          } else if (customerId && operation === "update" && previousDoc?.status !== doc.status) {
+            await createStoreNotification(req.payload, {
+              user: customerId,
+              type: "order_update",
+              title: "Order status updated",
+              message: `Order #${doc.id} is now marked ${String(doc.status ?? "updated")}.`,
+              href: "/account/orders",
+              relatedOrder: doc.id,
+            });
+          }
           return doc;
         },
 
