@@ -143,6 +143,11 @@ export const Products: CollectionOverride = ({ defaultCollection }) => {
       },
     },
     {
+      name: "demoImageUrl",
+      type: "text",
+      admin: { position: "sidebar", description: "Image URL used for clearly labelled demo listings only." },
+    },
+    {
       name: "isDemo",
       type: "checkbox",
       defaultValue: false,
