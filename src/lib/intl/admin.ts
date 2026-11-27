@@ -85,7 +85,7 @@ const applyNavigationGroups = (config: Config): void => {
     if (group) {
       global.admin = {
         ...global.admin,
-        group: group[appConfig.LOCAL.lang],
+        group: group[appConfig.LOCAL.lang] ?? group.en,
       };
     }
   }
