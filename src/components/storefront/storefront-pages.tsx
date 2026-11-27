@@ -87,7 +87,8 @@ export function ProductGrid({ products }: { products: Product[] }) {
       {visibleProducts.map((product) => {
         const demo = Boolean((product as Product & { isDemo?: boolean }).isDemo);
         const demoImage = (product as Product & { demoImageUrl?: string }).demoImageUrl;
-        const image = product.meta?.image && typeof product.meta.image === "object" ? resolveMediaUrl(product.meta.image) : demo && demoImage ? demoImage : null;
+        const sellerImage = (product as Product & { productImageUrl?: string }).productImageUrl;
+        const image = product.meta?.image && typeof product.meta.image === "object" ? resolveMediaUrl(product.meta.image) : demo ? demoImage ?? null : sellerImage ?? null;
         const external = product.listingType === "external" && Boolean(product.externalUrl);
         const price = Number(product.priceInUSD ?? 0);
         const href = external ? product.externalUrl! : `/product/${product.slug}`;
