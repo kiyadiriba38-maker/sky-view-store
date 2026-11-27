@@ -134,7 +134,8 @@
     "googlePending": "Seensi Google erga eenyummaan Google daldichaa qindaa'ee booda mul'ata.",
     "newToStore": "Sky View Store keessatti haaraa?",
     "alreadyHaveAccount": "Herrega qabdaa?",
-    "paymentsDemoOnly": "Herregni kee bittaa maamilaa qofaaf. Kaffaltiin marsariitii kanaa yaalii qofa."
+    "paymentsDemoOnly": "Herregni kee bittaa maamilaa qofaaf. Kaffaltiin marsariitii kanaa yaalii qofa.",
+    "notificationsLink": "Beeksisa"
   },
   "seller": {
     "accountLink": "Herrega maamilaa",
@@ -289,5 +290,18 @@
     "dealsTitle": "Gatii hir'ate sakatta'i.",
     "dealsDescription": "Oomisha gatii duraanii fi gatii ammaa gadi aanaa bulchaan kaa'e qofa asitti mul'ata.",
     "newest": "Haaraa"
+  },
+  "notifications": {
+    "title": "Beeksisa kee",
+    "description": "Odeeffannoo waa'ee ajaja kee, iyyata gurgurtaa fi sochii suuqii.",
+    "markAll": "Hunda akka dubbifametti mallatteessi",
+    "unread": "Hin dubbifamne",
+    "read": "Dubbifame",
+    "empty": "Odeeffannoo haaraa hunda ilaaltaniittu.",
+    "open": "Odeeffannoo bani",
+    "loading": "Beeksisa fe'aa jira…",
+    "error": "Beeksisa fe'uun hin danda'amne. Irra deebi'ii yaali.",
+    "signIn": "Beeksisa ilaaluuf seeni.",
+    "back": "Gara herregaatti deebi'i"
   }
 }
