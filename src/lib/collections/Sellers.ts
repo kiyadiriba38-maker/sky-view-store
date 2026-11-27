@@ -1,6 +1,16 @@
-import type { Access, CollectionConfig, Where } from "payload";
+import type { Access, CollectionConfig, PayloadRequest, Where } from "payload";
 
 import { isAdmin } from "@/lib/collections/base-fields";
+
+const isDesignatedModerator = ({ req }: { req: PayloadRequest }) => {
+  const moderatorEmail = process.env.LISTING_MODERATOR_EMAIL?.trim().toLowerCase();
+  return Boolean(
+    moderatorEmail &&
+    req.user &&
+    isAdmin({ req }) &&
+    req.user.email?.trim().toLowerCase() === moderatorEmail,
+  );
+};
 
 const readSellerProfiles: Access = ({ req }) => {
   if (isAdmin({ req })) return true;
@@ -33,24 +43,48 @@ export const Sellers: CollectionConfig = {
   },
   hooks: {
     beforeValidate: [
-      ({ data, req, operation }) => {
-        if (!data) return data;
-        if (operation === "create" && req.user && !isAdmin({ req })) {
-          return {
-            ...data,
-            owner: req.user.id,
-            approvalStatus: "pending",
-          };
+      ({ data, req, operation, originalDoc }) => {
+        if (!data || !req.user) return data;
+
+        if (isAdmin({ req })) {
+          if (!isDesignatedModerator({ req })) {
+            return {
+              ...data,
+              approvalStatus: operation === "create"
+                ? "pending"
+                : originalDoc?.approvalStatus ?? "pending",
+            };
+          }
+          return data;
         }
+
+        if (operation === "create") {
+          return { ...data, owner: req.user.id, approvalStatus: "pending" };
+        }
+
         return data;
       },
     ],
     beforeChange: [
       ({ data, req, operation, originalDoc }) => {
-        if (!data || !req.user || isAdmin({ req })) return data;
+        if (!data || !req.user) return data;
+
+        if (isAdmin({ req })) {
+          if (!isDesignatedModerator({ req })) {
+            return {
+              ...data,
+              approvalStatus: operation === "create"
+                ? "pending"
+                : originalDoc?.approvalStatus ?? "pending",
+            };
+          }
+          return data;
+        }
+
         if (operation === "create") {
           return { ...data, owner: req.user.id, approvalStatus: "pending" };
         }
+
         return {
           ...data,
           owner: originalDoc?.owner ?? req.user.id,
@@ -84,6 +118,7 @@ export const Sellers: CollectionConfig = {
         { label: "Suspended", value: "suspended" },
         { label: "Rejected", value: "rejected" },
       ],
+      access: { read: isAdmin, update: isDesignatedModerator },
       admin: { position: "sidebar" },
     },
     { name: "responseTimeHours", type: "number", min: 0, admin: { readOnly: true } },
