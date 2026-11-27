@@ -72,8 +72,8 @@ export default function ProductReviews({
 
           <div>
             <div className="mb-5 flex items-center justify-between gap-4">
-              <div><p className="text-[9px] font-bold uppercase tracking-[.22em] text-cyan-200">{t("customerVoices")}</p><p className="mt-1 text-sm font-semibold">{genuineReviews.length ? genuineReviews.length ? t("verifiedPurchasesCount", { count: genuineReviews.length }) : t("firstVerifiedReview")}</p>{demoReviews.length ? <p className="mt-1 text-[10px] text-amber-200/70">{demoReviews.length} illustrative demo {demoReviews.length === 1 ? "sample" : "samples"} — excluded from the customer rating</p> : null}</div>
-              <span className="rounded-full border border-white/10 px-3 py-2 text-[8px] font-bold uppercase tracking-[.15em] text-white/35">Demo and verified labels</span>
+              <div><p className="text-[9px] font-bold uppercase tracking-[.22em] text-cyan-200">{t("customerVoices")}</p><p className="mt-1 text-sm font-semibold">{genuineReviews.length ? t("verifiedPurchasesCount", { count: genuineReviews.length }) : t("firstVerifiedReview")}</p>{demoReviews.length ? <p className="mt-1 text-[10px] text-amber-200/70">{t("demoSamplesCount", { count: demoReviews.length })}</p> : null}</div>
+              <span className="rounded-full border border-white/10 px-3 py-2 text-[8px] font-bold uppercase tracking-[.15em] text-white/35">{t("reviewLabels")}</span>
             </div>
 
             {safeReviews.length ? (
