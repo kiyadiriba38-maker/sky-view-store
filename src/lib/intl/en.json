@@ -431,6 +431,7 @@
     "categoriesDescription": "Discover products across technology, fashion, home, beauty, sports, automotive, hobbies and more. Demo catalogue categories are available immediately; real product availability depends on published listings.",
     "dealsEyebrow": "Offers / 02",
     "dealsTitle": "Deals worth discovering.",
-    "dealsDescription": "Only products with an original price and a lower current price set by the store admin appear here."
+    "dealsDescription": "Only products with an original price and a lower current price set by the store admin appear here.",
+    "newest": "Newest"
   }
 }
