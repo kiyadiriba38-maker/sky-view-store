@@ -4,6 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
+import { useStoreLocale } from "@/lib/providers/intl";
+import { useTheme } from "@/lib/providers/theme";
+
 import { DEMO_CATEGORIES, DEMO_PRODUCTS } from "@/lib/demo/catalog";
 
 type CatalogProduct = {
@@ -37,17 +40,13 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
   const [category, setCategory] = useState("All");
   const [kind, setKind] = useState<"all" | "demo" | "real">("all");
   const [currency, setCurrency] = useState<Currency>("ETB");
-  const [language, setLanguage] = useState<Language>("en");
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const { locale, setLocale } = useStoreLocale();
+  const { theme, setTheme } = useTheme();
   const [rates, setRates] = useState<Record<string, number>>({});
   const [rateReady, setRateReady] = useState(false);
-  const t = copy[language];
+  const t = copy[locale];
 
   useEffect(() => {
-    const savedTheme = window.localStorage.getItem("sv-theme");
-    if (savedTheme === "light" || savedTheme === "dark") setTheme(savedTheme);
-    const savedLanguage = window.localStorage.getItem("sv-language");
-    if (savedLanguage === "am" || savedLanguage === "om" || savedLanguage === "en") setLanguage(savedLanguage);
     const savedCurrency = window.localStorage.getItem("sv-currency");
     if (savedCurrency && ["ETB", "USD", "EUR", "GBP", "AED"].includes(savedCurrency)) setCurrency(savedCurrency as Currency);
     const controller = new AbortController();
@@ -85,7 +84,7 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
   const changeTheme = () => {
     const next = theme === "dark" ? "light" : "dark";
     setTheme(next);
-    window.localStorage.setItem("sv-theme", next);
+
   };
 
   return (
@@ -99,7 +98,7 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
           <Link href="/shop">Shop</Link><Link href="/categories">Categories</Link><a href="#popular">Trending</a><Link href="/deals">Deals</Link><Link href="/help">Help</Link>
         </nav>
         <div className="sv-header-actions">
-          <select aria-label="Language" value={language} onChange={(event) => { const value = event.target.value as Language; setLanguage(value); window.localStorage.setItem("sv-language", value); }}>
+          <select aria-label="Language" value={locale} onChange={(event) => setLocale(event.target.value as Language)}>
             <option value="en">EN</option><option value="am">አማ</option><option value="om">OR</option>
           </select>
           <select aria-label="Currency" value={currency} onChange={(event) => { const value = event.target.value as Currency; setCurrency(value); window.localStorage.setItem("sv-currency", value); }}>
