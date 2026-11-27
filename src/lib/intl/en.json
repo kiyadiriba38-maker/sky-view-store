@@ -422,6 +422,15 @@
     "customerReview": "CUSTOMER REVIEW",
     "noReviewsYet": "There are no reviews yet.",
     "honestFeedback": "Share useful, honest feedback to help the next shopper.",
-    "reviewEmptyTitle": "Your experience belongs here."
+    "reviewEmptyTitle": "Your experience belongs here.",
+    "shopEyebrow": "Marketplace catalogue / 01",
+    "shopTitle": "Explore the marketplace.",
+    "shopDescription": "Discover 1,000+ clearly labelled demo listings alongside real products published by Sky View Store and approved sellers. Demo listings simulate the shopping experience and are not real offers for sale.",
+    "categoriesEyebrow": "Browse by interest / 03",
+    "categoriesTitle": "Explore every category.",
+    "categoriesDescription": "Discover products across technology, fashion, home, beauty, sports, automotive, hobbies and more. Demo catalogue categories are available immediately; real product availability depends on published listings.",
+    "dealsEyebrow": "Offers / 02",
+    "dealsTitle": "Deals worth discovering.",
+    "dealsDescription": "Only products with an original price and a lower current price set by the store admin appear here."
   }
 }
