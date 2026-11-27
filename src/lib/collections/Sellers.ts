@@ -42,6 +42,108 @@ export const Sellers: CollectionConfig = {
     delete: isAdmin,
     admin: isAdmin,
   },
+  endpoints: [
+    {
+      path: "/me/metrics",
+      method: "get",
+      handler: async (req) => {
+        if (!req.user) return Response.json({ message: "Sign in to view seller metrics." }, { status: 401 });
+
+        const sellerResult = await req.payload.find({
+          collection: "sellers" as never,
+          where: { owner: { equals: req.user.id } },
+          limit: 1,
+          depth: 0,
+          overrideAccess: true,
+        } as never) as unknown as {
+          docs: Array<{
+            id: number | string;
+            storeName: string;
+            approvalStatus: string;
+            completedOrders?: number;
+            responseTimeHours?: number;
+          }>;
+        };
+        const seller = sellerResult.docs[0];
+        if (!seller) return Response.json({ message: "Seller profile not found." }, { status: 404 });
+
+        const productResult = await req.payload.find({
+          collection: "products",
+          where: { seller: { equals: seller.id } },
+          limit: 500,
+          depth: 0,
+          overrideAccess: true,
+          select: { id: true, _status: true, listingStatus: true },
+        } as never) as unknown as {
+          docs: Array<{ id: number | string; _status?: string; listingStatus?: string }>;
+        };
+        const productIds = productResult.docs.map((product) => product.id);
+        const reviewResult = productIds.length
+          ? await req.payload.find({
+              collection: "reviews",
+              where: {
+                and: [
+                  { product: { in: productIds } },
+                  { isDemo: { equals: false } },
+                  { verifiedPurchase: { equals: true } },
+                ],
+              },
+              limit: 1000,
+              depth: 0,
+              overrideAccess: true,
+              select: { rating: true },
+            } as never) as unknown as { docs: Array<{ rating?: number }> }
+          : { docs: [] as Array<{ rating?: number }> };
+
+        const verifiedReviewCount = reviewResult.docs.length;
+        const averageRating = verifiedReviewCount
+          ? Number((reviewResult.docs.reduce((sum, review) => sum + Number(review.rating ?? 0), 0) / verifiedReviewCount).toFixed(2))
+          : null;
+        const completedOrders = Number(seller.completedOrders ?? 0);
+
+        const approvedSellerResult = await req.payload.find({
+          collection: "sellers" as never,
+          where: { approvalStatus: { equals: "approved" } },
+          limit: 500,
+          depth: 0,
+          overrideAccess: true,
+          select: { id: true, completedOrders: true },
+        } as never) as unknown as {
+          docs: Array<{ id: number | string; completedOrders?: number }>;
+        };
+        const rankedSellers = approvedSellerResult.docs
+          .filter((item) => Number(item.completedOrders ?? 0) > 0)
+          .sort((a, b) => Number(b.completedOrders ?? 0) - Number(a.completedOrders ?? 0));
+        const rankIndex = rankedSellers.findIndex((item) => String(item.id) === String(seller.id));
+
+        const badges: string[] = [];
+        if (completedOrders >= 50) badges.push("Trusted seller");
+        if (averageRating !== null && averageRating >= 4.5 && verifiedReviewCount >= 10) badges.push("Top rated");
+        if (completedOrders < 5) badges.push("New seller");
+
+        return Response.json({
+          seller: {
+            id: seller.id,
+            storeName: seller.storeName,
+            approvalStatus: seller.approvalStatus,
+          },
+          metrics: {
+            totalProducts: productResult.docs.length,
+            publishedProducts: productResult.docs.filter((product) => product._status === "published" && product.listingStatus === "approved").length,
+            pendingProducts: productResult.docs.filter((product) => product.listingStatus === "pending").length,
+            completedOrders,
+            averageRating,
+            verifiedReviewCount,
+            responseTimeHours: seller.responseTimeHours ?? null,
+            deliveryPerformance: null,
+            rank: rankIndex >= 0 ? rankIndex + 1 : null,
+            approvedSellerCount: approvedSellerResult.docs.length,
+            badges,
+          },
+        });
+      },
+    },
+  ],
   hooks: {
     afterChange: [
       async ({ doc, operation, previousDoc, req }) => {
