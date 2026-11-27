@@ -133,8 +133,8 @@ export async function authenticateGoogleCustomer({
 
     sessions.push({
       id: sid,
-      createdAt: now,
-      expiresAt: new Date(now.getTime() + tokenExpiration * 1000),
+      createdAt: now.toISOString(),
+      expiresAt: new Date(now.getTime() + tokenExpiration * 1000).toISOString(),
     });
 
     await payload.db.updateOne({
