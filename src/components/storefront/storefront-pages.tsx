@@ -79,6 +79,7 @@ export function ProductGrid({ products }: { products: Product[] }) {
               </div>
               <div className="p-4">
                 <h2 className="line-clamp-2 min-h-10 text-sm font-semibold leading-5">{product.title}</h2>
+                {demo ? <p className="mt-2 inline-flex rounded-full border border-amber-300/30 bg-amber-300/10 px-2 py-1 text-[8px] font-bold tracking-wider text-amber-200">DEMO · SIMULATED ORDER</p> : null}
                 <div className="mt-4 flex items-center justify-between border-t border-white/10 pt-4">
                   <div><p className="text-sm font-bold">{formatPrice(price)}</p>{product.originalPriceInUSD && product.originalPriceInUSD > price ? <p className="mt-1 text-[10px] text-white/35 line-through">{formatPrice(product.originalPriceInUSD)}</p> : null}</div>
                   <span className="grid size-9 place-items-center rounded-full border border-cyan-200/40 text-cyan-100 transition group-hover:bg-cyan-200 group-hover:text-[#07111a]">{external ? "↗" : "→"}</span>
