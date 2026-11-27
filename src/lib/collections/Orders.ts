@@ -224,7 +224,33 @@ export const Orders: CollectionOverride = ({ defaultCollection }) => {
           []) as CollectionAfterChangeHook[]),
 
         async (args) => {
-          const { operation, doc, req } = args;
+          const { operation, doc, req, previousDoc } = args;
+
+          // Restore stock once when an order is cancelled. The status
+          // transition rules below prevent reopening a cancelled order,
+          // which would otherwise make repeated restocking possible.
+          if (
+            operation === "update" &&
+            doc.status === OrderStatus.CANCELED &&
+            previousDoc?.status !== OrderStatus.CANCELED
+          ) {
+            const cancelledItems: OrderItem[] = Array.isArray(doc.items) ? doc.items : [];
+            for (const item of cancelledItems) {
+              const quantity = Number(item?.quantity ?? 0);
+              if (!Number.isSafeInteger(quantity) || quantity < 1) continue;
+              const variantId = typeof item.variant === "object" ? item.variant?.id : item.variant;
+              const productId = typeof item.product === "object" ? item.product?.id : item.product;
+              const targetId = variantId ?? productId;
+              if (!targetId) continue;
+              await req.payload.db.updateOne({
+                collection: variantId ? "variants" : CollectionName.products,
+                id: targetId,
+                data: { inventory: { $inc: quantity } },
+                req,
+              });
+            }
+          }
+
           if (operation !== "create" || req.context?.skipOrderNotification)
             return doc;
 
