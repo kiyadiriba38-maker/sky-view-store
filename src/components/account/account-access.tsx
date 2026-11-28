@@ -50,35 +50,35 @@ export default function AccountAccess({ mode }: { mode: Mode }) {
   }
 
   return (
-    <main className="sv-page min-h-[75vh] bg-[#070b12] px-4 py-14 text-white sm:px-6 sm:py-20">
-      <div className="mx-auto grid max-w-5xl overflow-hidden rounded-[28px] border border-white/10 bg-[#0d1724] shadow-[0_30px_100px_rgba(0,0,0,.35)] md:grid-cols-[.9fr_1.1fr]">
-        <section className="relative hidden min-h-[580px] flex-col justify-between overflow-hidden bg-[radial-gradient(circle_at_20%_20%,rgba(34,211,238,.25),transparent_38%),linear-gradient(145deg,#14283b,#0b1020_70%)] p-10 md:flex">
-          <div className="absolute -right-20 top-20 size-72 rounded-full border border-cyan-100/10 shadow-[0_0_100px_rgba(34,211,238,.12)]" />
+    <main className="sv-page min-h-[75vh] bg-[#121212] px-4 py-14 text-white sm:px-6 sm:py-20">
+      <div className="mx-auto grid max-w-5xl overflow-hidden rounded-[28px] border border-white/10 bg-[#191919] shadow-[0_30px_100px_rgba(0,0,0,.35)] md:grid-cols-[.9fr_1.1fr]">
+        <section className="relative hidden min-h-[580px] flex-col justify-between overflow-hidden bg-[radial-gradient(circle_at_20%_20%,rgba(245,158,11,.25),transparent_38%),linear-gradient(145deg,#241b10,#121212_70%)] p-10 md:flex">
+          <div className="absolute -right-20 top-20 size-72 rounded-full border border-amber-100/10 shadow-[0_0_100px_rgba(245,158,11,.12)]" />
           <Link href="/" className="relative text-xs font-black uppercase tracking-[.24em]">SKY VIEW <span className="font-light text-white/45">STORE</span></Link>
           <div className="relative">
-            <p className="text-[10px] font-bold uppercase tracking-[.28em] text-cyan-200">{t("heroEyebrow")}</p>
+            <p className="text-[10px] font-bold uppercase tracking-[.28em] text-amber-300">{t("heroEyebrow")}</p>
             <h1 className="mt-5 text-5xl font-semibold leading-[1.02] tracking-[-.06em]">{t("heroTitle")}</h1>
             <p className="mt-5 max-w-sm text-sm leading-7 text-white/50">{t("heroDescription")}</p>
           </div>
           <p className="relative text-[9px] uppercase tracking-[.2em] text-white/30">SKY VIEW STORE / CUSTOMER ACCESS</p>
         </section>
         <section className="p-6 sm:p-10 md:p-12">
-          <Link href="/" className="text-[10px] font-bold uppercase tracking-[.2em] text-cyan-200 md:hidden">← Sky View Store</Link>
-          <p className="mt-7 text-[9px] font-bold uppercase tracking-[.25em] text-cyan-200 md:mt-2">{t("customerAccess")}</p>
+          <Link href="/" className="text-[10px] font-bold uppercase tracking-[.2em] text-amber-300 md:hidden">← Sky View Store</Link>
+          <p className="mt-7 text-[9px] font-bold uppercase tracking-[.25em] text-amber-300 md:mt-2">{t("customerAccess")}</p>
           <h2 className="mt-3 text-3xl font-semibold tracking-[-.045em]">{mode === "login" ? t("welcomeBack") : t("createAccountTitle")}</h2>
           <p className="mt-3 text-sm leading-6 text-white/45">{mode === "login" ? t("loginDescription") : t("registerDescription")}</p>
           <form onSubmit={submit} className="mt-9 space-y-5">
             <label className="block text-xs font-medium text-white/70">{t("email")}
-              <input required type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} className="mt-2 w-full rounded-xl border border-white/15 bg-white/[.04] px-4 py-3.5 text-sm text-white outline-none transition placeholder:text-white/25 focus:border-cyan-200/70 focus:ring-2 focus:ring-cyan-200/10" placeholder={t("emailPlaceholder")} />
+              <input required type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} className="mt-2 w-full rounded-xl border border-white/15 bg-white/[.04] px-4 py-3.5 text-sm text-white outline-none transition placeholder:text-white/25 focus:border-amber-300/70 focus:ring-2 focus:ring-amber-300/10" placeholder={t("emailPlaceholder")} />
             </label>
             <label className="block text-xs font-medium text-white/70">{t("password")}
-              <input required minLength={8} type="password" autoComplete={mode === "login" ? "current-password" : "new-password"} value={password} onChange={(e) => setPassword(e.target.value)} className="mt-2 w-full rounded-xl border border-white/15 bg-white/[.04] px-4 py-3.5 text-sm text-white outline-none transition placeholder:text-white/25 focus:border-cyan-200/70 focus:ring-2 focus:ring-cyan-200/10" placeholder={t("passwordPlaceholder")} />
+              <input required minLength={8} type="password" autoComplete={mode === "login" ? "current-password" : "new-password"} value={password} onChange={(e) => setPassword(e.target.value)} className="mt-2 w-full rounded-xl border border-white/15 bg-white/[.04] px-4 py-3.5 text-sm text-white outline-none transition placeholder:text-white/25 focus:border-amber-300/70 focus:ring-2 focus:ring-amber-300/10" placeholder={t("passwordPlaceholder")} />
             </label>
             {mode === "register" ? <label className="block text-xs font-medium text-white/70">{t("confirmPassword")}
-              <input required minLength={8} type="password" autoComplete="new-password" value={confirm} onChange={(e) => setConfirm(e.target.value)} className="mt-2 w-full rounded-xl border border-white/15 bg-white/[.04] px-4 py-3.5 text-sm text-white outline-none transition placeholder:text-white/25 focus:border-cyan-200/70 focus:ring-2 focus:ring-cyan-200/10" placeholder={t("confirmPasswordPlaceholder")} />
+              <input required minLength={8} type="password" autoComplete="new-password" value={confirm} onChange={(e) => setConfirm(e.target.value)} className="mt-2 w-full rounded-xl border border-white/15 bg-white/[.04] px-4 py-3.5 text-sm text-white outline-none transition placeholder:text-white/25 focus:border-amber-300/70 focus:ring-2 focus:ring-amber-300/10" placeholder={t("confirmPasswordPlaceholder")} />
             </label> : null}
             {message ? <p role="alert" className="rounded-xl border border-rose-300/20 bg-rose-300/10 px-4 py-3 text-xs leading-5 text-rose-100">{message}</p> : null}
-            <button disabled={busy} type="submit" className="flex w-full items-center justify-center rounded-xl bg-cyan-200 px-5 py-4 text-xs font-extrabold uppercase tracking-[.17em] text-[#07111a] transition hover:-translate-y-0.5 hover:bg-white disabled:cursor-not-allowed disabled:opacity-50">{busy ? t("wait") : mode === "login" ? t("signIn") : t("createAccount")} <span className="ml-2">↗</span></button>
+            <button disabled={busy} type="submit" className="flex w-full items-center justify-center rounded-xl bg-amber-300 px-5 py-4 text-xs font-extrabold uppercase tracking-[.17em] text-[#121212] transition hover:-translate-y-0.5 hover:bg-white disabled:cursor-not-allowed disabled:opacity-50">{busy ? t("wait") : mode === "login" ? t("signIn") : t("createAccount")} <span className="ml-2">↗</span></button>
           </form>
           <div className="mt-7">
             <div className="flex items-center gap-3 text-[9px] font-bold uppercase tracking-[.2em] text-white/25">
@@ -97,7 +97,7 @@ export default function AccountAccess({ mode }: { mode: Mode }) {
               </p>
             )}
           </div>
-          <p className="mt-7 text-center text-xs text-white/45">{mode === "login" ? t("newToStore") : t("alreadyHaveAccount")} <Link className="font-semibold text-cyan-200 hover:text-white" href={`${mode === "login" ? "/account/register" : "/account/login"}${requestedNext ? `?next=${encodeURIComponent(redirectTo)}` : ""}`}>{mode === "login" ? t("createAccount") : t("signIn")}</Link></p>
+          <p className="mt-7 text-center text-xs text-white/45">{mode === "login" ? t("newToStore") : t("alreadyHaveAccount")} <Link className="font-semibold text-amber-300 hover:text-white" href={`${mode === "login" ? "/account/register" : "/account/login"}${requestedNext ? `?next=${encodeURIComponent(redirectTo)}` : ""}`}>{mode === "login" ? t("createAccount") : t("signIn")}</Link></p>
           <p className="mt-8 text-center text-[10px] leading-5 text-white/25">{t("paymentsDemoOnly")}</p>
         </section>
       </div>
