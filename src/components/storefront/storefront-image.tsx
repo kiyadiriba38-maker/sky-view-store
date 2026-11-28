@@ -31,7 +31,7 @@ export default function StorefrontImage({
     setUnavailable(false);
   }, [primary, fallback]);
 
-  const activeSource = usingFallback ? fallback : primary;
+  const activeSource = usingFallback || !primary ? fallback : primary;
   if (!activeSource || unavailable) {
     return (
       <div
