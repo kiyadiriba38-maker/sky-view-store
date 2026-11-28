@@ -76,7 +76,7 @@ const canManageSellerProducts: Access = async ({ req }) => {
   return ids.length ? { seller: { in: ids } } : false;
 };
 
-const enforceSellerListing: CollectionBeforeChangeHook = async ({ data, req, operation, originalDoc }) => {
+const enforceSellerListing: CollectionBeforeChangeHook = async ({ data, req, originalDoc }) => {
   if (!data || !req.user || req.user.roles?.includes("admin")) return data;
   const sellers = await req.payload.find({
     collection: "sellers" as never,
