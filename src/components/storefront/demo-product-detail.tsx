@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import type { CSSProperties } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useStoreLocale } from "@/lib/providers/intl";
@@ -14,7 +15,7 @@ export default function DemoProductDetail({ product }: { product: DemoProduct })
   const formatETB = (amount: number) => new Intl.NumberFormat(locale === "am" ? "am-ET" : locale === "om" ? "om-ET" : "en-ET", { style: "currency", currency: "ETB", maximumFractionDigits: 0 }).format(amount);
   const category = product.category.toLowerCase();
   const accent = /fashion|shoe|cloth|beauty|watch|bag/.test(category) ? "#ff9b63" : /tech|electronic|computer|phone/.test(category) ? "#71dff1" : /home|furniture|decor/.test(category) ? "#d5b6ff" : "#8be3c5";
-  return <main className="sv-product-experience" style={{ "--sv-product-backdrop": `url("${product.image}")`, "--sv-product-accent": accent } as React.CSSProperties}>
+  return <main className="sv-product-experience" style={{ "--sv-product-backdrop": `url("${product.image}")`, "--sv-product-accent": accent } as CSSProperties}>
     <div className="sv-product-topbar"><Link href="/shop" className="sv-product-wordmark"><span>SV</span> SKY VIEW <i> / </i> STORE</Link><nav><Link href="/shop">DISCOVER</Link><Link href="/categories">CATEGORIES</Link><Link href="/deals">OFFERS</Link></nav><Link href="/demo-cart" className="sv-product-toplink">YOUR CART ↗</Link></div>
     <div className="sv-product-crumb"><Link href="/">HOME</Link><span> / </span><Link href="/shop">MARKETPLACE</Link><span> / </span><b>{product.category}</b></div>
     <section className="sv-product-hero">
