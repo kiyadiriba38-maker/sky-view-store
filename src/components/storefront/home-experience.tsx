@@ -175,7 +175,7 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
       <div className="sv-market-topline">ETHIOPIA FIRST <span>✦</span> DISCOVER MORE. SHOP SMARTER.</div>
       <header className={`sv-market-header sv-amber-header${isHeaderScrolled ? " is-scrolled" : ""}`} data-scrolled={isHeaderScrolled}>
         <Link href="/" className="sv-brand" aria-label="Sky View Store home">
-          <span className="sv-brand-mark" aria-hidden="true"><svg viewBox="0 0 48 48" role="img" focusable="false"><path d="M6 34.5 19.2 13l8.1 13.2 4.3-6.4L42 34.5H6Z" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinejoin="round"/><path d="M10 38h28M15 30.5l4.2-6.8 4.5 7.2 4-5.9 5.6 8.5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/><circle cx="34.5" cy="11.5" r="3" fill="#fff0c2"/></svg></span><span className="sv-brand-wordmark">SKY VIEW <b>STORE</b></span>
+          <span className="sv-brand-mark" aria-hidden="true"><svg viewBox="0 0 48 48" role="img" focusable="false"><path d="M6 34.5 19.2 13l8.1 13.2 4.3-6.4L42 34.5H6Z" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinejoin="round"/><path d="M10 38h28M15 30.5l4.2-6.8 4.5 7.2 4-5.9 5.6 8.5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/><circle cx="34.5" cy="11.5" r="3" fill="#fff0c2"/></svg></span><span className="sv-brand-wordmark"><strong>SKY VIEW</strong><b>STORE</b></span>
         </Link>
         <div className="sv-amber-navigation">
           <Link href="/deals" className={`sv-super-deals${isHeaderScrolled ? " is-hidden" : ""}`} aria-label="Explore current deals">SUPER DEALS <FiArrowUpRight aria-hidden="true" /></Link>
@@ -213,37 +213,46 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
         <div className="sv-quick-links"><span>{t.popularPrefix}</span><button onClick={() => setQuery("wireless")}>{t.wireless}</button><button onClick={() => setQuery("phone")}>{t.phoneAccessories}</button><button onClick={() => setQuery("home")}>{t.homeSearch}</button><button onClick={() => setQuery("travel")}>{t.travel}</button></div>
       </section>
 
-      <section className="sv-amber-hero" aria-label="Sky View Store featured marketplace">
-        <div className="sv-hero-watermark" aria-hidden="true">SKY VIEW <b>2026</b></div>
-        <div className="sv-amber-hero-copy">
-          <span className="sv-amber-eyebrow"><i /> THE SKY VIEW MARKETPLACE</span>
-          <h1>Online Shopping,<br/><em>Simplified.</em></h1>
-          <p>Discover technology, fashion and everyday essentials in one beautifully simple marketplace, made for shoppers across Ethiopia.</p>
-          <div className="sv-hero-tabs" role="tablist" aria-label="Marketplace highlights">
-            <button type="button" role="tab" aria-selected={heroTab === "features"} className={heroTab === "features" ? "active" : ""} onClick={() => setHeroTab("features")}>+ TOP FEATURES</button>
-            <button type="button" role="tab" aria-selected={heroTab === "gallery"} className={heroTab === "gallery" ? "active" : ""} onClick={() => setHeroTab("gallery")}>+ GALLERY</button>
-            <button type="button" role="tab" aria-selected={heroTab === "specs"} className={heroTab === "specs" ? "active" : ""} onClick={() => setHeroTab("specs")}>+ SPECS</button>
-            <button type="button" role="tab" aria-selected={heroTab === "reviews"} className={heroTab === "reviews" ? "active" : ""} onClick={() => setHeroTab("reviews")}>+ REVIEWS</button>
+      <section className="sv-cinematic-hero" aria-label="Sky View Store featured marketplace">
+        <div className="sv-cinematic-watermark" aria-hidden="true"><span>SKY VIEW</span><b>2026</b></div>
+        <div className="sv-cinematic-spotlight" aria-hidden="true" />
+        <div className="sv-cinematic-inner">
+          <div className="sv-cinematic-copy">
+            <span className="sv-cinematic-eyebrow"><i /> THE SKY VIEW MARKETPLACE</span>
+            <h1>Online Shopping,<br /><em>Simplified.</em></h1>
+            <p>Discover verified electronics, fashion, lifestyle essentials and more — all in one beautifully simple marketplace, with delivery options across Ethiopia.</p>
+            <div className="sv-cinematic-tabs" role="tablist" aria-label="Marketplace highlights">
+              <button type="button" role="tab" aria-selected={heroTab === "features"} className={heroTab === "features" ? "active" : ""} onClick={() => setHeroTab("features")}>+ TOP FEATURES</button>
+              <button type="button" role="tab" aria-selected={heroTab === "gallery"} className={heroTab === "gallery" ? "active" : ""} onClick={() => setHeroTab("gallery")}>+ GALLERY</button>
+              <button type="button" role="tab" aria-selected={heroTab === "specs"} className={heroTab === "specs" ? "active" : ""} onClick={() => setHeroTab("specs")}>+ SPECS</button>
+              <button type="button" role="tab" aria-selected={heroTab === "reviews"} className={heroTab === "reviews" ? "active" : ""} onClick={() => setHeroTab("reviews")}>+ REVIEWS</button>
+            </div>
+            <div className="sv-cinematic-tab-panel" role="tabpanel" aria-live="polite">
+              {heroTab === "features" ? <><b><FiGrid /> Discover more in one place</b><span>Explore product collections, approved sellers and a simple shopping journey.</span></> : null}
+              {heroTab === "gallery" ? <><b><FiMonitor /> A world of everyday finds</b><span>Browse electronics, fashion, home essentials and lifestyle collections.</span></> : null}
+              {heroTab === "specs" ? <><b><FiSliders /> Details that help you choose</b><span>Compare options, product specifications, availability and seller information.</span></> : null}
+              {heroTab === "reviews" ? <><b><FiStar /> More confidence in every choice</b><span>Read buyer feedback and verified-purchase reviews on eligible listings.</span></> : null}
+            </div>
+            <div className="sv-cinematic-meta"><span>ETB-FIRST SHOPPING</span><span>APPROVED SELLERS</span><span>NO LIVE PAYMENT PROCESSING</span></div>
           </div>
-          <div className="sv-hero-tab-content" role="tabpanel">
-            {heroTab === "features" ? <><b><FiGrid /> A marketplace built to explore</b><span>Discover thousands of products, trusted sellers and a simpler way to shop.</span></> : null}
-            {heroTab === "gallery" ? <><b><FiMonitor /> A closer look at what you love</b><span>Explore product collections across electronics, fashion, home and more.</span></> : null}
-            {heroTab === "specs" ? <><b><FiSliders /> Clear product details</b><span>Compare product options, specifications, availability and seller information.</span></> : null}
-            {heroTab === "reviews" ? <><b><FiStar /> Shop with more confidence</b><span>Read buyer feedback and verified-purchase reviews on eligible listings.</span></> : null}
+          <div className="sv-cinematic-showcase" aria-label="Featured marketplace collections">
+            <div className="sv-cinematic-orbit sv-orbit-a" /><div className="sv-cinematic-orbit sv-orbit-b" />
+            <div className="sv-float-product sv-float-laptop"><StorefrontImage src={DEMO_CATEGORIES[1].image} fallbackSrc={DEMO_CATEGORIES[0].image} alt="Computers and laptop collection" sizes="(max-width: 800px) 48vw, 30vw" /></div>
+            <div className="sv-float-product sv-float-vr"><StorefrontImage src={DEMO_CATEGORIES[2].image} fallbackSrc={DEMO_CATEGORIES[1].image} alt="Electronics collection" sizes="(max-width: 800px) 30vw, 18vw" /></div>
+            <div className="sv-float-product sv-float-fashion"><StorefrontImage src={DEMO_CATEGORIES[4].image} fallbackSrc={DEMO_CATEGORIES[3].image} alt="Fashion collection" sizes="(max-width: 800px) 34vw, 20vw" /></div>
+            <div className="sv-float-product sv-float-home"><StorefrontImage src={DEMO_CATEGORIES[3].image} fallbackSrc={DEMO_CATEGORIES[4].image} alt="Home and lifestyle collection" sizes="(max-width: 800px) 28vw, 17vw" /></div>
+            <div className="sv-float-product sv-float-delivery"><StorefrontImage src={DEMO_CATEGORIES[16].image} fallbackSrc={DEMO_CATEGORIES[15].image} alt="Travel and delivery essentials" sizes="(max-width: 800px) 28vw, 17vw" /></div>
+            <div className="sv-showcase-caption"><small>CURATED DISCOVERIES / 001</small><b>Find your next<br />favourite thing.</b></div>
           </div>
-          <div className="sv-amber-hero-meta"><span>ETB-FIRST SHOPPING</span><span>APPROVED SELLERS</span><span>DEMO CHECKOUT</span></div>
+          <div className="sv-cinematic-cta"><button type="button" onClick={() => document.getElementById("catalogue")?.scrollIntoView({ behavior: "smooth" })}>Get the look <FiArrowUpRight aria-hidden="true" /></button><span>DISCOVER THE COLLECTION</span></div>
         </div>
-        <div className="sv-amber-product-stage">
-          <div className="sv-amber-glow" />
-          <div className="sv-amber-stage-ring ring-one" /><div className="sv-amber-stage-ring ring-two" />
-          <div className="sv-amber-product product-laptop"><StorefrontImage src={DEMO_CATEGORIES[1].image} fallbackSrc={DEMO_CATEGORIES[0].image} alt="Laptop and computer collection" sizes="(max-width: 800px) 30vw, 20vw" /></div>
-          <div className="sv-amber-product product-vr"><StorefrontImage src={DEMO_CATEGORIES[2].image} fallbackSrc={DEMO_CATEGORIES[1].image} alt="Electronics and smart devices collection" sizes="(max-width: 800px) 25vw, 17vw" /></div>
-          <div className="sv-amber-product product-fashion"><StorefrontImage src={DEMO_CATEGORIES[4].image} fallbackSrc={DEMO_CATEGORIES[3].image} alt="Fashion collection" sizes="(max-width: 800px) 28vw, 18vw" /></div>
-          <div className="sv-amber-product product-delivery"><StorefrontImage src={DEMO_CATEGORIES[16].image} fallbackSrc={DEMO_CATEGORIES[15].image} alt="Travel and delivery accessories collection" sizes="(max-width: 800px) 25vw, 17vw" /></div>
-          <div className="sv-amber-stage-caption"><small>CURATED FOR YOU / 001</small><b>Find your next<br/>favourite thing.</b></div>
+        <div className="sv-cinematic-bottom-tabs" aria-label="Hero highlight selector">
+          <button type="button" className={heroTab === "features" ? "active" : ""} onClick={() => setHeroTab("features")}>+ TOP FEATURES</button>
+          <button type="button" className={heroTab === "gallery" ? "active" : ""} onClick={() => setHeroTab("gallery")}>+ GALLERY</button>
+          <button type="button" className={heroTab === "specs" ? "active" : ""} onClick={() => setHeroTab("specs")}>+ SPECS</button>
+          <button type="button" className={heroTab === "reviews" ? "active" : ""} onClick={() => setHeroTab("reviews")}>+ REVIEWS</button>
         </div>
-        <div className="sv-amber-hero-cta"><button type="button" onClick={() => document.getElementById("catalogue")?.scrollIntoView({ behavior: "smooth" })}>Explore products <FiArrowUpRight aria-hidden="true" /></button><span>DISCOVER THE COLLECTION</span></div>
-        <a className="sv-more-anchor" href="#catalogue"><span /> MORE TO LOVE <b>↓</b></a>
+        <a className="sv-cinematic-more" href="#catalogue"><span /> MORE TO LOVE <b>↓</b></a>
       </section>
 
       <section className="sv-benefit-strip"><div><b>01</b><span>{t.benefitDiscovery}</span></div><div><b>02</b><span>{t.benefitLocal}</span></div><div><b>03</b><span>{t.benefitSeller}</span></div><div><b>04</b><span>{t.benefitSecure}</span></div></section>
@@ -273,7 +282,7 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
 
       <section className="sv-promo-band"><div><span className="sv-eyebrow">{t.promoEyebrow}</span><h2>{t.promoTitle}</h2><p>{t.promoText}</p></div><Link href="/shop" className="sv-primary-button">{t.startExploring} ↗</Link></section>
 
-      <footer className="sv-market-footer"><div className="sv-brand"><span className="sv-brand-mark" aria-hidden="true"><svg viewBox="0 0 48 48" focusable="false"><path d="M6 34.5 19.2 13l8.1 13.2 4.3-6.4L42 34.5H6Z" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinejoin="round"/><path d="M10 38h28M15 30.5l4.2-6.8 4.5 7.2 4-5.9 5.6 8.5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/><circle cx="34.5" cy="11.5" r="3" fill="#fff0c2"/></svg></span><span className="sv-brand-wordmark">SKY VIEW <b>STORE</b></span></div><p>{t.footerTagline}</p><div><Link href="/about">{t.about}</Link><Link href="/shipping">{t.shipping}</Link><Link href="/returns">{t.returns}</Link><Link href="/privacy">{t.privacy}</Link><Link href="/help">{t.helpCenter}</Link></div><small>© {new Date().getFullYear()} Sky View Store · {t.footerNote}</small></footer>
+      <footer className="sv-market-footer"><div className="sv-brand"><span className="sv-brand-mark" aria-hidden="true"><svg viewBox="0 0 48 48" focusable="false"><path d="M6 34.5 19.2 13l8.1 13.2 4.3-6.4L42 34.5H6Z" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinejoin="round"/><path d="M10 38h28M15 30.5l4.2-6.8 4.5 7.2 4-5.9 5.6 8.5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/><circle cx="34.5" cy="11.5" r="3" fill="#fff0c2"/></svg></span><span className="sv-brand-wordmark"><strong>SKY VIEW</strong><b>STORE</b></span></div><p>{t.footerTagline}</p><div><Link href="/about">{t.about}</Link><Link href="/shipping">{t.shipping}</Link><Link href="/returns">{t.returns}</Link><Link href="/privacy">{t.privacy}</Link><Link href="/help">{t.helpCenter}</Link></div><small>© {new Date().getFullYear()} Sky View Store · {t.footerNote}</small></footer>
       <nav className="sv-mobile-nav" aria-label="Mobile navigation"><Link href="/">⌂<span>{t.mobileHome}</span></Link><Link href="/shop">⌕<span>{t.mobileShop}</span></Link><Link href="/categories">▦<span>{t.mobileCategories}</span></Link><Link href="/demo-cart">▣<span>{t.mobileCart}</span></Link><Link href="/account">◎<span>{t.mobileAccount}</span></Link></nav>
     </main>
   );
