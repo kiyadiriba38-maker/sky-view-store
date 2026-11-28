@@ -123,7 +123,7 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
   };
 
   return (
-    <main className={`sv-marketplace min-h-screen ${theme === "dark" ? "sv-dark" : "sv-light"}`}>
+    <main className={`sv-marketplace sv-home-viewport min-h-screen ${theme === "dark" ? "sv-dark" : "sv-light"}`}>
       <div className="sv-market-topline">ETHIOPIA FIRST <span>✦</span> DISCOVER MORE. SHOP SMARTER.</div>
       <header className="sv-market-header">
         <Link href="/" className="sv-brand" aria-label={t.navShop}>
