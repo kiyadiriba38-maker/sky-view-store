@@ -158,7 +158,7 @@ export default function Search({
                   </div>
                 </div>
 
-                <div className="shrink-0 text-sm font-semibold text-neutral-900 dark:text-neutral-50">
+                <div className="shrink-0 text-sm font-semibold text-amber-100">
                   <Price amount={product.priceInUSD!} />
                 </div>
               </Link>
