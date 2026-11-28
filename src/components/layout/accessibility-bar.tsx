@@ -164,7 +164,7 @@ export default function AccessibilityBar() {
     <div className="fixed bottom-16 left-0 z-[999999] flex items-center">
       <Button
         onClick={() => setOpen((v) => !v)}
-        className="h-8 w-7 rounded-r-full rounded-l-none bg-black p-0 text-white shadow-lg"
+        className="h-10 w-9 rounded-r-full rounded-l-none border border-amber-300/30 bg-[#17130e] p-0 text-amber-300 shadow-[0_8px_24px_rgba(0,0,0,0.3)] transition-colors hover:bg-[#2a2115]"\n        aria-label={t("title")}\n        aria-expanded={open}
       >
         <BsUniversalAccessCircle />
       </Button>
@@ -172,9 +172,9 @@ export default function AccessibilityBar() {
       {open && (
         <div
           ref={panelRef}
-          className="ml-2 w-52 rounded-lg border border-neutral-200 bg-white p-3 shadow-xl dark:border-neutral-800 dark:bg-neutral-950"
+          className="ml-2 w-56 rounded-xl border border-amber-400/20 bg-[#171717] p-3 text-white shadow-[0_18px_55px_rgba(0,0,0,0.45)]"
         >
-          <div className="mb-2 font-semibold">{t("title")}</div>
+          <div className="mb-3 border-b border-white/10 pb-2 font-semibold tracking-wide text-amber-300">{t("title")}</div>
 
           {buttons.map(({ id, icon, onClick, selected }) => (
             <ActionItem
