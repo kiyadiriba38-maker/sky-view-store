@@ -452,7 +452,20 @@
     "dealsTitle": "Deals worth discovering.",
     "dealsDescription": "Only products with an original price and a lower current price set by the store admin appear here.",
     "newest": "Newest",
-    "reviewLabels": "DEMO AND VERIFIED LABELS"
+    "reviewLabels": "DEMO AND VERIFIED LABELS",
+    "wishlistBack": "Continue shopping",
+    "wishlistEyebrow": "Sky View / Saved collection",
+    "wishlistTitle": "Your wishlist.",
+    "wishlistCount": "{count} saved {count, plural, one {item} other {items}} on this device.",
+    "wishlistClear": "Clear wishlist",
+    "wishlistDemoItem": "Demo item",
+    "wishlistMarketplaceItem": "Marketplace item",
+    "wishlistRemove": "Remove {title} from wishlist",
+    "wishlistEmptyTitle": "Your wishlist is waiting.",
+    "wishlistEmptyText": "Save products with the heart button while browsing. They will appear here on this device.",
+    "wishlistExplore": "Explore products",
+    "wishlistLocalNote": "Wishlist items are stored locally in this browser. They are not synced between devices or accounts yet. Demo items are examples, not real offers for sale.",
+    "wishlistStorageUnavailable": "Browser storage is unavailable. Your saved collection may not persist after this page closes."
   },
   "notifications": {
     "title": "Your notifications",
