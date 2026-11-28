@@ -60,7 +60,7 @@ export default function ReviewFormClient({ productId }: { productId: number }) {
         ) : (
           <Link
             href={`/account/login?next=${encodeURIComponent(pathname)}`}
-            className="inline-flex items-center justify-center rounded-full border border-cyan-200/35 px-5 py-3 text-xs font-semibold text-cyan-100 transition hover:bg-cyan-200/10"
+            className="inline-flex items-center justify-center rounded-full border border-amber-300/35 px-5 py-3 text-xs font-semibold text-amber-100 transition hover:bg-amber-300/10"
           >
             Sign in to write a review
           </Link>
