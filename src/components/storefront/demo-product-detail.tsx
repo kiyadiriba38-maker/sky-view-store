@@ -15,7 +15,7 @@ export default function DemoProductDetail({ product }: { product: DemoProduct })
   const { locale } = useStoreLocale();
   const formatETB = (amount: number) => new Intl.NumberFormat(locale === "am" ? "am-ET" : locale === "om" ? "om-ET" : "en-ET", { style: "currency", currency: "ETB", maximumFractionDigits: 0 }).format(amount);
   const category = product.category.toLowerCase();
-  const defaultAccent = /fashion|shoe|cloth|beauty|watch|bag/.test(category) ? "#ff9b63" : /tech|electronic|computer|phone/.test(category) ? "#71dff1" : /home|furniture|decor/.test(category) ? "#d5b6ff" : "#8be3c5";
+  const defaultAccent = "#f59e0b";
   const [mood, setMood] = useState(0);
   const [selectedVariant, setSelectedVariant] = useState(0);
   const variant = product.variants[selectedVariant] ?? product.variants[0] ?? "Standard";
