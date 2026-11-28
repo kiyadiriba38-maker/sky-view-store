@@ -1531,3 +1531,28 @@ html[data-theme="light"] .sv-page [class*="bg-white/"] {
 .sv-page [class~="bg-[#172436]"] { background-color:#211c15 !important; }
 .sv-page [class~="focus:border-cyan-300"]:focus { border-color:#f59e0b !important; }
 .sv-page a, .sv-page button { transition-property:color,background-color,border-color,transform,box-shadow; }
+
+
+/* Product editorial pages inherit the amber studio identity while retaining product imagery. */
+.sv-page .sv-product-experience {
+  --sv-product-accent: #f59e0b;
+  background:
+    radial-gradient(ellipse at 78% 22%, rgba(217,119,6,.20), transparent 38%),
+    linear-gradient(125deg, #171512 0%, #211a12 48%, #11100e 100%);
+}
+.sv-page .sv-product-experience::after {
+  background: linear-gradient(90deg, #11100eee, #19140fbd 54%, #11100ee8);
+}
+.sv-page .sv-product-wordmark span {
+  background: linear-gradient(145deg,#fbbf24,#b45309);
+  color: #17110a;
+}
+.sv-page .sv-product-info-panel .rounded-full.bg-\\[\\#9F1239\\] {
+  background: #f59e0b;
+  color: #17110a;
+}
+.sv-page .sv-product-info-panel .text-cyan-200,
+.sv-page .sv-product-info-panel .text-cyan-100,
+.sv-page .sv-product-reviews .text-cyan-200 {
+  color: #fbbf24;
+}
