@@ -8,7 +8,7 @@ import { useCallback, useEffect, useState } from "react";
 type CartLine = { slug: string; title: string; priceETB: number; image: string; quantity: number };
 
 const readCart = (): CartLine[] => {
-  try { return JSON.parse(localStorage.getItem("sv-demo-cart") || "[]") as CartLine[]; } catch { return []; }
+  try { const value: unknown = JSON.parse(localStorage.getItem("sv-demo-cart") || "[]"); if (!Array.isArray(value)) return []; return value.filter((item): item is CartLine => item && typeof item.slug === "string" && typeof item.title === "string" && typeof item.image === "string" && Number.isFinite(item.priceETB) && item.priceETB >= 0 && Number.isInteger(item.quantity) && item.quantity > 0); } catch { return []; }
 };
 
 export default function DemoCartPanel() {
