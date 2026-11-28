@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "next dev -p 3344",
-    "build": "pnpm payload migrate && pnpm generate:types && next build",
+    "build": "pnpm payload migrate && pnpm generate:types && pnpm typecheck && pnpm lint && next build",
     "start": "next start",
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit",
