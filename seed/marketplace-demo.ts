@@ -10,6 +10,29 @@ const categoryNames = [
   "Pet Supplies", "Garden & Outdoors", "Gaming", "Lighting & Decor",
 ];
 
+const categoryImageIds = [
+  "photo-1511707171634-5f897ff02aa9",
+  "photo-1498050108023-c5249f4df085",
+  "photo-1498049794561-7780e7231661",
+  "photo-1556911220-bff31c812dba",
+  "photo-1483985988355-763728e1935b",
+  "photo-1542291026-7eec264c27ff",
+  "photo-1596462502278-27bfdc403348",
+  "photo-1517836357463-d25dfeac3438",
+  "photo-1476480862126-209bfaa8edc8",
+  "photo-1558060370-d644479cb6f7",
+  "photo-1492144534655-ae79c964c9d7",
+  "photo-1504148455328-c376907d081c",
+  "photo-1616486338812-3dadae4b4ace",
+  "photo-1523275335684-37898b6baf30",
+  "photo-1516627145497-ae6968895b74",
+  "photo-1455390582262-044cdead277a",
+  "photo-1553062407-98eeb64c6a62",
+  "photo-1450778869180-41d0601e046e",
+  "photo-1416879595882-3373a0480b5b",
+  "photo-1543168256-418811576931",
+];
+
 const productTypes = [
   "Wireless Earbuds", "Bluetooth Speaker", "Smart Watch", "Portable Charger",
   "USB-C Hub", "Mechanical Keyboard", "Wireless Mouse", "Laptop Stand",
@@ -102,7 +125,7 @@ async function main() {
 
     jobs.push(async () => {
       const price = 450 + ((index * 173) % 24800);
-      const imageUrl = `https://loremflickr.com/900/900/${encodeURIComponent(categoryNames[categoryIndex].toLowerCase())}?lock=${index + 3001}`;
+      const imageUrl = `https://images.unsplash.com/${categoryImageIds[categoryIndex % categoryImageIds.length]}?auto=format&fit=crop&w=900&q=85`;
       if (existingProduct) {
         await payload.update({ collection: "products", id: existingProduct.id, overrideAccess: true, data: { demoImageUrl: imageUrl } as never });
         return;
