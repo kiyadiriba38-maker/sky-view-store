@@ -2023,3 +2023,141 @@ html::-webkit-scrollbar-thumb:hover {
   background:linear-gradient(180deg,#f0c987,#b97c3d) !important;
   background-clip:padding-box !important;
 }
+
+
+/* Final homepage navigation polish: a softer champagne-bronze glass rail,
+   clear pill-shaped controls, and no harsh white strip. */
+.sv-home-viewport .sv-amber-navigation {
+  min-width:0;
+  padding:5px 0;
+}
+.sv-home-viewport .sv-amber-navigation .sv-main-nav {
+  position:relative !important;
+  display:flex;
+  align-items:center;
+  gap:7px !important;
+  width:max-content;
+  max-width:min(100%, 1000px);
+  min-height:58px;
+  padding:9px 15px !important;
+  border:1px solid rgba(242,205,151,.17) !important;
+  border-radius:22px !important;
+  background:
+    linear-gradient(90deg,
+      rgba(35,28,21,0) 0%,
+      rgba(74,57,38,.72) 5%,
+      rgba(83,64,42,.91) 17%,
+      rgba(83,64,42,.91) 83%,
+      rgba(74,57,38,.72) 95%,
+      rgba(35,28,21,0) 100%) !important;
+  box-shadow:0 12px 30px rgba(0,0,0,.16),inset 0 1px 0 rgba(255,244,222,.11) !important;
+  backdrop-filter:blur(18px) saturate(125%);
+  -webkit-backdrop-filter:blur(18px) saturate(125%);
+  overflow-x:auto;
+  scrollbar-width:none;
+  -webkit-mask-image:none !important;
+  mask-image:none !important;
+}
+.sv-home-viewport .sv-amber-navigation .sv-main-nav::-webkit-scrollbar { display:none; }
+.sv-home-viewport .sv-amber-navigation .sv-main-nav a {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  flex:0 0 auto;
+  min-height:39px;
+  padding:0 16px !important;
+  border:1px solid transparent;
+  border-radius:13px !important;
+  color:#fff4e3 !important;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.075em;
+  line-height:1;
+  text-shadow:0 1px 2px rgba(0,0,0,.25);
+  transition:background .2s ease,color .2s ease,border-color .2s ease,box-shadow .2s ease,transform .2s ease;
+}
+.sv-home-viewport .sv-amber-navigation .sv-main-nav a:hover {
+  color:#fffaf1 !important;
+  background:rgba(255,226,181,.14) !important;
+  border-color:rgba(255,231,194,.18);
+  transform:translateY(-1px);
+}
+.sv-home-viewport .sv-amber-navigation .sv-main-nav a.active,
+.sv-home-viewport .sv-amber-navigation .sv-main-nav a[aria-current="page"] {
+  color:#2b1b0b !important;
+  text-shadow:none;
+  background:linear-gradient(135deg,#ffe8bb 0%,#f4c77d 54%,#e3a64f 100%) !important;
+  border-color:rgba(255,242,214,.72);
+  box-shadow:0 5px 16px rgba(224,157,67,.3),inset 0 1px 0 rgba(255,255,255,.72) !important;
+}
+.sv-home-viewport .sv-amber-navigation .sv-super-deals {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  min-height:38px;
+  padding:0 15px;
+  border:1px solid rgba(245,196,119,.34);
+  border-radius:999px;
+  color:#ffe2b1;
+  background:linear-gradient(135deg,rgba(129,82,36,.38),rgba(67,47,29,.7));
+  box-shadow:inset 0 1px rgba(255,255,255,.09);
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.1em;
+  transition:background .2s ease,transform .2s ease;
+}
+.sv-home-viewport .sv-amber-navigation .sv-super-deals:hover {
+  background:linear-gradient(135deg,rgba(173,112,48,.55),rgba(83,57,32,.82));
+  transform:translateY(-1px);
+}
+.sv-home-viewport .sv-amber-navigation .sv-main-nav a:focus-visible,
+.sv-home-viewport .sv-amber-navigation .sv-super-deals:focus-visible {
+  outline:2px solid #ffe3b0;
+  outline-offset:3px;
+}
+@media (max-width:900px) {
+  .sv-home-viewport .sv-amber-navigation .sv-main-nav {
+    width:100%;
+    max-width:100%;
+    min-height:52px;
+    justify-content:flex-start;
+    padding:7px 10px !important;
+    border-radius:17px !important;
+    background:linear-gradient(90deg,rgba(43,33,23,.78),rgba(83,64,42,.94) 12%,rgba(83,64,42,.94) 88%,rgba(43,33,23,.78)) !important;
+  }
+  .sv-home-viewport .sv-amber-navigation .sv-main-nav a {
+    min-height:37px;
+    padding:0 13px !important;
+    font-size:10px;
+  }
+}
+
+/* Slim, rounded scrollbar: subtle channel, pill handle, soft hover. */
+html {
+  scrollbar-width:thin !important;
+  scrollbar-color:rgba(191,148,96,.48) transparent !important;
+}
+html::-webkit-scrollbar {
+  width:7px !important;
+  height:7px !important;
+  background:transparent !important;
+}
+html::-webkit-scrollbar-track {
+  margin:7px 0;
+  background:transparent !important;
+  border:0 !important;
+  border-radius:999px !important;
+}
+html::-webkit-scrollbar-thumb {
+  min-height:58px;
+  background:rgba(185,139,83,.58) !important;
+  border:1px solid rgba(18,18,18,.55) !important;
+  border-radius:999px !important;
+  background-clip:padding-box !important;
+}
+html::-webkit-scrollbar-thumb:hover {
+  background:rgba(222,174,111,.82) !important;
+  border-color:rgba(18,18,18,.35) !important;
+}
+html::-webkit-scrollbar-corner { background:transparent !important; }
