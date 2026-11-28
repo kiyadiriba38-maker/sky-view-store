@@ -100,7 +100,7 @@ async function main() {
     depth: 0,
     overrideAccess: true,
   });
-  const existingSlugs = new Set(existingProducts.docs.map((doc) => doc.slug));
+  const existingBySlug = new Map(existingProducts.docs.map((doc) => [doc.slug, doc]));
   const jobs: Array<() => Promise<void>> = [];
 
   for (let index = 0; index < 1000; index++) {
@@ -110,11 +110,15 @@ async function main() {
     const series = String(index + 1).padStart(4, "0");
     const title = `${adjective} ${type} · Series ${series}`;
     const slug = `${adjective.toLowerCase()}-${type.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-${series}`;
-    if (existingSlugs.has(slug)) continue;
+    const existingProduct = existingBySlug.get(slug);
 
     jobs.push(async () => {
       const price = 450 + ((index * 173) % 24800);
-      const imageUrl = images[categoryIndex] ?? images[0];
+      const imageUrl = `https://loremflickr.com/900/900/${encodeURIComponent(categoryNames[categoryIndex].toLowerCase())}?lock=${index + 3001}`;
+      if (existingProduct) {
+        await payload.update({ collection: "products", id: existingProduct.id, overrideAccess: true, data: { demoImageUrl: imageUrl } as never });
+        return;
+      }
       const product = await payload.create({
         collection: "products",
         overrideAccess: true,
@@ -162,7 +166,7 @@ async function main() {
     payload.logger.info(`Demo catalogue progress: ${Math.min(offset + concurrency, jobs.length)} / ${jobs.length}`);
   }
 
-  payload.logger.info(`Marketplace demo seed complete. New products: ${jobs.length}. Categories checked: ${categoryNames.length}.`);
+  payload.logger.info(`Marketplace demo seed complete. Products refreshed or created: ${jobs.length}. Categories checked: ${categoryNames.length}.`);
   await payload.destroy();
 }
 
