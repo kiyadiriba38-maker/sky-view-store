@@ -152,9 +152,9 @@ export default function DemoCheckoutPanel() {
         <div className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/5 p-4 text-xs leading-6 text-amber-100">
           DEMO CHECKOUT ONLY. Do not enter bank details, card numbers, PINs, OTPs, or real personal information. No money is collected.
         </div>
-        {storageError || submitError ? (
+        {storageError ? (
           <p role="alert" className="mt-4 text-xs text-amber-100">
-            {submitError ? "The demo order could not be saved to this browser. You can still review the sample checkout." : "Browser storage is unavailable; demo order history may not be saved."}
+            Browser storage is unavailable; demo order history may not be saved.
           </p>
         ) : null}
       </div>
