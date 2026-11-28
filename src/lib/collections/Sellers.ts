@@ -296,7 +296,7 @@ export const Sellers: CollectionConfig = {
       name: "responseTimeHours",
       type: "number",
       min: 0,
-      access: { update: isDesignatedModerator },
+      access: { create: isDesignatedModerator, update: isDesignatedModerator },
       admin: { readOnly: true, description: "Maintained by store operations; sellers cannot edit this metric." },
     },
     {
@@ -304,7 +304,7 @@ export const Sellers: CollectionConfig = {
       type: "number",
       min: 0,
       defaultValue: 0,
-      access: { update: isDesignatedModerator },
+      access: { create: isDesignatedModerator, update: isDesignatedModerator },
       admin: { readOnly: true, description: "Updated by completed non-demo orders; sellers cannot edit this metric." },
     },
   ],
