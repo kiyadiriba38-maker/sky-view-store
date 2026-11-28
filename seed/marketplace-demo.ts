@@ -29,18 +29,6 @@ const adjectives = [
   "Mosaic", "Summit", "Drift", "Onyx", "Ember", "Halo", "Flux", "Aria", "Kinetic",
 ];
 
-const images = [
-  "photo-1511707171634-5f897ff02aa9","photo-1496181133206-80ce9b88a853","photo-1505740420928-5e560c06d30e",
-  "photo-1505740420928-5e560c06d30e","photo-1516035069371-29a1b244cc32","photo-1543512214-318c7553f230",
-  "photo-1505693416388-ac5ce068fe85","photo-1556911220-e15b29be8c8f","photo-1505693416388-ac5ce068fe85",
-  "photo-1483985988355-763728e1935b","photo-1542291026-7eec264c27ff","photo-1553062407-98eeb64c6a62",
-  "photo-1596462502278-27bfdc403348","photo-1547887538-e3a2f32cb1cc","photo-1517836357463-d25dfeac3438",
-  "photo-1596462502278-27bfdc403348","photo-1519689680058-324335c77eba","photo-1492144534655-ae79c964c9d7",
-  "photo-1530124566582-a618bc2615dc","photo-1455390582262-044cdead277a","photo-1523275335684-37898b6baf30",
-  "photo-1583337130417-3346a1be7dee","photo-1416879595882-3373a0480b5b","photo-1542751371-adc38448a05e",
-  "photo-1507473885765-e6ed057f782c",
-].map((id) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=900&q=82`);
-
 const richText = (text: string) => ({
   root: {
     type: "root",
