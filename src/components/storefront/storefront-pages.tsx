@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
@@ -9,6 +8,7 @@ import { useMemo, useState } from "react";
 import type { Category, Product } from "@/lib/core/types/payload-types";
 import { formatPrice, resolveMediaUrl } from "@/lib/core/util";
 import { DEMO_CATEGORIES } from "@/lib/demo/catalog";
+import StorefrontImage from "@/components/storefront/storefront-image";
 
 export function StorefrontShell({
   eyebrow,
@@ -109,7 +109,7 @@ export function ProductGrid({ products }: { products: Product[] }) {
           <article key={product.id} className="group overflow-hidden rounded-2xl border border-white/10 bg-[#191919] transition duration-300 hover:-translate-y-1 hover:border-amber-300/50 hover:shadow-[0_20px_60px_rgba(0,0,0,.28)]">
             <Link href={href} className="block">
               <div className="relative aspect-square overflow-hidden bg-[#202020]">
-                {image ? <Image src={image} alt={product.title} fill unoptimized sizes="(max-width: 768px) 100vw, 25vw" className="object-cover transition duration-700 group-hover:scale-105" /> : <div className="grid h-full place-items-center text-4xl text-amber-100/30">✦</div>}
+                <StorefrontImage src={image} fallbackSrc={demo ? DEMO_CATEGORIES.find((item) => item.slug === categorySlug)?.image ?? DEMO_CATEGORIES[2].image : null} alt={product.title} sizes="(max-width: 768px) 100vw, 25vw" className="object-cover transition duration-700 group-hover:scale-105" />
                 <span className="absolute left-3 top-3 rounded-full border border-white/15 bg-black/55 px-3 py-1.5 text-[8px] font-bold uppercase tracking-[.12em]">{demo ? t("listingDemo") : product.listingType === "marketplace_seller" ? t("approvedSeller") : t("storeProduct")}</span>
               </div>
               <div className="p-4">
