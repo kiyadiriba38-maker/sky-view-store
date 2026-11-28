@@ -1827,3 +1827,97 @@ html::-webkit-scrollbar-corner { background:#17130e; }
   .sv-home-viewport .sv-brand-mark svg { width:29px; height:29px; }
   .sv-home-viewport .sv-brand-wordmark { font-size:10px; letter-spacing:.1em; }
 }
+
+
+/* Homepage navigation refinement: warm smoked-glass instead of the bright cream
+   capsule. The header is deliberately in normal document flow, so it never
+   pins itself over the shopping content while the customer scrolls. */
+.sv-home-viewport .sv-market-header {
+  position:relative !important;
+  top:auto !important;
+  z-index:5;
+  background:linear-gradient(180deg,rgba(42,31,19,.72),rgba(24,20,15,.30)) !important;
+  border-bottom:1px solid rgba(245,190,105,.12);
+  box-shadow:0 14px 42px rgba(0,0,0,.10);
+  backdrop-filter:blur(16px) saturate(115%);
+  -webkit-backdrop-filter:blur(16px) saturate(115%);
+}
+.sv-home-viewport .sv-market-header::after {
+  content:"";
+  position:absolute;
+  pointer-events:none;
+  left:0; right:0; bottom:-1px; height:1px;
+  background:linear-gradient(90deg,transparent,rgba(245,190,105,.30) 18%,rgba(245,190,105,.30) 82%,transparent);
+}
+.sv-home-viewport .sv-amber-navigation .sv-main-nav {
+  background:linear-gradient(115deg,rgba(91,65,35,.46),rgba(44,35,25,.38)) !important;
+  border:1px solid rgba(255,226,177,.14) !important;
+  box-shadow:0 8px 26px rgba(0,0,0,.18),inset 0 1px rgba(255,255,255,.08) !important;
+  backdrop-filter:blur(18px) saturate(125%);
+  -webkit-backdrop-filter:blur(18px) saturate(125%);
+  -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 5%,#000 95%,transparent 100%);
+  mask-image:linear-gradient(90deg,transparent 0%,#000 5%,#000 95%,transparent 100%);
+}
+.sv-home-viewport .sv-amber-navigation .sv-main-nav a {
+  color:#e8dcc8 !important;
+  transition:color .22s ease,background .22s ease,box-shadow .22s ease;
+}
+.sv-home-viewport .sv-amber-navigation .sv-main-nav a:hover {
+  color:#fff4dd !important;
+  background:rgba(245,158,11,.16) !important;
+}
+.sv-home-viewport .sv-amber-navigation .sv-main-nav a.active,
+.sv-home-viewport .sv-amber-navigation .sv-main-nav a[aria-current="page"] {
+  color:#21170a !important;
+  background:linear-gradient(135deg,#f7d18a,#d99536) !important;
+  box-shadow:0 3px 14px rgba(217,145,54,.20),inset 0 1px rgba(255,255,255,.4) !important;
+}
+@media (max-width:900px) {
+  .sv-home-viewport .sv-amber-navigation .sv-main-nav {
+    background:rgba(48,36,23,.84) !important;
+    -webkit-mask-image:none;
+    mask-image:none;
+  }
+}
+@media (max-width:600px) {
+  .sv-home-viewport .sv-amber-navigation .sv-main-nav a { color:#e8dcc8 !important; }
+  .sv-home-viewport .sv-amber-navigation .sv-main-nav a.active {
+    color:#21170a !important;
+    background:linear-gradient(135deg,#f7d18a,#d99536) !important;
+  }
+}
+
+/* Minimal, premium scrollbar. Avoid the thick, high-contrast gold gradient:
+   a narrow smoked track and softly metallic thumb feel quieter on long pages. */
+html {
+  scrollbar-width:thin !important;
+  scrollbar-color:rgba(202,151,78,.62) #171512 !important;
+  scrollbar-gutter:auto;
+}
+html::-webkit-scrollbar { width:7px !important; height:7px !important; }
+html::-webkit-scrollbar-track {
+  background:#171512 !important;
+  border:0 !important;
+}
+html::-webkit-scrollbar-thumb {
+  min-height:48px;
+  background:rgba(202,151,78,.62) !important;
+  border:2px solid #171512 !important;
+  border-radius:999px !important;
+}
+html::-webkit-scrollbar-thumb:hover {
+  background:rgba(238,184,103,.9) !important;
+}
+html::-webkit-scrollbar-corner { background:#171512 !important; }
+.sv-store ::-webkit-scrollbar,
+.sv-page ::-webkit-scrollbar { width:7px !important; height:7px !important; }
+.sv-store ::-webkit-scrollbar-track,
+.sv-page ::-webkit-scrollbar-track { background:#171512 !important; }
+.sv-store ::-webkit-scrollbar-thumb,
+.sv-page ::-webkit-scrollbar-thumb {
+  background:rgba(202,151,78,.62) !important;
+  border:2px solid #171512 !important;
+  border-radius:999px !important;
+}
+.sv-store ::-webkit-scrollbar-thumb:hover,
+.sv-page ::-webkit-scrollbar-thumb:hover { background:rgba(238,184,103,.9) !important; }
