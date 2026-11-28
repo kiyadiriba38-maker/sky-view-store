@@ -2,6 +2,8 @@
 
 @import "tailwindcss";
 
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap");
+
 @import "./button.css";
 @import "./accessibility-bar.css";
 @import "./cart.css";
@@ -2643,3 +2645,111 @@ html::-webkit-scrollbar-corner { background:transparent !important; }
 .sv-deal-card>button{display:inline-flex;align-items:center;gap:6px;padding:7px 10px;border:1px solid rgba(255,255,255,.12);border-radius:999px;background:rgba(255,255,255,.055);color:rgba(255,255,255,.76);font-size:9px;cursor:pointer}
 .sv-deal-card>button:hover{border-color:rgba(234,179,8,.4);color:#f6d99f}
 @media(max-width:700px){.sv-deals-section{padding:32px 4% 18px}.sv-deals-heading{align-items:start;flex-wrap:wrap;gap:12px}.sv-deals-heading>div:first-child{width:100%}.sv-deals-heading>a{margin-left:auto}.sv-deals-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.sv-deal-card{padding:7px}.sv-deal-info{padding:8px 2px}.sv-deal-info>a{font-size:10px}.sv-deal-info>b{font-size:12px}}
+
+
+/* Editorial typography and homepage visual refinement */
+.sv-home-viewport{
+  --sv-font-display:"Cormorant Garamond", "Bodoni MT", "Iowan Old Style", Georgia, serif;
+  --sv-font-body:"DM Sans", "Avenir Next", Inter, "Segoe UI", sans-serif;
+  font-family:var(--sv-font-body)!important;
+  background:#111!important;
+  color:#f3eee5;
+}
+.sv-home-viewport :is(button,input,select,a){font-family:var(--sv-font-body)}
+.sv-home-viewport .sv-market-topline{font-family:var(--sv-font-body);font-size:8px;letter-spacing:.28em;color:rgba(231,210,174,.66);background:#101010!important}
+.sv-home-viewport .sv-brand-wordmark{font-family:var(--sv-font-body);letter-spacing:.15em}
+.sv-home-viewport .sv-amber-navigation .sv-main-nav a{font-family:var(--sv-font-body);letter-spacing:.075em;font-weight:700}
+.sv-home-viewport .sv-cinematic-copy h1{
+  max-width:700px;
+  font-family:var(--sv-font-display)!important;
+  font-size:clamp(66px,7.2vw,112px);
+  font-weight:600;
+  line-height:.82;
+  letter-spacing:-.055em;
+  color:#e8c887;
+  background:linear-gradient(112deg,#fff0ca 0%,#e8c887 36%,#c18a42 72%,#f2d9a7 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  text-shadow:0 16px 48px rgba(190,125,40,.12);
+  text-wrap:balance;
+}
+.sv-home-viewport .sv-cinematic-copy h1 em{
+  display:inline-block;
+  margin-top:.09em;
+  font-family:var(--sv-font-display);
+  font-size:1.12em;
+  font-weight:500;
+  letter-spacing:-.065em;
+  background:linear-gradient(105deg,#f7e8c8 0%,#e5b869 52%,#b77a36 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.sv-home-viewport .sv-cinematic-copy>p{
+  max-width:440px;
+  font-family:var(--sv-font-body);
+  font-size:13px;
+  line-height:1.9;
+  letter-spacing:.005em;
+  color:rgba(244,239,230,.72);
+}
+.sv-home-viewport .sv-cinematic-eyebrow,
+.sv-home-viewport .sv-cinematic-meta,
+.sv-home-viewport .sv-cinematic-tabs button,
+.sv-home-viewport .sv-cinematic-bottom-tabs button{
+  font-family:var(--sv-font-body);
+  letter-spacing:.13em;
+}
+.sv-home-viewport .sv-cinematic-tab-panel{font-family:var(--sv-font-body);font-size:11px;line-height:1.75}
+.sv-home-viewport .sv-deals-heading h2,
+.sv-home-viewport .sv-section-heading h2,
+.sv-home-viewport .sv-promo-band h2{
+  font-family:var(--sv-font-display)!important;
+  font-weight:600;
+  font-size:clamp(34px,4vw,54px);
+  line-height:.98;
+  letter-spacing:-.035em;
+  color:#f0e3ca;
+}
+.sv-home-viewport .sv-deals-heading h2 em{font-style:italic;color:#dcb16c}
+.sv-home-viewport .sv-eyebrow{font-family:var(--sv-font-body);font-size:8px;letter-spacing:.24em}
+.sv-home-viewport .sv-category-name,
+.sv-home-viewport .sv-product-title,
+.sv-home-viewport .sv-deal-info>a{font-family:var(--sv-font-body);letter-spacing:-.01em}
+.sv-home-viewport .sv-cinematic-showcase{filter:saturate(.9)}
+.sv-home-viewport .sv-float-product{background:transparent!important;border:0!important;box-shadow:none!important}
+.sv-home-viewport .sv-float-product img{
+  object-fit:contain!important;
+  border-radius:0!important;
+  background:transparent!important;
+  mix-blend-mode:screen;
+  -webkit-mask-image:radial-gradient(ellipse 72% 70% at 50% 48%,#000 46%,rgba(0,0,0,.9) 62%,transparent 100%);
+  mask-image:radial-gradient(ellipse 72% 70% at 50% 48%,#000 46%,rgba(0,0,0,.9) 62%,transparent 100%);
+  filter:drop-shadow(0 18px 22px rgba(0,0,0,.36));
+}
+.sv-home-viewport .sv-cinematic-orbit{opacity:.42;border-color:rgba(227,179,105,.16);box-shadow:0 0 45px rgba(217,119,6,.045),inset 0 0 35px rgba(217,119,6,.025)}
+.sv-home-viewport .sv-showcase-caption{border-left-color:rgba(229,184,105,.45);background:linear-gradient(90deg,rgba(17,17,17,.20),transparent)}
+.sv-home-viewport .sv-cinematic-cta button{font-family:var(--sv-font-body);letter-spacing:.02em}
+.sv-home-viewport .sv-deal-card,
+.sv-home-viewport .sv-product-card,
+.sv-home-viewport .sv-category-tile{
+  box-shadow:0 14px 36px rgba(0,0,0,.13);
+}
+.sv-home-viewport .sv-deal-card{border-radius:18px;background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.012))}
+.sv-home-viewport .sv-deal-image{border-radius:12px}
+.sv-home-viewport .sv-deal-info>b,
+.sv-home-viewport .sv-price-row>b{font-variant-numeric:tabular-nums;letter-spacing:-.025em}
+.sv-home-viewport .sv-section-heading{align-items:end;gap:20px}
+.sv-home-viewport .sv-section-heading>a{font-family:var(--sv-font-body);font-size:10px;letter-spacing:.06em}
+.sv-home-viewport .sv-market-footer{font-family:var(--sv-font-body)}
+@media(max-width:1050px){
+ .sv-home-viewport .sv-cinematic-copy h1{font-size:clamp(60px,8vw,88px)}
+}
+@media(max-width:700px){
+ .sv-home-viewport .sv-cinematic-copy h1{font-size:clamp(58px,15vw,82px);line-height:.86;letter-spacing:-.06em}
+ .sv-home-viewport .sv-cinematic-copy h1 em{font-size:1.05em}
+ .sv-home-viewport .sv-deals-heading h2,.sv-home-viewport .sv-section-heading h2,.sv-home-viewport .sv-promo-band h2{font-size:clamp(34px,10vw,44px)}
+ .sv-home-viewport .sv-cinematic-copy>p{font-size:12px;line-height:1.8}
+ .sv-home-viewport .sv-market-topline{font-size:7px;letter-spacing:.19em}
+}
