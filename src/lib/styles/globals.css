@@ -1609,7 +1609,7 @@ html[data-theme="light"] .sv-page [class*="bg-white/"] {
 .sv-home-viewport .sv-amber-hero-copy h1,
 .sv-home-viewport .sv-section-heading h2,
 .sv-home-viewport .sv-promo-band h2 {
-  font-family: "Bodoni Moda", "Playfair Display", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  font-family: "Cormorant Garamond", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
   font-weight: 600;
   letter-spacing: -.055em;
   text-wrap: balance;
