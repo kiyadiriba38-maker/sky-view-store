@@ -816,3 +816,122 @@ html[data-theme="light"] .sv-page [class*="bg-white/"] {
 @media (max-width: 600px) {
   .sv-product-mood-picker { margin-block: 18px; }
 }
+
+
+/* Stabilization pass: keep the storefront usable and typography consistent. */
+.sv-marketplace,
+.sv-product-experience {
+  font-family: Inter, "Noto Sans Ethiopic", "Abyssinica SIL", "Segoe UI", Arial, sans-serif !important;
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: auto;
+  font-kerning: normal;
+}
+.sv-marketplace *,
+.sv-product-experience *,
+.sv-marketplace *::before,
+.sv-product-experience *::before,
+.sv-marketplace *::after,
+.sv-product-experience *::after {
+  font-family: inherit;
+}
+.sv-marketplace button,
+.sv-marketplace input,
+.sv-marketplace select,
+.sv-product-experience button,
+.sv-product-experience input,
+.sv-product-experience select,
+.sv-product-experience textarea {
+  font: inherit;
+}
+.sv-marketplace {
+  overflow-x: clip;
+  overflow-y: visible;
+}
+.sv-marketplace.sv-home-viewport {
+  height: auto;
+  min-height: 100svh;
+  overflow: visible;
+  display: block;
+}
+.sv-home-viewport .sv-market-topline,
+.sv-home-viewport .sv-market-header,
+.sv-home-viewport .sv-market-searchbar {
+  flex: initial;
+}
+.sv-home-viewport .sv-quick-links {
+  display: flex;
+}
+.sv-home-viewport .sv-benefit-strip,
+.sv-home-viewport .sv-product-section,
+.sv-home-viewport .sv-promo-band,
+.sv-home-viewport .sv-market-footer {
+  display: revert;
+}
+.sv-home-viewport .sv-market-hero {
+  min-height: clamp(390px, calc(100svh - 280px), 590px);
+  max-height: none;
+  margin-block: 18px 24px;
+}
+.sv-home-viewport .sv-hero-copy,
+.sv-home-viewport .sv-hero-visual {
+  min-height: clamp(360px, calc(100svh - 300px), 560px);
+  height: auto;
+  max-height: none;
+}
+.sv-home-viewport .sv-category-section {
+  flex: initial;
+  padding-block: 18px 26px;
+}
+.sv-home-viewport .sv-category-tile:nth-child(n+5) {
+  display: grid;
+}
+.sv-home-viewport .sv-category-tile {
+  height: clamp(90px, 9vw, 138px);
+  min-height: 90px;
+}
+.sv-home-viewport .sv-product-section,
+.sv-home-viewport .sv-promo-band,
+.sv-home-viewport .sv-market-footer {
+  display: block;
+}
+.sv-home-viewport .sv-product-section {
+  scroll-margin-top: 24px;
+}
+.sv-home-viewport .sv-search-wrap button {
+  cursor: pointer;
+}
+.sv-home-viewport .sv-product-card,
+.sv-home-viewport .sv-category-tile,
+.sv-home-viewport a,
+.sv-home-viewport button,
+.sv-product-experience a,
+.sv-product-experience button {
+  -webkit-tap-highlight-color: transparent;
+}
+.sv-product-experience {
+  overflow-x: clip;
+}
+@media (max-width: 900px) {
+  .sv-home-viewport .sv-market-hero {
+    min-height: 0;
+    margin-block: 12px 20px;
+  }
+  .sv-home-viewport .sv-hero-copy,
+  .sv-home-viewport .sv-hero-visual {
+    min-height: 320px;
+  }
+  .sv-home-viewport .sv-category-tile {
+    height: 110px;
+  }
+}
+@media (max-width: 600px) {
+  .sv-home-viewport .sv-hero-copy,
+  .sv-home-viewport .sv-hero-visual {
+    min-height: 280px;
+  }
+  .sv-home-viewport .sv-category-tile {
+    height: 96px;
+  }
+}
