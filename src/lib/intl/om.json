@@ -306,7 +306,20 @@
     "dealsTitle": "Gatii hir'ate sakatta'i.",
     "dealsDescription": "Oomisha gatii duraanii fi gatii ammaa gadi aanaa bulchaan kaa'e qofa asitti mul'ata.",
     "newest": "Haaraa",
-    "reviewLabels": "MALLATTOO YAALII FI MIRKANAA'E"
+    "reviewLabels": "MALLATTOO YAALII FI MIRKANAA'E",
+    "wishlistBack": "Gara bittaa deebi'i",
+    "wishlistEyebrow": "Sky View / Kuusaa olkaa'aman",
+    "wishlistTitle": "Tarree hawwii kee.",
+    "wishlistCount": "Meeshaan {count} meeshaa meeshaalee meeshaa kana irratti kuufame.",
+    "wishlistClear": "Tarree hawwii qulqulleessi",
+    "wishlistDemoItem": "Meeshaa yaalii",
+    "wishlistMarketplaceItem": "Meeshaa gabaa",
+    "wishlistRemove": "{title} tarree hawwii keessaa haqi",
+    "wishlistEmptyTitle": "Tarreen hawwii kee si eeggata.",
+    "wishlistEmptyText": "Yeroo oomisha ilaaltu mallattoo onnee tuquun kuusi. As irratti meeshaa kana keessatti argita.",
+    "wishlistExplore": "Oomisha ilaali",
+    "wishlistLocalNote": "Tarreen hawwii kun browser kana keessatti qofa kuufama. Meeshaalee ykn account gidduutti hin walsimsiifamu. Oomishni yaalii fakkeenya qofa; gurgurtaa dhugaa miti.",
+    "wishlistStorageUnavailable": "Kuusaan browser hin argamne. Tarreen kuufame kun fuulli erga cufamee booda turuu dhiisuu danda'a."
   },
   "notifications": {
     "title": "Beeksisa kee",
