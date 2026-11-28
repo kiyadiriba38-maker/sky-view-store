@@ -6,8 +6,19 @@ import { useCallback, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 
 type Seller = { id: number; storeName: string; approvalStatus: "pending" | "approved" | "suspended" | "rejected"; city?: string };
-type SellerProduct = { id: number; title: string; slug: string; listingStatus?: string; _status?: string; inventory?: number; priceInUSD?: number };
+type SellerProduct = { id: number; title: string; slug: string; listingStatus?: string; _status?: string; inventory?: number; priceInUSD?: number; productImageUrl?: string | null; description?: unknown };
 type SellerMetrics = { totalProducts: number; publishedProducts: number; pendingProducts: number; completedOrders: number; averageRating: number | null; verifiedReviewCount: number; responseTimeHours: number | null; deliveryPerformance: number | null; rank: number | null; approvedSellerCount: number; badges: string[] };
+
+function richTextToPlainText(value: unknown): string {
+  if (!value || typeof value !== "object") return "";
+  const node = value as Record<string, unknown>;
+  if (typeof node.text === "string") return node.text;
+  if (Array.isArray(node.children)) {
+    return node.children.map(richTextToPlainText).filter(Boolean).join(" ");
+  }
+  if (node.root) return richTextToPlainText(node.root);
+  return "";
+}
 
 export default function SellerDashboard() {
   const t = useTranslations("seller");
@@ -22,6 +33,7 @@ export default function SellerDashboard() {
   const [inventory, setInventory] = useState("10");
   const [imageUrl, setImageUrl] = useState("");
   const [busy, setBusy] = useState(false);
+  const [editingProductId, setEditingProductId] = useState<number | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -60,40 +72,66 @@ export default function SellerDashboard() {
 
   useEffect(() => { void load(); }, [load]);
 
+  function editProduct(product: SellerProduct) {
+    setEditingProductId(product.id);
+    setTitle(product.title);
+    setDescription(richTextToPlainText(product.description));
+    setPrice(String(product.priceInUSD ?? 1200));
+    setInventory(String(product.inventory ?? 0));
+    setImageUrl(product.productImageUrl ?? "");
+    setMessage("Editing this listing will send it back to moderation before it is visible again.");
+  }
+
+  function resetProductForm() {
+    setEditingProductId(null);
+    setTitle("");
+    setDescription("");
+    setPrice("1200");
+    setInventory("10");
+    setImageUrl("");
+  }
+
   async function addProduct(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!seller || seller.approvalStatus !== "approved") return;
     setBusy(true);
     setMessage("");
     try {
-      const response = await fetch("/api/products", {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title: title.trim(),
+      const payload = {
+        title: title.trim(),
+        ...(editingProductId === null ? {
           slug: title.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") + "-" + Date.now().toString(36),
-          inventory: Number(inventory),
-          priceInUSDEnabled: true,
-          priceInUSD: Number(price),
-          description: {
-            root: {
-              type: "root",
-              children: [{ type: "paragraph", children: [{ type: "text", text: description.trim(), detail: 0, format: 0, mode: "normal", style: "", version: 1 }], direction: "ltr", format: "", indent: 0, version: 1 }],
-              direction: "ltr", format: "", indent: 0, version: 1,
-            },
+        } : {}),
+        inventory: Number(inventory),
+        priceInUSDEnabled: true,
+        priceInUSD: Number(price),
+        description: {
+          root: {
+            type: "root",
+            children: [{ type: "paragraph", children: [{ type: "text", text: description.trim(), detail: 0, format: 0, mode: "normal", style: "", version: 1 }], direction: "ltr", format: "", indent: 0, version: 1 }],
+            direction: "ltr", format: "", indent: 0, version: 1,
           },
-          meta: { title: title.trim(), description: description.trim(), image: null },
-          productImageUrl: imageUrl.trim() || undefined,
-          gallery: [],
-        }),
-      });
+        },
+        meta: { title: title.trim(), description: description.trim(), image: null },
+        productImageUrl: imageUrl.trim(),
+        gallery: [],
+      };
+      const response = await fetch(
+        editingProductId === null ? "/api/products" : `/api/products/${editingProductId}`,
+        {
+          method: editingProductId === null ? "POST" : "PATCH",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        },
+      );
       const result = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(result?.errors?.[0]?.message || result?.message || "Product could not be submitted.");
-      setTitle("");
-      setDescription("");
-      setImageUrl("");
-      setMessage("Product submitted for admin review. It will remain a draft until approved.");
+      if (!response.ok) throw new Error(result?.errors?.[0]?.message || result?.message || "Product could not be saved.");
+      const wasEditing = editingProductId !== null;
+      resetProductForm();
+      setMessage(wasEditing
+        ? "Product updated and returned to moderation. It will stay hidden until approved again."
+        : "Product submitted for admin review. It will remain a draft until approved.");
       await load();
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Product submission failed.");
@@ -142,7 +180,7 @@ export default function SellerDashboard() {
             ) : (
               <div className="mt-8 grid gap-6 lg:grid-cols-[.9fr_1.1fr]">
                 <form onSubmit={addProduct} className="h-fit rounded-2xl border border-white/10 bg-[#101a28] p-6">
-                  <h2 className="text-xl font-semibold">Submit a product</h2>
+                  <h2 className="text-xl font-semibold">{editingProductId === null ? "Submit a product" : "Edit product listing"}</h2>
                   <p className="mt-2 text-xs leading-6 text-white/45">New seller listings are reviewed by an administrator before becoming visible.</p>
                   <label className="mt-5 block text-xs text-white/70">Product title<input required value={title} onChange={(event) => setTitle(event.target.value)} className="mt-2 w-full rounded-xl border border-white/15 bg-white/[.04] px-4 py-3 text-sm outline-none focus:border-cyan-200" /></label>
                   <label className="mt-4 block text-xs text-white/70">Product image URL (HTTPS)<input required type="url" pattern="https://.*" value={imageUrl} onChange={(event) => setImageUrl(event.target.value)} placeholder="https://..." className="mt-2 w-full rounded-xl border border-white/15 bg-white/[.04] px-4 py-3 text-sm outline-none focus:border-cyan-200" /><span className="mt-1 block text-[10px] leading-5 text-white/40">Required. Use an HTTPS image URL that you have permission to publish.</span></label>
@@ -151,12 +189,13 @@ export default function SellerDashboard() {
                     <label className="block text-xs text-white/70">Price (ETB)<input required type="number" min="1" value={price} onChange={(event) => setPrice(event.target.value)} className="mt-2 w-full rounded-xl border border-white/15 bg-white/[.04] px-3 py-3 text-sm outline-none focus:border-cyan-200" /></label>
                     <label className="block text-xs text-white/70">Stock<input required type="number" min="0" value={inventory} onChange={(event) => setInventory(event.target.value)} className="mt-2 w-full rounded-xl border border-white/15 bg-white/[.04] px-3 py-3 text-sm outline-none focus:border-cyan-200" /></label>
                   </div>
-                  <button disabled={busy} className="mt-5 w-full rounded-full bg-cyan-200 px-5 py-3 text-sm font-bold text-[#07111a] disabled:opacity-50">{busy ? "Submitting…" : "Submit for review"}</button>
+                  <button disabled={busy} className="mt-5 w-full rounded-full bg-cyan-200 px-5 py-3 text-sm font-bold text-[#07111a] disabled:opacity-50">{busy ? "Saving…" : editingProductId === null ? "Submit for review" : "Save changes for review"}</button>
+                  {editingProductId !== null ? <button type="button" onClick={resetProductForm} disabled={busy} className="mt-3 w-full rounded-full border border-white/15 px-5 py-3 text-xs font-semibold text-white/65 disabled:opacity-50">Cancel editing</button> : null}
                 </form>
                 <section className="rounded-2xl border border-white/10 bg-[#101a28] p-6">
                   <div className="flex items-center justify-between gap-3"><h2 className="text-xl font-semibold">Your products</h2><span className="text-xs text-white/40">{products.length} listings</span></div>
                   <div className="mt-5 space-y-3">
-                    {products.length ? products.map((product) => <article key={product.id} className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/[.025] p-4"><div><h3 className="text-sm font-semibold">{product.title}</h3><p className="mt-1 text-[10px] text-white/40">Stock: {product.inventory ?? 0} · ETB {Number(product.priceInUSD ?? 0).toLocaleString("en-ET")}</p></div><span className="rounded-full border border-white/10 px-3 py-1.5 text-[9px] uppercase tracking-wider text-white/60">{product.listingStatus || product._status || "pending"}</span></article>) : <p className="rounded-xl border border-dashed border-white/15 p-8 text-center text-sm text-white/45">No products submitted yet.</p>}
+                    {products.length ? products.map((product) => <article key={product.id} className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/[.025] p-4"><div><h3 className="text-sm font-semibold">{product.title}</h3><p className="mt-1 text-[10px] text-white/40">Stock: {product.inventory ?? 0} · ETB {Number(product.priceInUSD ?? 0).toLocaleString("en-ET")}</p></div><div className="flex items-center gap-2"><span className="rounded-full border border-white/10 px-3 py-1.5 text-[9px] uppercase tracking-wider text-white/60">{product.listingStatus || product._status || "pending"}</span><button type="button" onClick={() => editProduct(product)} className="rounded-full border border-cyan-200/30 px-3 py-1.5 text-[9px] font-semibold text-cyan-100 hover:bg-cyan-200/10">Edit</button></div></article>) : <p className="rounded-xl border border-dashed border-white/15 p-8 text-center text-sm text-white/45">No products submitted yet.</p>}
                   </div>
                 </section>
               </div>
