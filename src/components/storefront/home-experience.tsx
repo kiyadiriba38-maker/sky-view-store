@@ -301,7 +301,7 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
         <div className="sv-section-heading"><div><span className="sv-eyebrow">{t.catalogueEyebrow}</span><h2 id="popular">{t.popular}</h2><p>{products.length.toLocaleString()} {t.catalogueDescription}</p></div><Link href="/shop">{t.browse} ↗</Link></div>
         <div className="sv-catalog-controls">
           <div className="sv-filter-pills"><button className={kind === "all" ? "active" : ""} onClick={() => setKind("all")}>{t.all}</button><button className={kind === "demo" ? "active" : ""} onClick={() => setKind("demo")}>{t.demoOnly}</button><button className={kind === "real" ? "active" : ""} onClick={() => setKind("real")}>{t.realOnly}</button></div>
-          <select value={category} onChange={(event) => setCategory(event.target.value)} aria-label="Filter by category"><option value="All">{t.allCategories}</option>{categories.map((item) => <option key={item.slug} value={item.name}>{t.categoryNames[item.slug as keyof typeof t.categoryNames] ?? item.name}</option>)}<option value="Real products">Real products</option></select>
+          <select value={category} onChange={(event) => setCategory(event.target.value)} aria-label="Filter by category"><option value="All">{t.allCategories}</option>{categories.map((item) => <option key={item.slug} value={item.name}>{t.categoryNames[item.slug as keyof typeof t.categoryNames] ?? item.name}</option>)}</select>
         </div>
         <div className="sv-product-grid">
           {products.slice(0, 24).map((product) => {
