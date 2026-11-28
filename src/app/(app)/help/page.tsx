@@ -9,7 +9,7 @@ const topics = [
   ["External listings", "An external listing belongs to an independent seller. Use its seller link to view the original listing and seller terms."],
   ["Checkout", "Checkout is currently a demonstration flow. No real payment is collected or processed."],
   ["Product feedback", "Only genuine customer feedback should be presented as a customer review. Sample content must be labelled as a demo."],
-  ["Accounts", "Customer sign-in and Google sign-in are not available until the account system has been safely configured."],
+  ["Accounts", "Email and password registration and sign-in are implemented. Google sign-in appears when the store owner configures the Google OAuth credentials. Keep account access on the preview environment until production settings and security checks are complete."],
 ];
 
 export default function HelpPage() {
