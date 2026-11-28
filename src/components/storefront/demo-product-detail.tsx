@@ -20,7 +20,7 @@ export default function DemoProductDetail({ product }: { product: DemoProduct })
   const [selectedVariant, setSelectedVariant] = useState(0);
   const variant = product.variants[selectedVariant] ?? product.variants[0] ?? "Standard";
   const variantPrice = product.priceETB + selectedVariant * Math.max(50, Math.round(product.priceETB * 0.08));
-  const demoStock = Math.max(2, 18 - ((Number(product.id.replace(/\\D/g, "")) + selectedVariant * 5) % 15));
+  const demoStock = Math.max(2, 18 - ((Number(product.id.replace(/\D/g, "")) + selectedVariant * 5) % 15));
   const moods = [
     { name: "Original", accent: defaultAccent, background: "#171c25", filter: "none" },
     { name: "Crimson", accent: "#ff6b63", background: "#351716", filter: "saturate(1.12)" },
