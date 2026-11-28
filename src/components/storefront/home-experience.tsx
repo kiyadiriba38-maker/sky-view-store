@@ -63,7 +63,26 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
   const [rates, setRates] = useState<Record<string, number>>({});
   const [rateReady, setRateReady] = useState(false);
   const [heroTab, setHeroTab] = useState<"features" | "gallery" | "specs" | "reviews">("features");
+  const [cartCount, setCartCount] = useState(0);
   const t = copy[locale];
+
+  useEffect(() => {
+    const refreshCartCount = () => {
+      try {
+        const lines = JSON.parse(window.localStorage.getItem("sv-demo-cart") || "[]") as { quantity?: number }[];
+        setCartCount(lines.reduce((total, line) => total + (Number.isFinite(line.quantity) ? Math.max(0, Number(line.quantity)) : 0), 0));
+      } catch {
+        setCartCount(0);
+      }
+    };
+    refreshCartCount();
+    window.addEventListener("sv-demo-cart-change", refreshCartCount);
+    window.addEventListener("storage", refreshCartCount);
+    return () => {
+      window.removeEventListener("sv-demo-cart-change", refreshCartCount);
+      window.removeEventListener("storage", refreshCartCount);
+    };
+  }, []);
 
   useEffect(() => {
     const savedCurrency = window.localStorage.getItem("sv-currency");
@@ -139,7 +158,7 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
         <div className="sv-header-actions sv-amber-actions">
           <Link href="/account" aria-label="Wishlist and saved items"><FiHeart /></Link>
           <button type="button" aria-label="Focus search" onClick={() => document.getElementById("catalogue-search")?.focus()}><FiSearch /></button>
-          <Link href="/demo-cart" aria-label="Shopping cart" className="sv-icon-cart"><FiShoppingCart /><i>1</i></Link>
+          <Link href="/demo-cart" aria-label={cartCount ? `Shopping cart, ${cartCount} items` : "Shopping cart"} className="sv-icon-cart"><FiShoppingCart />{cartCount > 0 ? <i>{cartCount > 99 ? "99+" : cartCount}</i> : null}</Link>
           <Link href="/account" aria-label="User profile"><FiUser /></Link>
           <select aria-label="Language" value={locale} onChange={(event) => setLocale(event.target.value as Language)}>
             <option value="en">EN</option><option value="am">አማ</option><option value="om">OR</option>
