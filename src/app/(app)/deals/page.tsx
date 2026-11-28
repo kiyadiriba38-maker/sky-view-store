@@ -33,7 +33,7 @@ export default async function DealsPage() {
             <h2 id="demo-deals-heading" className="mt-2 text-2xl font-semibold tracking-tight text-white sm:text-3xl">Featured demo picks</h2>
             <p className="mt-2 max-w-2xl text-xs leading-6 text-white/45">These sample listings help you explore the product and checkout experience. They are not real sale offers or confirmed stock.</p>
           </div>
-          <Link href="/shop?type=demo" className="text-[9px] font-bold uppercase tracking-[.14em] text-amber-200 transition hover:text-white">Browse demo catalogue ↗</Link>
+          <Link href="/shop" className="text-[9px] font-bold uppercase tracking-[.14em] text-amber-200 transition hover:text-white">Browse demo catalogue ↗</Link>
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {DEMO_PRODUCTS.filter((product) => product.originalPriceETB > product.priceETB).slice(0, 12).map((product, index) => (
