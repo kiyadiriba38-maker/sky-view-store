@@ -15,7 +15,7 @@ export default async function ComparePage({ searchParams }: { searchParams: Prom
   const fetchedProducts = await Promise.all(slugs.map((slug) => DAL.queryProductBySlug(slug)));
   const products = fetchedProducts.filter((product): product is NonNullable<typeof product> => product !== null);
   if (!products.length) {
-    return <StorefrontShell eyebrow="Product tools / Compare" title="Compare products." description="Choose up to four products from the catalogue to compare them side by side."><div className="rounded-2xl border border-dashed border-white/15 p-10 text-center"><p className="text-sm text-white/60">No products selected yet.</p><Link href="/shop" className="mt-5 inline-flex rounded-full bg-cyan-200 px-5 py-3 text-xs font-bold text-[#07111a]">Browse products ↗</Link></div></StorefrontShell>;
+    return <StorefrontShell eyebrow="Product tools / Compare" title="Compare products." description="Choose up to four products from the catalogue to compare them side by side."><div className="rounded-2xl border border-dashed border-white/15 p-10 text-center"><p className="text-sm text-white/60">No products selected yet.</p><Link href="/shop" className="mt-5 inline-flex rounded-full bg-amber-300 px-5 py-3 text-xs font-bold text-[#121212]">Browse products ↗</Link></div></StorefrontShell>;
   }
 
   const rows = [
@@ -29,9 +29,9 @@ export default async function ComparePage({ searchParams }: { searchParams: Prom
 
   return (
     <StorefrontShell eyebrow="Product tools / Compare" title="Compare products." description="Review important differences side by side. Demo listings are clearly identified and do not represent real inventory.">
-      <div className="overflow-x-auto rounded-2xl border border-white/10 bg-[#101a28]">
+      <div className="overflow-x-auto rounded-2xl border border-white/10 bg-[#191919]">
         <table className="w-full min-w-[720px] border-collapse text-left text-sm">
-          <thead><tr><th className="w-40 border-b border-white/10 p-4 text-xs uppercase tracking-wider text-white/40">Details</th>{products.map((product) => <th key={product!.id} className="min-w-48 border-b border-white/10 p-4 align-top"><Link href={`/product/${product!.slug}`} className="font-semibold text-white hover:text-cyan-200">{product!.title}</Link><p className="mt-2 text-xs font-bold text-cyan-200">{formatPrice(Number(product!.priceInUSD ?? product!.purchase_section.price ?? 0))}</p></th>)}</tr></thead>
+          <thead><tr><th className="w-40 border-b border-white/10 p-4 text-xs uppercase tracking-wider text-white/40">Details</th>{products.map((product) => <th key={product!.id} className="min-w-48 border-b border-white/10 p-4 align-top"><Link href={`/product/${product!.slug}`} className="font-semibold text-white hover:text-amber-200">{product!.title}</Link><p className="mt-2 text-xs font-bold text-cyan-200">{formatPrice(Number(product!.priceInUSD ?? product!.purchase_section.price ?? 0))}</p></th>)}</tr></thead>
           <tbody>{rows.map((row) => <tr key={row.label}><th className="border-b border-white/10 p-4 text-xs font-semibold text-white/50">{row.label}</th>{products.map((product) => <td key={product!.id} className="border-b border-white/10 p-4 text-xs leading-6 text-white/75">{row.value(product!)}</td>)}</tr>)}</tbody>
         </table>
       </div>
