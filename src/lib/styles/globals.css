@@ -2753,3 +2753,7 @@ html::-webkit-scrollbar-corner { background:transparent !important; }
  .sv-home-viewport .sv-cinematic-copy>p{font-size:12px;line-height:1.8}
  .sv-home-viewport .sv-market-topline{font-size:7px;letter-spacing:.19em}
 }
+
+/* Keep the cinematic hero as the first visual focus; search remains available in the glass header. */
+.sv-home-viewport>.sv-market-searchbar{display:none!important}
+.sv-home-viewport .sv-cinematic-hero{margin-top:0}
