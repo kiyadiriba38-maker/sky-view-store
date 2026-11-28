@@ -14,7 +14,6 @@ export default function DemoProductDetail({ product }: { product: DemoProduct })
   const t = useTranslations("marketplace");
   const { locale } = useStoreLocale();
   const formatETB = (amount: number) => new Intl.NumberFormat(locale === "am" ? "am-ET" : locale === "om" ? "om-ET" : "en-ET", { style: "currency", currency: "ETB", maximumFractionDigits: 0 }).format(amount);
-  const category = product.category.toLowerCase();
   const defaultAccent = "#f59e0b";
   const [mood, setMood] = useState(0);
   const [selectedVariant, setSelectedVariant] = useState(0);
