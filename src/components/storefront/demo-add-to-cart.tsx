@@ -20,5 +20,5 @@ export default function DemoAddToCart({ product }: { product: Omit<CartLine, "qu
       setAdded(false);
     }
   };
-  return <button type="button" onClick={add} className="rounded-full bg-cyan-300 px-6 py-3 text-sm font-extrabold text-slate-950 transition hover:-translate-y-0.5 hover:bg-white">{added ? "Added to demo cart ✓" : "Add to demo cart"}</button>;
+  return <button type="button" onClick={add} className="rounded-full bg-amber-300 px-6 py-3 text-sm font-extrabold text-[#17120b] transition hover:-translate-y-0.5 hover:bg-amber-200">{added ? "Added to demo cart ✓" : "Add to demo cart"}</button>;
 }
