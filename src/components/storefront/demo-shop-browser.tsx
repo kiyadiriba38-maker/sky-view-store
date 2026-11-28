@@ -29,7 +29,7 @@ export default function DemoShopBrowser({ realProducts }: Props) {
     const category=firstCategory?.title??"Marketplace";
     const categorySlug=firstCategory?.slug??"real-products";
     const imageUrl=demo?extended.demoImageUrl:extended.productImageUrl;
-    const image=imageUrl||(product.meta?.image&&typeof product.meta.image==="object"?resolveMediaUrl(product.meta.image):DEMO_CATEGORIES[2].image);
+    const image=demo?(DEMO_CATEGORIES.find((item)=>item.slug===categorySlug)?.image??DEMO_CATEGORIES[2].image):(imageUrl||(product.meta?.image&&typeof product.meta.image==="object"?resolveMediaUrl(product.meta.image):DEMO_CATEGORIES[2].image));
     return {id:`database-${product.id}`,slug:product.slug,title:product.title,category,categorySlug,priceETB:Number(product.priceInUSD??0),image,demo,databaseBacked:true as const};
   }),[realProducts]);
   const demoFallback=real.some(item=>item.demo)?[]:DEMO_PRODUCTS;
