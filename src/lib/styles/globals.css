@@ -423,7 +423,7 @@ html[data-theme="light"] .sv-page [class*="bg-white/"] {
   z-index: -1;
   inset: 0;
   pointer-events: none;
-  background: linear-gradient(90deg, #11151ddd, #161a22b8 54%, #11151dcc);
+  background: linear-gradient(90deg, #100e0bdd, #17130eb8 54%, #100e0bdc);
 }
 .sv-product-topbar {
   width: 100%;
