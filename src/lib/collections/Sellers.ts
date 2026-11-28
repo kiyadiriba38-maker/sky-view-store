@@ -292,7 +292,20 @@ export const Sellers: CollectionConfig = {
       access: { read: ({ req }) => Boolean(req.user), update: isDesignatedModerator },
       admin: { position: "sidebar" },
     },
-    { name: "responseTimeHours", type: "number", min: 0, admin: { readOnly: true } },
-    { name: "completedOrders", type: "number", min: 0, defaultValue: 0, admin: { readOnly: true } },
+    {
+      name: "responseTimeHours",
+      type: "number",
+      min: 0,
+      access: { update: isDesignatedModerator },
+      admin: { readOnly: true, description: "Maintained by store operations; sellers cannot edit this metric." },
+    },
+    {
+      name: "completedOrders",
+      type: "number",
+      min: 0,
+      defaultValue: 0,
+      access: { update: isDesignatedModerator },
+      admin: { readOnly: true, description: "Updated by completed non-demo orders; sellers cannot edit this metric." },
+    },
   ],
 };
