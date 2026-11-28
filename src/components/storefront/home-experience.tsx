@@ -64,10 +64,15 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
   const [rates, setRates] = useState<Record<string, number>>({});
   const [rateReady, setRateReady] = useState(false);
   const [heroTab, setHeroTab] = useState<"features" | "gallery" | "specs" | "reviews">("features");
-  const [cartCount, setCartCount] = useState(0);\n  const [wishlist, setWishlist] = useState<string[]>([]);
+  const [cartCount, setCartCount] = useState(0);
+  const [wishlist, setWishlist] = useState<string[]>([]);
   const t = copy[locale];
 
   useEffect(() => {
+    try {
+      const saved = JSON.parse(window.localStorage.getItem("sv-wishlist") || "[]") as SavedProduct[];
+      setWishlist(saved.map((item) => item.id));
+    } catch { setWishlist([]); }
     const refreshCartCount = () => {
       try {
         const lines = JSON.parse(window.localStorage.getItem("sv-demo-cart") || "[]") as { quantity?: number }[];
@@ -99,7 +104,18 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
     return () => controller.abort();
   }, []);
 
-  function toggleWishlist(product: { id: string; slug: string; title: string; image: string | null; priceETB: number; category: string; demo: boolean }) {\n    const safeImage = product.image || DEMO_CATEGORIES[2].image;\n    let saved: SavedProduct[] = [];\n    try { saved = JSON.parse(window.localStorage.getItem("sv-wishlist") || "[]") as SavedProduct[]; } catch { saved = []; }\n    const exists = saved.some((item) => item.id === product.id);\n    const next = exists ? saved.filter((item) => item.id !== product.id) : [...saved, { ...product, image: safeImage, href: product.id.startsWith("database-") ? `/product/${product.slug}` : `/demo-product/${product.slug}` }];\n    window.localStorage.setItem("sv-wishlist", JSON.stringify(next));\n    setWishlist(next.map((item) => item.id));\n    window.dispatchEvent(new Event("sv-wishlist-change"));\n  }\n\n  const realProducts = useMemo(() => catalogProducts.map((product) => {
+  function toggleWishlist(product: { id: string; slug: string; title: string; image: string | null; priceETB: number; category: string; demo: boolean }) {
+    const safeImage = product.image || DEMO_CATEGORIES[2].image;
+    let saved: SavedProduct[] = [];
+    try { saved = JSON.parse(window.localStorage.getItem("sv-wishlist") || "[]") as SavedProduct[]; } catch { saved = []; }
+    const exists = saved.some((item) => item.id === product.id);
+    const next = exists ? saved.filter((item) => item.id !== product.id) : [...saved, { ...product, image: safeImage, href: product.id.startsWith("database-") ? `/product/${product.slug}` : `/demo-product/${product.slug}` }];
+    window.localStorage.setItem("sv-wishlist", JSON.stringify(next));
+    setWishlist(next.map((item) => item.id));
+    window.dispatchEvent(new Event("sv-wishlist-change"));
+  }
+
+  const realProducts = useMemo(() => catalogProducts.map((product) => {
     const demo = Boolean(product.isDemo);
     return {
       id: `database-${product.slug}`, slug: product.slug, title: product.title,
