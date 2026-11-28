@@ -45,10 +45,12 @@ const copy = {
 };
 
 const formatPrice = (amount: number, currency: Currency, rates: Record<string, number>, locale: Language) => {
-  const converted = currency === "ETB" ? amount : rates[currency] ? amount * rates[currency] : amount;
-  const localeTag = locale === "am" ? "am-ET" : locale === "om" ? "om-ET" : currency === "ETB" ? "en-ET" : "en-US";
+  const hasRate = currency === "ETB" || (Number.isFinite(rates[currency]) && rates[currency] > 0);
+  const displayCurrency: Currency = hasRate ? currency : "ETB";
+  const converted = displayCurrency === "ETB" ? amount : amount * rates[displayCurrency];
+  const localeTag = locale === "am" ? "am-ET" : locale === "om" ? "om-ET" : displayCurrency === "ETB" ? "en-ET" : "en-US";
   return new Intl.NumberFormat(localeTag, {
-    style: "currency", currency, maximumFractionDigits: currency === "ETB" ? 0 : 2,
+    style: "currency", currency: displayCurrency, maximumFractionDigits: displayCurrency === "ETB" ? 0 : 2,
   }).format(converted);
 };
 
@@ -204,7 +206,7 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
         <div className="sv-product-grid">
           {products.slice(0, 24).map((product) => {
             const href = product.demo && !("databaseBacked" in product && product.databaseBacked) ? `/demo-product/${product.slug}` : `/product/${product.slug}`;
-            return <article className="sv-product-card" key={product.id}><Link href={href} className="sv-product-image"><Image src={product.image} alt={product.title} fill unoptimized sizes="(max-width: 640px) 50vw, 25vw" /><span className={product.demo ? "sv-label-demo" : "sv-label-real"}>{product.demo ? t.demo : t.real}</span></Link><div className="sv-product-info"><small>{t.categoryNames[product.categorySlug as keyof typeof t.categoryNames] ?? product.category}</small><Link href={href} className="sv-product-title">{product.title}</Link><div className="sv-price-row"><b>{formatPrice(product.priceETB, currency, rates, locale)}</b><del>{formatPrice(product.originalPriceETB, currency, rates, locale)}</del></div><span className="sv-demo-note">{product.demo ? t.demoNote : t.realNote}</span></div></article>;
+            return <article className="sv-product-card" key={product.id}><Link href={href} className="sv-product-image"><Image src={product.image} alt={product.title} fill unoptimized sizes="(max-width: 640px) 50vw, 25vw" /><span className={product.demo ? "sv-label-demo" : "sv-label-real"}>{product.demo ? t.demo : t.real}</span></Link><div className="sv-product-info"><small>{t.categoryNames[product.categorySlug as keyof typeof t.categoryNames] ?? product.category}</small><Link href={href} className="sv-product-title">{product.title}</Link><div className="sv-price-row"><b>{formatPrice(product.priceETB, currency, rates, locale)}</b>{product.originalPriceETB > product.priceETB ? <del>{formatPrice(product.originalPriceETB, currency, rates, locale)}</del> : null}</div><span className="sv-demo-note">{product.demo ? t.demoNote : t.realNote}</span></div></article>;
           })}
         </div>
         {products.length === 0 ? <div className="sv-empty">{t.emptyResults}</div> : null}
