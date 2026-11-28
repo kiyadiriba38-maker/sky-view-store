@@ -54,12 +54,12 @@ export default function CheckoutClient() {
 
   if (authStatus === "signed-out" && !successOrderId) {
     return (
-      <div className="mx-auto my-8 w-full max-w-xl rounded-2xl border border-cyan-200/20 bg-cyan-200/5 p-7 text-center">
-        <p className="text-[10px] font-bold uppercase tracking-[.2em] text-cyan-200">Customer sign-in required</p>
+      <div className="mx-auto my-8 w-full max-w-xl rounded-2xl border border-amber-300/20 bg-amber-300/5 p-7 text-center">
+        <p className="text-[10px] font-bold uppercase tracking-[.2em] text-amber-200">Customer sign-in required</p>
         <h2 className="mt-3 text-2xl font-semibold">Sign in to continue checkout.</h2>
         <p className="mt-3 text-sm leading-6 text-muted-foreground">Your cart is kept separate from your account. Sign in or create a customer account to place a demo order.</p>
         <div className="mt-6 flex flex-wrap justify-center gap-3">
-          <Link href="/account/login?next=%2Fcheckout" className="rounded-full bg-cyan-200 px-6 py-3 text-xs font-bold text-slate-950">Sign in</Link>
+          <Link href="/account/login?next=%2Fcheckout" className="rounded-full bg-amber-300 px-6 py-3 text-xs font-bold text-[#17120b]">Sign in</Link>
           <Link href="/account/register?next=%2Fcheckout" className="rounded-full border border-white/20 px-6 py-3 text-xs font-bold">Create account</Link>
         </div>
       </div>
