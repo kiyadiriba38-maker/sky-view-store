@@ -52,7 +52,7 @@ export default function ReportListingButton({
 
   return (
     <section className="mt-6 rounded-2xl border border-white/10 bg-[#0c1420] p-4 text-white">
-      <button type="button" onClick={() => { setOpen((value) => !value); setMessage(""); }} className="text-xs font-semibold text-white/55 underline decoration-white/20 underline-offset-4 hover:text-cyan-100">
+      <button type="button" onClick={() => { setOpen((value) => !value); setMessage(""); }} className="text-xs font-semibold text-white/55 underline decoration-white/20 underline-offset-4 hover:text-amber-100">
         {t("button")}
       </button>
       {message === "success" ? <p role="status" className="mt-3 text-xs text-emerald-200">{t("success")}</p> : null}
@@ -65,7 +65,7 @@ export default function ReportListingButton({
           </div>
           <label className="block text-xs text-white/65">
             {t("reason")}
-            <select value={reason} onChange={(event) => setReason(event.target.value)} className="mt-2 w-full rounded-xl border border-white/15 bg-[#101a28] px-3 py-3 text-xs text-white">
+            <select value={reason} onChange={(event) => setReason(event.target.value)} className="mt-2 w-full rounded-xl border border-white/15 bg-[#191919] px-3 py-3 text-xs text-white">
               <option value="misleading_listing">{t("misleading")}</option>
               <option value="counterfeit_concern">{t("counterfeit")}</option>
               <option value="unsafe_content">{t("unsafe")}</option>
@@ -76,10 +76,10 @@ export default function ReportListingButton({
           </label>
           <label className="block text-xs text-white/65">
             {t("details")}
-            <textarea value={description} onChange={(event) => setDescription(event.target.value)} maxLength={2000} required rows={4} placeholder={t("detailsPlaceholder")} className="mt-2 w-full resize-y rounded-xl border border-white/15 bg-[#101a28] px-3 py-3 text-xs text-white placeholder:text-white/30" />
+            <textarea value={description} onChange={(event) => setDescription(event.target.value)} maxLength={2000} required rows={4} placeholder={t("detailsPlaceholder")} className="mt-2 w-full resize-y rounded-xl border border-white/15 bg-[#191919] px-3 py-3 text-xs text-white placeholder:text-white/30" />
           </label>
           <div className="flex flex-wrap gap-2">
-            <button type="submit" disabled={submitting || !description.trim()} className="rounded-full bg-cyan-200 px-4 py-2.5 text-[10px] font-bold text-[#07111a] disabled:opacity-50">{submitting ? "…" : t("submit")}</button>
+            <button type="submit" disabled={submitting || !description.trim()} className="rounded-full bg-amber-300 px-4 py-2.5 text-[10px] font-bold text-[#17120b] disabled:opacity-50">{submitting ? "…" : t("submit")}</button>
             <button type="button" onClick={() => setOpen(false)} className="rounded-full border border-white/15 px-4 py-2.5 text-[10px] font-semibold text-white/65">{t("cancel")}</button>
           </div>
         </form>
