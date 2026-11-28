@@ -15,7 +15,7 @@ export default function DemoCartPanel() {
   useEffect(() => { refresh(); window.addEventListener("sv-demo-cart-change", refresh); window.addEventListener("storage", refresh); return () => { window.removeEventListener("sv-demo-cart-change", refresh); window.removeEventListener("storage", refresh); }; }, [refresh]);
   const update = (slug: string, quantity: number) => {
     const next = items.map((item) => item.slug === slug ? { ...item, quantity } : item).filter((item) => item.quantity > 0);
-    localStorage.setItem("sv-demo-cart", JSON.stringify(next)); setItems(next);
+    localStorage.setItem("sv-demo-cart", JSON.stringify(next)); setItems(next); window.dispatchEvent(new Event("sv-demo-cart-change"));
   };
   const total = items.reduce((sum, item) => sum + item.priceETB * item.quantity, 0);
   if (!items.length) return <div className="rounded-3xl border border-dashed border-white/15 p-12 text-center"><p className="text-lg font-semibold">Your demo cart is empty.</p><p className="mt-2 text-sm text-white/45">Explore the sample catalogue and add products to try the shopping flow.</p><Link href="/shop" className="mt-6 inline-flex rounded-full bg-cyan-300 px-6 py-3 text-sm font-bold text-slate-950">Explore products</Link></div>;
