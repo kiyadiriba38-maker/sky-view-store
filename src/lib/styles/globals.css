@@ -392,7 +392,7 @@ html[data-theme="light"] .sv-page [class*="bg-white/"] {
 
 /* Editorial, product-led detail experience inspired by the supplied reference. */
 .sv-product-experience {
-  --sv-product-accent: #77dce9;
+  --sv-product-accent: #f59e0b;
   --sv-product-backdrop: none;
   position: relative;
   isolation: isolate;
