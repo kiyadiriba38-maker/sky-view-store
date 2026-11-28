@@ -86,7 +86,7 @@ export const DEMO_PRODUCTS: DemoProduct[] = DEMO_CATEGORIES.flatMap((category, c
       categorySlug: category.slug,
       priceETB: price,
       originalPriceETB: Math.round(price * 1.18),
-      image: `https://loremflickr.com/900/900/${encodeURIComponent(category.slug.replaceAll("-", " "))}?lock=${sequence + 1001}`,
+      image: category.image,
       description: `${title} is a sample marketplace listing created for the Sky View Store demo catalogue. This listing demonstrates the product detail, shopping, delivery and checkout experience. Product availability, specifications and fulfilment details are illustrative only and are not a real offer for sale.`,
       specifications: [
         { label: "Listing type", value: "Demo product" },
