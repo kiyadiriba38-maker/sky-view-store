@@ -85,7 +85,7 @@ export default function Search({
   }, [onClose]);
 
   return (
-    <div ref={rootRef} className="relative  max-w-2xl mx-auto w-full">
+    <div ref={rootRef} className="relative mx-auto w-full max-w-2xl">
       <div className="relative">
         <input
           ref={inputRef}
@@ -97,11 +97,7 @@ export default function Search({
           role="combobox"
           aria-expanded
           className="
-        w-full rounded-xl border px-4 py-3 pe-10 text-sm outline-none
-        bg-white text-neutral-900 border-neutral-200 placeholder:text-neutral-400
-        focus:border-neutral-300 focus:ring-2 focus:ring-neutral-200
-        dark:bg-neutral-900 dark:text-neutral-50 dark:border-neutral-700 dark:placeholder:text-neutral-500
-        dark:focus:border-neutral-600 dark:focus:ring-neutral-700
+        w-full rounded-xl border border-amber-300/20 bg-[#171717] px-4 py-3 pe-10 text-sm text-white outline-none placeholder:text-white/35 focus:border-amber-300/70 focus:ring-2 focus:ring-amber-300/20
       "
         />
 
@@ -111,13 +107,13 @@ export default function Search({
               variant="outline"
               size="icon"
               aria-label={t("clear")}
-              className="h-8 w-8 border-0 text-neutral-400 hover:text-neutral-600 hover:cursor-pointer dark:text-neutral-500 dark:hover:text-neutral-300"
+              className="h-8 w-8 border-0 text-amber-200/65 transition hover:cursor-pointer hover:text-amber-100"
               onClick={() => setQuery("")}
             >
               <FiX className="h-5 w-5" />
             </Button>
           ) : (
-            <FiSearch className="h-5 w-5 text-neutral-400 dark:text-neutral-500" />
+            <FiSearch className="h-5 w-5 text-amber-200/65" />
           )}
         </div>
       </div>
@@ -125,12 +121,10 @@ export default function Search({
       <div
         id="search-results"
         className="
-        mt-1 overflow-hidden rounded-xl border shadow-lg
-        border-neutral-200 bg-white
-        dark:border-neutral-700 dark:bg-neutral-900
+        mt-2 overflow-hidden rounded-xl border border-amber-300/20 bg-[#171717] text-white shadow-[0_22px_65px_rgba(0,0,0,.48)] backdrop-blur-2xl
       "
       >
-        <div className="px-4 py-2 text-xs font-semibold text-neutral-500 dark:text-neutral-400">
+        <div className="border-b border-white/10 px-4 py-3 text-[9px] font-bold uppercase tracking-[.18em] text-amber-200/75">
           {t("products")}
         </div>
 
@@ -143,8 +137,7 @@ export default function Search({
                 onClick={onClose}
                 className="
                 flex items-center gap-3 px-4 py-3
-                hover:bg-neutral-50
-                dark:hover:bg-neutral-800
+                transition-colors hover:bg-amber-300/[.08]
               "
               >
                 <div
@@ -160,7 +153,7 @@ export default function Search({
                 </div>
 
                 <div className="min-w-0 flex-1">
-                  <div className="truncate text-sm font-medium text-neutral-900 dark:text-neutral-50">
+                  <div className="truncate text-sm font-medium text-white">
                     {product.title}
                   </div>
                 </div>
@@ -171,7 +164,7 @@ export default function Search({
               </Link>
             ))
           ) : (
-            <div className="p-3 text-sm text-neutral-500 dark:text-neutral-400">
+            <div className="p-5 text-sm text-white/50">
               {t("noMatch")}
             </div>
           )}
