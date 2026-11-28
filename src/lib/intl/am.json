@@ -306,7 +306,20 @@
     "dealsTitle": "ሊታዩ የሚገቡ ቅናሾች።",
     "dealsDescription": "በአስተዳዳሪው የተቀመጠ የቀድሞ ዋጋ እና ዝቅተኛ የአሁኑ ዋጋ ያላቸው ምርቶች ብቻ እዚህ ይታያሉ።",
     "newest": "አዲስ",
-    "reviewLabels": "የሙከራ እና የተረጋገጠ መለያ"
+    "reviewLabels": "የሙከራ እና የተረጋገጠ መለያ",
+    "wishlistBack": "ወደ ግዢ ተመለስ",
+    "wishlistEyebrow": "ስካይ ቪው / የተቀመጡ ምርቶች",
+    "wishlistTitle": "የእርስዎ የምኞት ዝርዝር።",
+    "wishlistCount": "በዚህ መሣሪያ ላይ {count} ምርቶች ተቀምጠዋል።",
+    "wishlistClear": "የምኞት ዝርዝሩን አጽዳ",
+    "wishlistDemoItem": "የሙከራ ምርት",
+    "wishlistMarketplaceItem": "የገበያ ምርት",
+    "wishlistRemove": "{title} ከምኞት ዝርዝር አስወግድ",
+    "wishlistEmptyTitle": "የምኞት ዝርዝርዎ ይጠብቃል።",
+    "wishlistEmptyText": "በሚያስሱበት ጊዜ የልብ ምልክቱን በመጫን ምርቶችን ያስቀምጡ። እዚህ በዚህ መሣሪያ ላይ ይታያሉ።",
+    "wishlistExplore": "ምርቶችን ያስሱ",
+    "wishlistLocalNote": "የምኞት ዝርዝሩ በዚህ አሳሽ ውስጥ ብቻ ይቀመጣል። በመሣሪያዎች ወይም በመለያዎች መካከል አይመሳሰልም። የሙከራ ምርቶች ምሳሌዎች ናቸው።",
+    "wishlistStorageUnavailable": "የአሳሹ ማከማቻ አይገኝም። የተቀመጡ ምርቶች ከገጹ ከተዘጋ በኋላ ላይቆዩ ይችላሉ።"
   },
   "notifications": {
     "title": "ማሳወቂያዎችዎ",
