@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { FiHeart, FiTrash2 } from "react-icons/fi";
 import StorefrontImage from "@/components/storefront/storefront-image";
+import { DEMO_CATEGORIES } from "@/lib/demo/catalog";
 
 type SavedProduct = {
   id: string;
@@ -23,7 +24,7 @@ const isSafeImage = (value: unknown): value is string =>
 
 const isSafeProductPath = (value: unknown): value is string =>
   typeof value === "string" &&
-  !value.includes("\\\\") &&
+  !value.includes("\\") &&
   !value.startsWith("//") &&
   (/^\/(?:product|demo-product)\/[a-zA-Z0-9_-]+$/.test(value));
 
@@ -125,7 +126,7 @@ export default function WishlistPage() {
             {items.map((item) => (
               <article key={item.id} className="group overflow-hidden rounded-2xl border border-white/10 bg-[#191919] transition duration-300 hover:-translate-y-1 hover:border-amber-300/40 hover:shadow-[0_18px_50px_rgba(0,0,0,.25)]">
                 <Link href={item.href} className="relative block aspect-square overflow-hidden bg-white/[.03]">
-                  <StorefrontImage src={item.image} alt={item.title} fallbackSrc="/images/product-placeholder.png" sizes="(max-width: 640px) 90vw, 25vw" className="object-cover transition duration-500 group-hover:scale-105" />
+                  <StorefrontImage src={item.image} alt={item.title} fallbackSrc={DEMO_CATEGORIES[2].image} sizes="(max-width: 640px) 90vw, 25vw" className="object-cover transition duration-500 group-hover:scale-105" />
                   <span className="absolute left-3 top-3 rounded-full border border-white/15 bg-black/65 px-3 py-1.5 text-[9px] font-bold uppercase tracking-wider text-white">{item.demo ? "Demo item" : "Marketplace item"}</span>
                 </Link>
                 <div className="p-4">
