@@ -8,6 +8,7 @@ import { useMemo, useState } from "react";
 
 import type { Category, Product } from "@/lib/core/types/payload-types";
 import { formatPrice, resolveMediaUrl } from "@/lib/core/util";
+import { DEMO_CATEGORIES } from "@/lib/demo/catalog";
 
 export function StorefrontShell({
   eyebrow,
@@ -100,7 +101,9 @@ export function ProductGrid({ products }: { products: Product[] }) {
         const demo = Boolean((product as Product & { isDemo?: boolean }).isDemo);
         const demoImage = (product as Product & { demoImageUrl?: string }).demoImageUrl;
         const sellerImage = (product as Product & { productImageUrl?: string }).productImageUrl;
-        const image = product.meta?.image && typeof product.meta.image === "object" ? resolveMediaUrl(product.meta.image) : demo ? demoImage ?? null : sellerImage ?? null;
+        const productCategory = Array.isArray(product.categories) ? product.categories.find((item) => typeof item === "object" && item !== null) : null;
+        const categorySlug = productCategory && typeof productCategory === "object" && "slug" in productCategory ? String(productCategory.slug) : "";
+        const image = product.meta?.image && typeof product.meta.image === "object" ? resolveMediaUrl(product.meta.image) : demo ? DEMO_CATEGORIES.find((item) => item.slug === categorySlug)?.image ?? DEMO_CATEGORIES[2].image : sellerImage ?? null;
         const price = Number(product.priceInUSD ?? 0);
         const href = `/product/${product.slug}`;
         return (
