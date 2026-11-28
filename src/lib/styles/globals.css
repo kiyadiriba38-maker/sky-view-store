@@ -1578,3 +1578,22 @@ html[data-theme="light"] .sv-page [class*="bg-white/"] {
 .sv-store textarea:focus,
 .sv-store select:focus { outline-color:#f59e0b; border-color:#f59e0b !important; }
 .sv-store ::selection { background:#f59e0b; color:#17110a; }
+
+
+/* Warm panel surfaces used by account, seller and order workspaces. */
+.sv-store [class*="bg-[#0d1724]"],
+.sv-store [class*="bg-[#0c1724]"],
+.sv-store [class*="bg-[#101a28]"],
+.sv-store [class*="bg-[#101a29]"] { background-color:#1b1916 !important; }
+.sv-store [class*="bg-[#142b40]"],
+.sv-store [class*="bg-[#172436]"] { background-color:#211c15 !important; }
+.sv-store input,
+.sv-store textarea,
+.sv-store select {
+  color:#f7f3eb;
+  border-color:rgba(255,255,255,.15);
+  background-color:#171512;
+}
+.sv-store input::placeholder,
+.sv-store textarea::placeholder { color:#8f877b; }
+.sv-store :focus-visible { outline:2px solid #f59e0b; outline-offset:3px; }
