@@ -6,7 +6,8 @@ import { useCallback, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 
 type Seller = { id: number; storeName: string; approvalStatus: "pending" | "approved" | "suspended" | "rejected"; city?: string };
-type SellerProduct = { id: number; title: string; slug: string; listingStatus?: string; _status?: string; inventory?: number; priceInUSD?: number; productImageUrl?: string | null; description?: unknown };
+type SellerProduct = { id: number; title: string; slug: string; listingStatus?: string; _status?: string; inventory?: number; priceInUSD?: number; productImageUrl?: string | null; description?: unknown; categories?: Array<number | string | { id: number | string }> };
+type CategoryOption = { id: number; title: string };
 type SellerMetrics = { totalProducts: number; publishedProducts: number; pendingProducts: number; completedOrders: number; averageRating: number | null; verifiedReviewCount: number; responseTimeHours: number | null; deliveryPerformance: number | null; rank: number | null; approvedSellerCount: number; badges: string[] };
 
 function richTextToPlainText(value: unknown): string {
@@ -25,6 +26,8 @@ export default function SellerDashboard() {
   const [metrics, setMetrics] = useState<SellerMetrics | null>(null);
   const [seller, setSeller] = useState<Seller | null>(null);
   const [products, setProducts] = useState<SellerProduct[]>([]);
+  const [categories, setCategories] = useState<CategoryOption[]>([]);
+  const [categoryId, setCategoryId] = useState("");
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
   const [title, setTitle] = useState("");
@@ -41,6 +44,11 @@ export default function SellerDashboard() {
       const meResponse = await fetch("/api/users/me", { credentials: "include", cache: "no-store" });
       if (!meResponse.ok) throw new Error("Sign in to open Seller Center.");
       const me = await meResponse.json();
+      const categoryResponse = await fetch("/api/category?limit=100&sort=title&depth=0", { credentials: "include", cache: "no-store" });
+      const categoryData = await categoryResponse.json().catch(() => ({}));
+      if (categoryResponse.ok) {
+        setCategories((categoryData?.docs ?? []).map((item: { id: number; title: string }) => ({ id: Number(item.id), title: item.title })));
+      }
       const sellerUrl = new URL("/api/sellers", window.location.origin);
       sellerUrl.searchParams.set("where[owner][equals]", String(me?.user?.id ?? ""));
       sellerUrl.searchParams.set("limit", "1");
@@ -79,6 +87,8 @@ export default function SellerDashboard() {
     setPrice(String(product.priceInUSD ?? 1200));
     setInventory(String(product.inventory ?? 0));
     setImageUrl(product.productImageUrl ?? "");
+    const firstCategory = product.categories?.[0];
+    setCategoryId(firstCategory == null ? "" : String(typeof firstCategory === "object" ? firstCategory.id : firstCategory));
     setMessage("Editing this listing will send it back to moderation before it is visible again.");
   }
 
@@ -89,6 +99,7 @@ export default function SellerDashboard() {
     setPrice("1200");
     setInventory("10");
     setImageUrl("");
+    setCategoryId("");
   }
 
   async function addProduct(event: FormEvent<HTMLFormElement>) {
@@ -99,6 +110,7 @@ export default function SellerDashboard() {
     try {
       const payload = {
         title: title.trim(),
+        categories: categoryId ? [Number(categoryId)] : [],
         ...(editingProductId === null ? {
           slug: title.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") + "-" + Date.now().toString(36),
         } : {}),
@@ -183,6 +195,7 @@ export default function SellerDashboard() {
                   <h2 className="text-xl font-semibold">{editingProductId === null ? "Submit a product" : "Edit product listing"}</h2>
                   <p className="mt-2 text-xs leading-6 text-white/45">New seller listings are reviewed by an administrator before becoming visible.</p>
                   <label className="mt-5 block text-xs text-white/70">Product title<input required value={title} onChange={(event) => setTitle(event.target.value)} className="mt-2 w-full rounded-xl border border-white/15 bg-white/[.04] px-4 py-3 text-sm outline-none focus:border-cyan-200" /></label>
+                  <label className="mt-4 block text-xs text-white/70">Category<select required value={categoryId} onChange={(event) => setCategoryId(event.target.value)} className="mt-2 w-full rounded-xl border border-white/15 bg-[#091321] px-4 py-3 text-sm text-white outline-none focus:border-cyan-200"><option value="">Choose a category</option>{categories.map((category) => <option key={category.id} value={category.id}>{category.title}</option>)}</select></label>
                   <label className="mt-4 block text-xs text-white/70">Product image URL (HTTPS)<input required type="url" pattern="https://.*" value={imageUrl} onChange={(event) => setImageUrl(event.target.value)} placeholder="https://..." className="mt-2 w-full rounded-xl border border-white/15 bg-white/[.04] px-4 py-3 text-sm outline-none focus:border-cyan-200" /><span className="mt-1 block text-[10px] leading-5 text-white/40">Required. Use an HTTPS image URL that you have permission to publish.</span></label>
                   <label className="mt-4 block text-xs text-white/70">Description<textarea required minLength={20} rows={4} value={description} onChange={(event) => setDescription(event.target.value)} className="mt-2 w-full rounded-xl border border-white/15 bg-white/[.04] px-4 py-3 text-sm outline-none focus:border-cyan-200" /></label>
                   <div className="mt-4 grid grid-cols-2 gap-3">
