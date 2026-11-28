@@ -216,7 +216,7 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
           </select>
         </div>
         {quickSearchOpen ? (
-          <div id="sv-quick-search-overlay" className="sv-quick-search-overlay" role="dialog" aria-label="Quick product search">
+          <div id="sv-quick-search-overlay" className="sv-quick-search-overlay absolute inset-x-3 top-[calc(100%+8px)] z-[60] rounded-2xl border border-white/15 bg-[#171717]/95 p-4 shadow-2xl backdrop-blur-2xl sm:inset-x-6" role="dialog" aria-modal="true" aria-label={t.search}>
             <div className="sv-quick-search-field flex items-center gap-3"><FiSearch aria-hidden="true" /><input autoFocus className="min-w-0 flex-1 bg-transparent text-sm text-white outline-none placeholder:text-white/40" value={query} onChange={(event) => setQuery(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter") { setQuickSearchOpen(false); document.getElementById("catalogue")?.scrollIntoView({ behavior: "smooth" }); } }} placeholder={t.search} aria-label={t.search} /><button type="button" className="shrink-0 rounded-full bg-amber-300 px-4 py-2.5 text-xs font-extrabold text-[#17120b]" onClick={() => { setQuickSearchOpen(false); document.getElementById("catalogue")?.scrollIntoView({ behavior: "smooth" }); }}>{t.searchButton}</button><button type="button" className="sv-quick-search-close grid size-8 shrink-0 place-items-center rounded-full border border-white/15 text-lg text-white/70 hover:border-amber-300/50 hover:text-amber-100" aria-label="Close quick search" onClick={() => setQuickSearchOpen(false)}>×</button></div>
             <p className="mt-3 text-xs text-white/45">{t.searchHint}</p>
           </div>
