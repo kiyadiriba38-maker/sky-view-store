@@ -32,6 +32,9 @@ const copy = {
     search: "Search products, brands and categories", hero: "A whole marketplace. A new way to shop.", sub: "Discover everyday essentials, technology, fashion and more — all in one place.", shop: "Explore marketplace", categories: "Shop by category", popular: "Popular discoveries", demo: "DEMO", real: "REAL PRODUCT", all: "All products", demoOnly: "Demo products", realOnly: "Real products", searchButton: "Search", browse: "Browse all products",
     navShop:"Shop",navCategories:"Categories",navTrending:"Trending",navDeals:"Deals",navHelp:"Help",signIn:"Sign in",cart:"Cart",popularPrefix:"Popular:",wireless:"Wireless",phoneAccessories:"Phone accessories",homeSearch:"Home",travel:"Travel",heroEyebrow:"THE SKY VIEW MARKETPLACE",metaETB:"ETB-first shopping",metaSellers:"Approved sellers",metaDemo:"Demo checkout",benefitDiscovery:"Wide product discovery",benefitLocal:"Local-first shopping",benefitSeller:"Seller marketplace",benefitSecure:"Secure account access",categoryEyebrow:"EXPLORE THE COLLECTIONS",viewAllCategories:"View all categories",catalogueEyebrow:"A MARKETPLACE OF POSSIBILITIES",catalogueDescription:"listings · sample listings are labelled clearly",allCategories:"All categories",demoNote:"Sample listing · simulated stock",realNote:"Published marketplace listing",emptyResults:"No products match your search. Try another term or category.",exchangeUnavailable:"Exchange rate unavailable — showing ETB values.",exchangeIndicative:"Converted using a reference exchange-rate feed; indicative only.",pricesETB:"Prices shown in Ethiopian birr.",promoEyebrow:"A BETTER WAY TO DISCOVER",promoTitle:"From everyday essentials to unexpected finds.",promoText:"Browse a growing catalogue built for Ethiopia, with a marketplace foundation ready to expand.",startExploring:"Start exploring",about:"About",shipping:"Shipping",returns:"Returns",privacy:"Privacy",helpCenter:"Help center",footerTagline:"Built for discovery. Starting in Ethiopia.",footerNote:"Demo listings are not real offers for sale.",mobileHome:"Home",mobileShop:"Shop",mobileCategories:"Categories",mobileCart:"Cart",mobileAccount:"Account",
     heroTitle: "Online Shopping,", heroTitleAccent: "Simplified.", heroDescription: "Discover verified electronics, fashion, lifestyle essentials and more — all in one beautifully simple marketplace, with delivery options across Ethiopia.", tabFeatures: "+ TOP FEATURES", tabGallery: "+ GALLERY", tabSpecs: "+ SPECS", tabReviews: "+ REVIEWS", featureTitle: "Discover more in one place", featureText: "Explore product collections, approved sellers and a simple shopping journey.", galleryTitle: "A world of everyday finds", galleryText: "Browse electronics, fashion, home essentials and lifestyle collections.", specsTitle: "Details that help you choose", specsText: "Compare options, product specifications, availability and seller information.", reviewsTitle: "More confidence in every choice", reviewsText: "Read buyer feedback and verified-purchase reviews on eligible listings.", metaApproved: "APPROVED SELLERS", metaNoPayments: "NO LIVE PAYMENT PROCESSING", showcaseCaption: "Find your next favourite thing.", ctaLook: "Get the look", ctaExplore: "DISCOVER THE COLLECTION", dealsEyebrow: "LIMITED-TIME DEMO PICKS", dealsTitle: "Super Deals", dealsPreview: "preview", dealsDescription: "Explore sample offers from the demo catalogue. Prices and timer are illustrative.", demoTimer: "DEMO TIMER", dealsExplore: "Explore deals", saved: "Saved", save: "Save", clearFilters: "Clear filters",
+    navHome:"HOME", navElectronics:"ELECTRONICS", navFashion:"FASHION", navVehicles:"VEHICLES", navAccessories:"ACCESSORIES", navAllCategories:"ALL CATEGORIES",
+    navHome:"መነሻ", navElectronics:"ኤሌክትሮኒክስ", navFashion:"ፋሽን", navVehicles:"ተሽከርካሪዎች", navAccessories:"መለዋወጫዎች", navAllCategories:"ሁሉም ምድቦች",
+    navHome:"JALQABA", navElectronics:"ELEKTIRONIKSII", navFashion:"FAASHINII", navVehicles:"KONKOLAATA", navAccessories:"MEESHAALEE", navAllCategories:"RAMADDII HUNDA",
     categoryNames:{"phones-and-accessories":"Phones & Accessories","computers-and-office":"Computers & Office","electronics":"Consumer Electronics","home-and-living":"Home & Kitchen","fashion":"Fashion","shoes":"Shoes","beauty-and-personal-care":"Beauty & Personal Care","health-and-wellness":"Health & Fitness","sports-and-outdoors":"Sports & Outdoors","toys-and-games":"Toys & Hobbies","automotive":"Automotive","tools-and-hardware":"Tools & Hardware","furniture":"Furniture & Decor","jewelry-and-watches":"Jewelry & Watches","baby-and-kids":"Baby & Kids","books-and-stationery":"Books & Stationery","bags-and-travel":"Travel & Luggage","pet-supplies":"Pet Supplies","garden-and-outdoors":"Garden & Home Improvement","kitchen-and-dining":"Food & Grocery Accessories"}
   },
   am: {
@@ -189,12 +192,12 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
         <div className="sv-amber-navigation">
           <Link href="/deals" className={`sv-super-deals${isHeaderScrolled ? " is-hidden" : ""}`} aria-label="Explore current deals">SUPER DEALS <FiArrowUpRight aria-hidden="true" /></Link>
           <nav className="sv-main-nav" aria-label="Main navigation">
-            <Link className="active" href="/" aria-current="page">HOME</Link>
-            <Link href="/shop?category=electronics">ELECTRONICS</Link>
-            <Link href="/shop?category=fashion">FASHION</Link>
-            <Link href="/shop?category=automotive">VEHICLES</Link>
-            <Link href="/categories">ACCESSORIES</Link>
-            <Link href="/categories">ALL CATEGORIES</Link>
+            <Link className="active" href="/" aria-current="page">{t.navHome}</Link>
+            <Link href="/shop?category=electronics">{t.navElectronics}</Link>
+            <Link href="/shop?category=fashion">{t.navFashion}</Link>
+            <Link href="/shop?category=automotive">{t.navVehicles}</Link>
+            <Link href="/categories">{t.navAccessories}</Link>
+            <Link href="/categories">{t.navAllCategories}</Link>
           </nav>
         </div>
         <div className="sv-header-actions sv-amber-actions">
@@ -222,7 +225,7 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
         <div className="sv-quick-links"><span>{t.popularPrefix}</span><button onClick={() => setQuery("wireless")}>{t.wireless}</button><button onClick={() => setQuery("phone")}>{t.phoneAccessories}</button><button onClick={() => setQuery("home")}>{t.homeSearch}</button><button onClick={() => setQuery("travel")}>{t.travel}</button></div>
       </section>
 
-      <section className="sv-cinematic-hero" aria-label="Sky View Store featured marketplace">
+      <section className="sv-cinematic-hero" aria-label={t.heroEyebrow}>
         <div className="sv-cinematic-watermark" aria-hidden="true"><span>SKY VIEW</span><b>2026</b></div>
         <div className="sv-cinematic-spotlight" aria-hidden="true" />
         <div className="sv-cinematic-inner">
@@ -242,9 +245,9 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
               {heroTab === "specs" ? <><b><FiSliders /> {t.specsTitle}</b><span>{t.specsText}</span></> : null}
               {heroTab === "reviews" ? <><b><FiStar /> {t.reviewsTitle}</b><span>{t.reviewsText}</span></> : null}
             </div>
-            <div className="sv-cinematic-meta"><span>ETB-FIRST SHOPPING</span><span>{t.metaApproved}</span><span>{t.metaNoPayments}</span></div>
+            <div className="sv-cinematic-meta"><span>{t.metaETB}</span><span>{t.metaApproved}</span><span>{t.metaNoPayments}</span></div>
           </div>
-          <div className="sv-cinematic-showcase" aria-label="Featured marketplace collections">
+          <div className="sv-cinematic-showcase" aria-label={t.popular}>
             <div className="sv-cinematic-orbit sv-orbit-a" /><div className="sv-cinematic-orbit sv-orbit-b" />
             <div className="sv-float-product sv-float-laptop"><StorefrontImage src={DEMO_CATEGORIES[1].image} fallbackSrc={DEMO_CATEGORIES[0].image} alt="Computers and laptop collection" sizes="(max-width: 800px) 48vw, 30vw" /></div>
             <div className="sv-float-product sv-float-vr"><StorefrontImage src={DEMO_CATEGORIES[2].image} fallbackSrc={DEMO_CATEGORIES[1].image} alt="Electronics collection" sizes="(max-width: 800px) 30vw, 18vw" /></div>
