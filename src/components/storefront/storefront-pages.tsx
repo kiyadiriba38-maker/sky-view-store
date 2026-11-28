@@ -99,7 +99,6 @@ export function ProductGrid({ products }: { products: Product[] }) {
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {visibleProducts.map((product) => {
         const demo = Boolean((product as Product & { isDemo?: boolean }).isDemo);
-        const demoImage = (product as Product & { demoImageUrl?: string }).demoImageUrl;
         const sellerImage = (product as Product & { productImageUrl?: string }).productImageUrl;
         const productCategory = Array.isArray(product.categories) ? product.categories.find((item) => typeof item === "object" && item !== null) : null;
         const categorySlug = productCategory && typeof productCategory === "object" && "slug" in productCategory ? String(productCategory.slug) : "";
