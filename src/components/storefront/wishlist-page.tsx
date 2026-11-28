@@ -1,9 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { FiHeart, FiTrash2 } from "react-icons/fi";
+import StorefrontImage from "@/components/storefront/storefront-image";
 
 type SavedProduct = {
   id: string;
@@ -52,7 +52,7 @@ export default function WishlistPage() {
   }
 
   return (
-    <main className="sv-page min-h-[75vh] bg-[#070b12] px-4 py-12 text-white sm:px-8">
+    <main className="sv-page min-h-[75vh] bg-[#121212] px-4 py-12 text-white sm:px-8">
       <div className="mx-auto max-w-6xl">
         <Link href="/" className="text-xs text-amber-200 hover:text-white">← Continue shopping</Link>
         <div className="mt-8 flex flex-wrap items-end justify-between gap-4">
@@ -66,9 +66,9 @@ export default function WishlistPage() {
         {items.length ? (
           <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {items.map((item) => (
-              <article key={item.id} className="overflow-hidden rounded-2xl border border-white/10 bg-[#101a28]">
+              <article key={item.id} className="overflow-hidden rounded-2xl border border-white/10 bg-[#191919]">
                 <Link href={item.href} className="relative block aspect-square overflow-hidden bg-white/[.03]">
-                  <Image src={item.image} alt={item.title} fill unoptimized sizes="(max-width: 640px) 90vw, 25vw" className="object-cover transition duration-500 hover:scale-105" />
+                  <StorefrontImage src={item.image} alt={item.title} fallbackSrc="https://images.unsplash.com/photo-1491553895911-0055eca6402d?auto=format&fit=crop&w=900&q=80" sizes="(max-width: 640px) 90vw, 25vw" className="object-cover transition duration-500 hover:scale-105" />
                   <span className="absolute left-3 top-3 rounded-full border border-white/15 bg-black/65 px-3 py-1.5 text-[9px] font-bold uppercase tracking-wider text-white">{item.demo ? "Demo item" : "Marketplace item"}</span>
                 </Link>
                 <div className="p-4">
