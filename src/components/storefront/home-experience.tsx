@@ -1,11 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { FiHeart, FiSearch, FiShoppingCart, FiUser, FiArrowUpRight, FiMonitor, FiGrid, FiSliders, FiStar } from "react-icons/fi";
 
 import { useStoreLocale } from "@/lib/providers/intl";
+import StorefrontImage from "@/components/storefront/storefront-image";
 
 import { DEMO_CATEGORIES, DEMO_PRODUCTS } from "@/lib/demo/catalog";
 
@@ -214,10 +214,10 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
         <div className="sv-amber-product-stage">
           <div className="sv-amber-glow" />
           <div className="sv-amber-stage-ring ring-one" /><div className="sv-amber-stage-ring ring-two" />
-          <div className="sv-amber-product product-laptop"><Image src={DEMO_CATEGORIES[1].image} alt="Laptop and computer collection" fill unoptimized sizes="(max-width: 800px) 30vw, 20vw" /></div>
-          <div className="sv-amber-product product-vr"><Image src={DEMO_CATEGORIES[2].image} alt="Electronics and smart devices collection" fill unoptimized sizes="(max-width: 800px) 25vw, 17vw" /></div>
-          <div className="sv-amber-product product-fashion"><Image src={DEMO_CATEGORIES[4].image} alt="Fashion collection" fill unoptimized sizes="(max-width: 800px) 28vw, 18vw" /></div>
-          <div className="sv-amber-product product-delivery"><Image src={DEMO_CATEGORIES[16].image} alt="Travel and delivery accessories collection" fill unoptimized sizes="(max-width: 800px) 25vw, 17vw" /></div>
+          <div className="sv-amber-product product-laptop"><StorefrontImage src={DEMO_CATEGORIES[1].image} fallbackSrc={DEMO_CATEGORIES[0].image} alt="Laptop and computer collection" sizes="(max-width: 800px) 30vw, 20vw" /></div>
+          <div className="sv-amber-product product-vr"><StorefrontImage src={DEMO_CATEGORIES[2].image} fallbackSrc={DEMO_CATEGORIES[1].image} alt="Electronics and smart devices collection" sizes="(max-width: 800px) 25vw, 17vw" /></div>
+          <div className="sv-amber-product product-fashion"><StorefrontImage src={DEMO_CATEGORIES[4].image} fallbackSrc={DEMO_CATEGORIES[3].image} alt="Fashion collection" sizes="(max-width: 800px) 28vw, 18vw" /></div>
+          <div className="sv-amber-product product-delivery"><StorefrontImage src={DEMO_CATEGORIES[16].image} fallbackSrc={DEMO_CATEGORIES[15].image} alt="Travel and delivery accessories collection" sizes="(max-width: 800px) 25vw, 17vw" /></div>
           <div className="sv-amber-stage-caption"><small>CURATED FOR YOU / 001</small><b>Find your next<br/>favourite thing.</b></div>
         </div>
         <div className="sv-amber-hero-cta"><button type="button" onClick={() => document.getElementById("catalogue")?.scrollIntoView({ behavior: "smooth" })}>Explore products <FiArrowUpRight aria-hidden="true" /></button><span>DISCOVER THE COLLECTION</span></div>
@@ -229,7 +229,7 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
       <section className="sv-category-section">
         <div className="sv-section-heading"><div><span className="sv-eyebrow">{t.categoryEyebrow}</span><h2>{t.categories}</h2></div><Link href="/categories">{t.viewAllCategories} ↗</Link></div>
         <div className="sv-category-grid">
-          {categories.slice(0, 8).map((item) => <Link href={`/shop?category=${item.slug}`} className="sv-category-tile" key={item.slug}><Image src={item.image} alt="" fill unoptimized sizes="(max-width: 640px) 50vw, 25vw" /><span className="sv-category-shade" /><span className="sv-category-name">{t.categoryNames[item.slug as keyof typeof t.categoryNames] ?? item.name}</span><span className="sv-category-arrow">↗</span></Link>)}
+          {categories.slice(0, 8).map((item) => <Link href={`/shop?category=${item.slug}`} className="sv-category-tile" key={item.slug}><StorefrontImage src={item.image} fallbackSrc={DEMO_CATEGORIES[2].image} alt={`${item.name} category`} sizes="(max-width: 640px) 50vw, 25vw" /><span className="sv-category-shade" /><span className="sv-category-name">{t.categoryNames[item.slug as keyof typeof t.categoryNames] ?? item.name}</span><span className="sv-category-arrow">↗</span></Link>)}
         </div>
       </section>
 
@@ -242,7 +242,7 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
         <div className="sv-product-grid">
           {products.slice(0, 24).map((product) => {
             const href = product.demo && !("databaseBacked" in product && product.databaseBacked) ? `/demo-product/${product.slug}` : `/product/${product.slug}`;
-            return <article className="sv-product-card relative" key={product.id}><Link href={href} className="sv-product-image"><Image src={product.image} alt={product.title} fill unoptimized sizes="(max-width: 640px) 50vw, 25vw" /><span className={product.demo ? "sv-label-demo" : "sv-label-real"}>{product.demo ? t.demo : t.real}</span></Link><button type="button" aria-label={wishlist.includes(product.id) ? `Remove ${product.title} from wishlist` : `Save ${product.title} to wishlist`} aria-pressed={wishlist.includes(product.id)} onClick={() => toggleWishlist(product)} className="absolute right-3 top-3 z-10 flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-black/65 text-white shadow-lg backdrop-blur transition hover:scale-105 hover:border-amber-300/70" style={{ color: wishlist.includes(product.id) ? "#fbbf24" : undefined }}><FiHeart /></button><div className="sv-product-info"><small>{t.categoryNames[product.categorySlug as keyof typeof t.categoryNames] ?? product.category}</small><Link href={href} className="sv-product-title">{product.title}</Link><div className="sv-price-row"><b>{formatPrice(product.priceETB, currency, rates, locale)}</b>{product.originalPriceETB > product.priceETB ? <del>{formatPrice(product.originalPriceETB, currency, rates, locale)}</del> : null}</div><span className="sv-demo-note">{product.demo ? t.demoNote : t.realNote}</span></div></article>;
+            return <article className="sv-product-card relative" key={product.id}><Link href={href} className="sv-product-image"><StorefrontImage src={product.image} fallbackSrc={DEMO_CATEGORIES[2].image} alt={product.title} sizes="(max-width: 640px) 50vw, 25vw" /><span className={product.demo ? "sv-label-demo" : "sv-label-real"}>{product.demo ? t.demo : t.real}</span></Link><button type="button" aria-label={wishlist.includes(product.id) ? `Remove ${product.title} from wishlist` : `Save ${product.title} to wishlist`} aria-pressed={wishlist.includes(product.id)} onClick={() => toggleWishlist(product)} className="absolute right-3 top-3 z-10 flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-black/65 text-white shadow-lg backdrop-blur transition hover:scale-105 hover:border-amber-300/70" style={{ color: wishlist.includes(product.id) ? "#fbbf24" : undefined }}><FiHeart /></button><div className="sv-product-info"><small>{t.categoryNames[product.categorySlug as keyof typeof t.categoryNames] ?? product.category}</small><Link href={href} className="sv-product-title">{product.title}</Link><div className="sv-price-row"><b>{formatPrice(product.priceETB, currency, rates, locale)}</b>{product.originalPriceETB > product.priceETB ? <del>{formatPrice(product.originalPriceETB, currency, rates, locale)}</del> : null}</div><span className="sv-demo-note">{product.demo ? t.demoNote : t.realNote}</span></div></article>;
           })}
         </div>
         {products.length === 0 ? <div className="sv-empty">{t.emptyResults}</div> : null}
