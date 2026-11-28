@@ -1547,7 +1547,7 @@ html[data-theme="light"] .sv-page [class*="bg-white/"] {
   background: linear-gradient(145deg,#fbbf24,#b45309);
   color: #17110a;
 }
-.sv-page .sv-product-info-panel .rounded-full.bg-\\[\\#9F1239\\] {
+.sv-page .sv-product-info-panel [class~="bg-[#9F1239]"] {
   background: #f59e0b;
   color: #17110a;
 }
