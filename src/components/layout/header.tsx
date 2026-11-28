@@ -107,7 +107,7 @@ const ThemeToggle = () => {
       {isDark ? (
         <FiSun className="h-7 w-7 text-yellow-400" />
       ) : (
-        <FiMoon className="h-7 w-7 text-blue-400" />
+        <FiMoon className="h-7 w-7 text-amber-300" />
       )}
     </Button>
   );
