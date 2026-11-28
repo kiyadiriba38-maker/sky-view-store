@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useState } from "react";
@@ -9,6 +8,7 @@ import { DEMO_CATEGORIES, DEMO_PRODUCTS } from "@/lib/demo/catalog";
 import type { Product } from "@/lib/core/types/payload-types";
 import { resolveMediaUrl } from "@/lib/core/util";
 import { useStoreLocale } from "@/lib/providers/intl";
+import StorefrontImage from "@/components/storefront/storefront-image";
 
 type Props = { realProducts: Product[] };
 
@@ -59,7 +59,7 @@ export default function DemoShopBrowser({ realProducts }: Props) {
         const href=item.demo&&!((item as (typeof real)[number]).databaseBacked)?`/demo-product/${item.slug}`: `/product/${item.slug}`;
         const price=item.priceETB;
         return <article key={item.id} className="group overflow-hidden rounded-2xl border border-white/10 bg-[#191919] transition hover:-translate-y-1 hover:border-amber-300/50">
-          <Link href={href} className="block"><div className="relative aspect-square bg-[#202020]"><Image src={item.image} alt={item.title} fill unoptimized sizes="(max-width: 640px) 50vw, 20vw" className="object-cover transition duration-500 group-hover:scale-105"/><span className={`absolute left-2 top-2 rounded-full px-2 py-1 text-[8px] font-black tracking-wider ${item.demo?"bg-amber-300 text-slate-950":"bg-emerald-300 text-slate-950"}`}>{item.demo?t("demoBadge"):t("realBadge")}</span></div><div className="p-3"><p className="text-[9px] uppercase tracking-wider text-white/45">{item.category}</p><h2 className="mt-1 line-clamp-2 min-h-9 text-xs font-semibold leading-5">{item.title}</h2><p className="mt-3 text-sm font-extrabold">{new Intl.NumberFormat(locale==="am"?"am-ET":locale==="om"?"om-ET":"en-ET",{style:"currency",currency:"ETB",maximumFractionDigits:0}).format(price)}</p><p className="mt-1 text-[9px] text-white/40">{item.demo?t("demoListingNote"):t("publishedListingNote")}</p></div></Link>
+          <Link href={href} className="block"><div className="relative aspect-square bg-[#202020]"><StorefrontImage src={item.image} fallbackSrc={DEMO_CATEGORIES[2].image} alt={item.title} sizes="(max-width: 640px) 50vw, 20vw" className="object-cover transition duration-500 group-hover:scale-105"/><span className={`absolute left-2 top-2 rounded-full px-2 py-1 text-[8px] font-black tracking-wider ${item.demo?"bg-amber-300 text-slate-950":"bg-emerald-300 text-slate-950"}`}>{item.demo?t("demoBadge"):t("realBadge")}</span></div><div className="p-3"><p className="text-[9px] uppercase tracking-wider text-white/45">{item.category}</p><h2 className="mt-1 line-clamp-2 min-h-9 text-xs font-semibold leading-5">{item.title}</h2><p className="mt-3 text-sm font-extrabold">{new Intl.NumberFormat(locale==="am"?"am-ET":locale==="om"?"om-ET":"en-ET",{style:"currency",currency:"ETB",maximumFractionDigits:0}).format(price)}</p><p className="mt-1 text-[9px] text-white/40">{item.demo?t("demoListingNote"):t("publishedListingNote")}</p></div></Link>
         </article>
       })}
     </div>
