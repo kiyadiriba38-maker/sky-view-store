@@ -25,6 +25,7 @@ type CatalogProduct = {
 
 type Currency = "ETB" | "USD" | "EUR" | "GBP" | "AED";
 type Language = "en" | "am" | "om";
+type SavedProduct = { id: string; slug: string; title: string; image: string; priceETB: number; category: string; demo: boolean };
 
 const copy = {
   en: {
@@ -63,7 +64,7 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
   const [rates, setRates] = useState<Record<string, number>>({});
   const [rateReady, setRateReady] = useState(false);
   const [heroTab, setHeroTab] = useState<"features" | "gallery" | "specs" | "reviews">("features");
-  const [cartCount, setCartCount] = useState(0);
+  const [cartCount, setCartCount] = useState(0);\n  const [wishlist, setWishlist] = useState<string[]>([]);
   const t = copy[locale];
 
   useEffect(() => {
@@ -98,7 +99,7 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
     return () => controller.abort();
   }, []);
 
-  const realProducts = useMemo(() => catalogProducts.map((product) => {
+  function toggleWishlist(product: { id: string; slug: string; title: string; image: string | null; priceETB: number; category: string; demo: boolean }) {\n    const safeImage = product.image || DEMO_CATEGORIES[2].image;\n    let saved: SavedProduct[] = [];\n    try { saved = JSON.parse(window.localStorage.getItem("sv-wishlist") || "[]") as SavedProduct[]; } catch { saved = []; }\n    const exists = saved.some((item) => item.id === product.id);\n    const next = exists ? saved.filter((item) => item.id !== product.id) : [...saved, { ...product, image: safeImage }];\n    window.localStorage.setItem("sv-wishlist", JSON.stringify(next));\n    setWishlist(next.map((item) => item.id));\n    window.dispatchEvent(new Event("sv-wishlist-change"));\n  }\n\n  const realProducts = useMemo(() => catalogProducts.map((product) => {
     const demo = Boolean(product.isDemo);
     return {
       id: `database-${product.slug}`, slug: product.slug, title: product.title,
@@ -156,7 +157,7 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
           </nav>
         </div>
         <div className="sv-header-actions sv-amber-actions">
-          <Link href="/account" aria-label="Wishlist and saved items"><FiHeart /></Link>
+          <Link href="/wishlist" aria-label={`Wishlist, ${wishlist.length} saved items`} className="relative"><FiHeart />{wishlist.length > 0 ? <i className="absolute -right-2 -top-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-amber-400 px-1 text-[9px] font-bold not-italic text-black">{wishlist.length > 99 ? "99+" : wishlist.length}</i> : null}</Link>
           <button type="button" aria-label="Focus search" onClick={() => document.getElementById("catalogue-search")?.focus()}><FiSearch /></button>
           <Link href="/demo-cart" aria-label={cartCount ? `Shopping cart, ${cartCount} items` : "Shopping cart"} className="sv-icon-cart"><FiShoppingCart />{cartCount > 0 ? <i>{cartCount > 99 ? "99+" : cartCount}</i> : null}</Link>
           <Link href="/account" aria-label="User profile"><FiUser /></Link>
@@ -225,7 +226,7 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
         <div className="sv-product-grid">
           {products.slice(0, 24).map((product) => {
             const href = product.demo && !("databaseBacked" in product && product.databaseBacked) ? `/demo-product/${product.slug}` : `/product/${product.slug}`;
-            return <article className="sv-product-card" key={product.id}><Link href={href} className="sv-product-image"><Image src={product.image} alt={product.title} fill unoptimized sizes="(max-width: 640px) 50vw, 25vw" /><span className={product.demo ? "sv-label-demo" : "sv-label-real"}>{product.demo ? t.demo : t.real}</span></Link><div className="sv-product-info"><small>{t.categoryNames[product.categorySlug as keyof typeof t.categoryNames] ?? product.category}</small><Link href={href} className="sv-product-title">{product.title}</Link><div className="sv-price-row"><b>{formatPrice(product.priceETB, currency, rates, locale)}</b>{product.originalPriceETB > product.priceETB ? <del>{formatPrice(product.originalPriceETB, currency, rates, locale)}</del> : null}</div><span className="sv-demo-note">{product.demo ? t.demoNote : t.realNote}</span></div></article>;
+            return <article className="sv-product-card" key={product.id}><Link href={href} className="sv-product-image"><Image src={product.image} alt={product.title} fill unoptimized sizes="(max-width: 640px) 50vw, 25vw" /><span className={product.demo ? "sv-label-demo" : "sv-label-real"}>{product.demo ? t.demo : t.real}</span></Link><button type="button" aria-label={wishlist.includes(product.id) ? `Remove ${product.title} from wishlist` : `Save ${product.title} to wishlist`} aria-pressed={wishlist.includes(product.id)} onClick={() => toggleWishlist(product)} className="absolute right-3 top-3 z-10 flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-black/65 text-white shadow-lg backdrop-blur transition hover:scale-105 hover:border-amber-300/70" style={{ color: wishlist.includes(product.id) ? "#fbbf24" : undefined }}><FiHeart /></button><div className="sv-product-info"><small>{t.categoryNames[product.categorySlug as keyof typeof t.categoryNames] ?? product.category}</small><Link href={href} className="sv-product-title">{product.title}</Link><div className="sv-price-row"><b>{formatPrice(product.priceETB, currency, rates, locale)}</b>{product.originalPriceETB > product.priceETB ? <del>{formatPrice(product.originalPriceETB, currency, rates, locale)}</del> : null}</div><span className="sv-demo-note">{product.demo ? t.demoNote : t.realNote}</span></div></article>;
           })}
         </div>
         {products.length === 0 ? <div className="sv-empty">{t.emptyResults}</div> : null}
