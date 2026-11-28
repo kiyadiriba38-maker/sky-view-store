@@ -70,7 +70,6 @@ const productsByCategory: Record<string, string[]> = {
 };
 
 const adjectives = ["Everyday", "Modern", "Compact", "Premium-style", "Portable", "Minimal", "Smart", "Lightweight", "Essential", "Travel-ready"];
-const photoByCategory = DEMO_CATEGORIES.map((category) => category.image);
 
 export const DEMO_PRODUCTS: DemoProduct[] = DEMO_CATEGORIES.flatMap((category, categoryIndex) => {
   const names = productsByCategory[category.name] ?? [];
