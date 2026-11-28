@@ -1,7 +1,6 @@
 import Image from "next/image";
+import Link from "next/link";
 import type { CSSProperties } from "react";
-import { getTranslations } from "next-intl/server";
-
 import type { ProductSinglePage } from "@/lib/core/types/types";
 
 import ArchiveBlock from "@/components/blocks/archive";
@@ -12,7 +11,6 @@ import ReportListingButton from "@/components/storefront/report-listing-button";
 import { resolveMediaUrl } from "@/lib/core/util";
 
 export default async function ProductPage({ product }: { product: ProductSinglePage }) {
-  const t = await getTranslations("product");
   const isDemo = Boolean((product as ProductSinglePage & { isDemo?: boolean }).isDemo);
   const extended = product as ProductSinglePage & { demoImageUrl?: string | null; productImageUrl?: string | null };
   const galleryImage = product.gallery?.find((item) => item.image && typeof item.image === "object")?.image;
@@ -23,11 +21,11 @@ export default async function ProductPage({ product }: { product: ProductSingleP
   return (
     <main className="sv-product-experience" style={backdropStyle}>
       <div className="sv-product-topbar">
-        <a href="/shop" className="sv-product-wordmark"><span>SV</span> SKY VIEW <i> / </i> STORE</a>
-        <nav aria-label="Product navigation"><a href="/shop">DISCOVER</a><a href="/categories">CATEGORIES</a><a href="/deals">OFFERS</a></nav>
-        <a href="/demo-cart" className="sv-product-toplink">YOUR CART ↗</a>
+        <Link href="/shop" className="sv-product-wordmark"><span>SV</span> SKY VIEW <i> / </i> STORE</Link>
+        <nav aria-label="Product navigation"><Link href="/shop">DISCOVER</Link><Link href="/categories">CATEGORIES</Link><Link href="/deals">OFFERS</Link></nav>
+        <Link href="/demo-cart" className="sv-product-toplink">YOUR CART ↗</Link>
       </div>
-      <div className="sv-product-crumb"><a href="/">HOME</a><span> / </span><a href="/shop">MARKETPLACE</a><span> / </span><b>{category}</b></div>
+      <div className="sv-product-crumb"><Link href="/">HOME</Link><span> / </span><Link href="/shop">MARKETPLACE</Link><span> / </span><b>{category}</b></div>
       <section className="sv-product-hero">
         <div className="sv-product-gallery-panel">
           <div className="sv-product-index">01 <span> / PRODUCT VIEW</span></div>
