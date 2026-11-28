@@ -529,3 +529,94 @@ html[data-theme="light"] .sv-page [class*="bg-white/"] {
   .sv-product-trust-row { font-size: 7px; gap: 9px; }
   .sv-demo-review-grid { grid-template-columns: 1fr; }
 }
+
+
+/* Full-screen discovery landing: the home screen is a complete first viewport;
+   the full catalogue remains available on /shop and the category pages. */
+.sv-marketplace.sv-home-viewport {
+  height: 100svh;
+  min-height: 680px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.sv-home-viewport .sv-market-topline { flex: 0 0 24px; }
+.sv-home-viewport .sv-market-header { flex: 0 0 70px; }
+.sv-home-viewport .sv-market-searchbar { flex: 0 0 68px; padding-top: 8px; padding-bottom: 4px; }
+.sv-home-viewport .sv-quick-links { display: none; }
+.sv-home-viewport .sv-market-hero {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: 490px;
+  margin-top: 8px;
+  margin-bottom: 10px;
+  align-items: stretch;
+}
+.sv-home-viewport .sv-hero-copy,
+.sv-home-viewport .sv-hero-visual { min-height: 0; height: 100%; }
+.sv-home-viewport .sv-hero-copy { display: flex; flex-direction: column; justify-content: center; }
+.sv-home-viewport .sv-hero-copy h1 { font-size: clamp(38px, 4.1vw, 66px); }
+.sv-home-viewport .sv-benefit-strip,
+.sv-home-viewport .sv-product-section,
+.sv-home-viewport .sv-promo-band,
+.sv-home-viewport .sv-market-footer { display: none; }
+.sv-home-viewport .sv-category-section {
+  flex: 0 0 150px;
+  padding-top: 6px;
+  padding-bottom: 12px;
+}
+.sv-home-viewport .sv-category-section .sv-section-heading { margin-bottom: 9px; }
+.sv-home-viewport .sv-category-section .sv-section-heading h2 { font-size: 18px; }
+.sv-home-viewport .sv-category-grid { grid-template-columns: repeat(4,minmax(0,1fr)); gap: 10px; }
+.sv-home-viewport .sv-category-tile { min-height: 82px; height: 82px; }
+.sv-home-viewport .sv-category-tile:nth-child(n+5) { display: none; }
+.sv-home-viewport .sv-category-name { font-size: 10px; }
+@media (min-width: 1500px) {
+  .sv-home-viewport .sv-market-hero { max-width: none; }
+  .sv-home-viewport .sv-category-section { flex-basis: 158px; }
+  .sv-home-viewport .sv-category-tile { height: 90px; }
+}
+@media (max-height: 760px) and (min-width: 901px) {
+  .sv-marketplace.sv-home-viewport { min-height: 620px; }
+  .sv-home-viewport .sv-market-topline { flex-basis: 20px; }
+  .sv-home-viewport .sv-market-header { flex-basis: 60px; }
+  .sv-home-viewport .sv-market-searchbar { flex-basis: 58px; }
+  .sv-home-viewport .sv-category-section { flex-basis: 125px; }
+  .sv-home-viewport .sv-category-tile { height: 68px; min-height: 68px; }
+}
+@media (max-width: 900px) {
+  .sv-marketplace.sv-home-viewport { height: auto; min-height: 100svh; overflow: visible; }
+  .sv-home-viewport .sv-market-hero { flex: none; max-height: none; }
+  .sv-home-viewport .sv-hero-copy,.sv-home-viewport .sv-hero-visual { min-height: 320px; height: auto; }
+  .sv-home-viewport .sv-category-section { flex: none; }
+  .sv-home-viewport .sv-category-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .sv-home-viewport .sv-category-tile:nth-child(n+5) { display: grid; }
+  .sv-home-viewport .sv-mobile-nav { display: flex; }
+}
+@media (max-width: 600px) {
+  .sv-home-viewport .sv-market-hero { margin-top: 4px; }
+  .sv-home-viewport .sv-hero-copy,.sv-home-viewport .sv-hero-visual { min-height: 280px; }
+  .sv-home-viewport .sv-category-section { padding-top: 18px; }
+}
+
+/* Product transitions echo the supplied sneaker video: cinematic entrance,
+   product-led color atmosphere, and smooth movement between product views. */
+@keyframes sv-product-scene-in {
+  0% { opacity: 0; transform: translateY(18px) scale(.985); filter: saturate(.65); }
+  100% { opacity: 1; transform: translateY(0) scale(1); filter: saturate(1); }
+}
+@keyframes sv-product-atmosphere {
+  0% { opacity: .05; transform: scale(1.14); }
+  100% { opacity: .19; transform: scale(1.08); }
+}
+.sv-product-experience { animation: sv-product-scene-in .75s cubic-bezier(.2,.7,.2,1) both; }
+.sv-product-experience::before { animation: sv-product-atmosphere 1.1s ease-out both; }
+.sv-product-gallery { animation: sv-product-scene-in .9s .08s cubic-bezier(.2,.7,.2,1) both; }
+.sv-product-info-panel { animation: sv-product-scene-in .75s .16s cubic-bezier(.2,.7,.2,1) both; }
+.sv-product-gallery img { transition: transform .7s cubic-bezier(.2,.7,.2,1), filter .7s ease; }
+.sv-product-gallery:hover img { transform: scale(1.035); }
+.sv-product-topbar a,.sv-product-crumb a,.sv-product-back-link { transition: color .25s ease, opacity .25s ease; }
+@media (prefers-reduced-motion: reduce) {
+  .sv-product-experience,.sv-product-experience::before,.sv-product-gallery,.sv-product-info-panel { animation: none !important; }
+  .sv-product-gallery img,.sv-product-main-image { transition: none !important; }
+}
