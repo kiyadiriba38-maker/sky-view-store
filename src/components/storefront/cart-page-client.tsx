@@ -3,12 +3,14 @@
 import { useCart } from "@payloadcms/plugin-ecommerce/client/react";
 import Link from "next/link";
 import { useMemo } from "react";
+import Image from "next/image";
 
 import type { Cart } from "@/payload-types";
 
 import { DeleteItemButton, EditItemQuantityButton } from "@/components/shop/cart/cart-controls";
 import { Price } from "@/components/shared/elements-ssr";
 import { buildCartRows } from "@/lib/core/adapter";
+import { resolveMediaUrl } from "@/lib/core/util";
 
 export default function CartPageClient() {
   const { cart, clearCart } = useCart();
@@ -17,7 +19,7 @@ export default function CartPageClient() {
   const subtotal = typeof cart?.subtotal === "number" ? cart.subtotal : 0;
 
   if (!rows.length) {
-    return <div className="rounded-3xl border border-dashed border-white/15 bg-white/[.025] px-6 py-16 text-center"><p className="text-4xl">🛒</p><h2 className="mt-4 text-2xl font-semibold">Your cart is empty</h2><p className="mt-2 text-sm text-white/45">Explore the catalogue and add products to your cart.</p><Link href="/shop" className="mt-7 inline-flex rounded-full bg-cyan-200 px-6 py-3 text-[10px] font-extrabold uppercase tracking-[.15em] text-[#07111a] hover:bg-white">Continue shopping ↗</Link></div>;
+    return <div className="rounded-3xl border border-dashed border-white/15 bg-white/[.025] px-6 py-16 text-center"><p className="text-4xl">🛒</p><h2 className="mt-4 text-2xl font-semibold">Your cart is empty</h2><p className="mt-2 text-sm text-white/45">Explore the catalogue and add products to your cart.</p><Link href="/shop" className="mt-7 inline-flex rounded-full bg-amber-300 px-6 py-3 text-[10px] font-extrabold uppercase tracking-[.15em] text-[#15100a] hover:bg-white">Continue shopping ↗</Link></div>;
   }
 
   return (
@@ -25,12 +27,14 @@ export default function CartPageClient() {
       <section className="space-y-3">
         {rows.map(({ item, data }, index) => {
           const { product, variant, isVariant, price, originalPrice } = data;
-          return <article key={item.id ?? index} className="flex flex-col gap-4 rounded-2xl border border-white/10 bg-[#101a28] p-4 sm:flex-row sm:items-center">
-            <Link href={`/product/${product.slug}`} className="min-w-0 flex-1">
-              <p className="font-semibold">{product.title}</p>
+          const image = product.meta?.image && typeof product.meta.image === "object" ? resolveMediaUrl(product.meta.image) : null;
+          return <article key={item.id ?? index} className="flex flex-col gap-4 rounded-2xl border border-white/10 bg-[#191919] p-4 sm:flex-row sm:items-center">
+            <Link href={`/product/${product.slug}`} className="flex min-w-0 flex-1 items-center gap-4">
+              <span className="relative size-20 shrink-0 overflow-hidden rounded-xl border border-white/10 bg-white/[.04]">{image ? <Image src={image} alt={product.title} fill unoptimized sizes="80px" className="object-cover" /> : <span className="grid h-full place-items-center text-2xl text-amber-200/40">✦</span>}</span><span className="min-w-0"><p className="font-semibold">{product.title}</p>
               {isVariant && variant ? <p className="mt-1 text-xs text-white/45">{Array.isArray(variant.options) ? variant.options.map((option) => typeof option === "object" && option && "label" in option ? String(option.label) : null).filter(Boolean).join(" / ") : ""}</p> : null}
               {typeof price === "number" ? <p className="mt-3 text-sm font-bold"><Price amount={price} /></p> : null}
-              {typeof originalPrice === "number" ? <p className="text-xs text-white/35 line-through"><Price amount={originalPrice} /></p> : null}
+              {typeof originalPrice === "number" && originalPrice > (price ?? 0) ? <p className="text-xs text-white/35 line-through"><Price amount={originalPrice} /></p> : null}
+              </span>
             </Link>
             <div className="flex items-center justify-between gap-4 sm:justify-end">
               <div className="flex h-10 items-center gap-1 rounded-full border border-white/15 px-1"><EditItemQuantityButton item={item as NonNullable<Cart["items"]>[number]} type="minus" /><span className="min-w-6 text-center text-sm">{item.quantity}</span><EditItemQuantityButton item={item as NonNullable<Cart["items"]>[number]} type="plus" /></div>
@@ -39,12 +43,12 @@ export default function CartPageClient() {
           </article>;
         })}
       </section>
-      <aside className="h-fit rounded-2xl border border-cyan-200/20 bg-[#101a28] p-6">
-        <p className="text-[9px] font-bold uppercase tracking-[.2em] text-cyan-200">Order summary</p>
+      <aside className="h-fit rounded-2xl border border-amber-300/20 bg-[#191919] p-6">
+        <p className="text-[9px] font-bold uppercase tracking-[.2em] text-amber-300">Order summary</p>
         <div className="mt-6 flex justify-between text-sm text-white/55"><span>Items</span><span>{quantity}</span></div>
         <div className="mt-4 flex justify-between border-t border-white/10 pt-4 text-base font-bold"><span>Subtotal</span><Price amount={subtotal} /></div>
         <p className="mt-4 text-xs leading-5 text-white/40">Shipping and final details are confirmed during the demo checkout.</p>
-        <Link href="/checkout" className="mt-6 flex w-full justify-center rounded-full bg-cyan-200 px-5 py-4 text-[10px] font-extrabold uppercase tracking-[.15em] text-[#07111a] transition hover:bg-white">Continue to checkout ↗</Link>
+        <Link href="/checkout" className="mt-6 flex w-full justify-center rounded-full bg-amber-300 px-5 py-4 text-[10px] font-extrabold uppercase tracking-[.15em] text-[#15100a] transition hover:bg-white">Continue to checkout ↗</Link>
         <button type="button" onClick={() => clearCart()} className="mt-4 w-full text-center text-[9px] font-bold uppercase tracking-[.15em] text-white/40 transition hover:text-white">Clear cart</button>
       </aside>
     </div>

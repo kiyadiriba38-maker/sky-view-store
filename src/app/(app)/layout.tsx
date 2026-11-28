@@ -15,6 +15,10 @@ import { generateMetadataLayout } from "@/lib/seo/metadata";
 
 import "@/lib/styles/globals.css";
 
+// This layout reads CMS settings from Postgres; keep it request-time so
+// production builds do not require a live database during static prerendering.
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata(): Promise<Metadata> {
   return generateMetadataLayout();
 }
@@ -35,8 +39,8 @@ export default async function RootLayout({
       <body>
         <AnalyticsLayout />
         <Providers>
-          <div className="min-h-screen flex flex-col">
-            <div className="layout-container flex flex-col flex-1">
+          <div className="sv-page sv-store min-h-screen flex flex-col">
+            <div className="layout-container sv-app-shell flex flex-col flex-1">
               {settings.general?.logo ? (
                 <Suspense
                   fallback={

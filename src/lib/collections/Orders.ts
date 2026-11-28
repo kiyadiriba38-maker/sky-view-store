@@ -1,10 +1,12 @@
 import { addDataAndFileToRequest } from "payload";
+import { sql } from "@payloadcms/db-postgres";
 
-import type { Variant } from "@/lib/core/types/payload-types";
+import type { Product, Variant } from "@/lib/core/types/payload-types";
 import type { CollectionOverride } from "@payloadcms/plugin-ecommerce/types";
 import type {
   CollectionAfterChangeHook,
   CollectionBeforeValidateHook,
+  PayloadRequest,
 } from "payload";
 
 import {
@@ -16,6 +18,8 @@ import { revalidate } from "@/lib/collections/hooks";
 import appConfig from "@/lib/core/config";
 import { getOrderDashboard } from "@/lib/core/dal/order-dashboard";
 import { OrderNotifier } from "@/lib/core/OrderNotifier";
+import { createStoreNotification } from "@/lib/core/notifications";
+import { createStoreAuditLog } from "@/lib/core/audit-log";
 import {
   type CartItem,
   type OrderItem,
@@ -29,6 +33,50 @@ import {
   verifyStripePaymentIntent,
 } from "@/lib/stripe/server";
 
+type InventoryCollection = typeof CollectionName.products | "variants";
+
+const changeInventoryAtomically = async ({
+  req,
+  collection,
+  id,
+  quantity,
+  direction,
+}: {
+  req: PayloadRequest;
+  collection: InventoryCollection;
+  id: number | string;
+  quantity: number;
+  direction: "reserve" | "restore";
+}) => {
+  const adapter = req.payload.db as unknown as {
+    execute: (args: { db?: unknown; sql: unknown }) => Promise<{ rows?: Array<{ id: number | string }> }>;
+    sessions?: Record<string, { db: unknown }>;
+  };
+  const transactionID = await req.transactionID;
+  const transaction = transactionID
+    ? adapter.sessions?.[String(transactionID)]?.db
+    : undefined;
+  const tableName = collection === "variants" ? '"variants"' : '"products"';
+  const statement = direction === "reserve"
+    ? sql`UPDATE ${sql.raw(tableName)}
+        SET "inventory" = "inventory" - ${quantity}
+        WHERE "id" = ${id} AND "inventory" >= ${quantity}
+        RETURNING "id"`
+    : sql`UPDATE ${sql.raw(tableName)}
+        SET "inventory" = "inventory" + ${quantity}
+        WHERE "id" = ${id}
+        RETURNING "id"`;
+
+  const result = await adapter.execute({ db: transaction, sql: statement });
+  if (!result.rows?.length) {
+    throw new Error(
+      direction === "reserve"
+        ? "Stock changed while checkout was being completed. Please refresh your cart and try again."
+        : "Could not restore inventory for the cancelled order.",
+    );
+  }
+};
+
 export const Orders: CollectionOverride = ({ defaultCollection }) => {
   return {
     ...defaultCollection,
@@ -41,7 +89,13 @@ export const Orders: CollectionOverride = ({ defaultCollection }) => {
 
     access: {
       ...adminOnlyAccess,
-      create: () => true,
+      read: ({ req }) => {
+        if (isAdmin({ req })) return true;
+        if (!req.user) return false;
+        return { customer: { equals: req.user.id } };
+      },
+      // Checkout is account-only; never allow anonymous order creation.
+      create: ({ req }) => Boolean(req.user),
     },
 
     fields: [
@@ -102,6 +156,12 @@ export const Orders: CollectionOverride = ({ defaultCollection }) => {
         admin: { position: "sidebar", readOnly: true },
       },
       {
+        name: "isDemoOrder",
+        type: "checkbox",
+        defaultValue: true,
+        admin: { position: "sidebar", readOnly: true, description: "All orders remain simulated until real payments are approved and activated." },
+      },
+      {
         name: "demoPaymentMethod",
         type: "text",
         required: false,
@@ -111,6 +171,29 @@ export const Orders: CollectionOverride = ({ defaultCollection }) => {
           readOnly: true,
           description: "Demo selection only. No payment was processed.",
         },
+      },
+      {
+        name: "returnRequestStatus",
+        type: "select",
+        defaultValue: "none",
+        options: [
+          { label: "No request", value: "none" },
+          { label: "Requested", value: "requested" },
+          { label: "Approved", value: "approved" },
+          { label: "Rejected", value: "rejected" },
+          { label: "Completed", value: "completed" },
+        ],
+        admin: { position: "sidebar", description: "Customer return request review status." },
+      },
+      {
+        name: "returnReason",
+        type: "textarea",
+        admin: { position: "sidebar", readOnly: true },
+      },
+      {
+        name: "returnRequestedAt",
+        type: "date",
+        admin: { position: "sidebar", readOnly: true },
       },
       // Stripe integration touch point 1/2 — see @/lib/stripe/server
       stripePaymentIntentField,
@@ -146,6 +229,7 @@ export const Orders: CollectionOverride = ({ defaultCollection }) => {
           { name: "quantity", type: "number", required: true },
           { name: "unitPrice", type: "number", required: true },
           { name: "lineTotal", type: "number", required: true },
+          { name: "isDemo", type: "checkbox", defaultValue: false, admin: { readOnly: true } },
         ],
       },
     ],
@@ -156,6 +240,81 @@ export const Orders: CollectionOverride = ({ defaultCollection }) => {
         path: "/dashboard",
         method: "get",
         handler: getOrderDashboard,
+      },
+      {
+        path: "/:id/return-request",
+        method: "post",
+        handler: async (req) => {
+          if (!req.user) {
+            return Response.json({ message: "Sign in to request a return." }, { status: 401 });
+          }
+
+          await addDataAndFileToRequest(req);
+          const id = req.routeParams?.id;
+          const reason = typeof req.data?.reason === "string" ? req.data.reason.trim() : "";
+          if (!id || reason.length < 10 || reason.length > 1000) {
+            return Response.json({ message: "Please provide a return reason between 10 and 1,000 characters." }, { status: 400 });
+          }
+
+          const order = await req.payload.findByID({
+            collection: "orders",
+            id: String(id),
+            depth: 0,
+            req,
+          });
+          const customer = typeof order.customer === "object" && order.customer
+            ? order.customer.id
+            : order.customer;
+          if (String(customer ?? "") !== String(req.user.id)) {
+            return Response.json({ message: "You can only request a return for your own order." }, { status: 403 });
+          }
+          if (order.status !== OrderStatus.DONE) {
+            return Response.json({ message: "Return requests are available after an order is marked delivered." }, { status: 400 });
+          }
+
+          const returnStatus = (order as typeof order & { returnRequestStatus?: string }).returnRequestStatus ?? "none";
+          if (returnStatus !== "none") {
+            return Response.json({ message: "A return request has already been submitted for this order." }, { status: 409 });
+          }
+
+          const updated = await req.payload.update({
+            collection: "orders",
+            id: String(id),
+            data: {
+              returnRequestStatus: "requested",
+              returnReason: reason,
+              returnRequestedAt: new Date().toISOString(),
+            } as never,
+            overrideAccess: true,
+            req,
+            context: { skipOrderNotification: true },
+          });
+
+          const isDemo = Boolean((order as typeof order & { isDemoOrder?: boolean }).isDemoOrder);
+          await createStoreNotification(req.payload, {
+            user: req.user.id,
+            type: "return_update",
+            title: "Return request received",
+            message: isDemo
+              ? "Your demo return request has been recorded. No payment or refund was processed."
+              : "Your return request has been submitted for review.",
+            href: "/account/orders",
+            relatedOrder: order.id,
+          });
+          await createStoreAuditLog(req.payload, {
+            actor: req.user.id,
+            action: "return_requested",
+            targetCollection: "orders",
+            targetId: order.id,
+            summary: `Return request submitted for order #${order.id}.`,
+          });
+          return Response.json({
+            message: isDemo
+              ? "Demo return request recorded. This only simulates the review process; no real refund or payment is involved."
+              : "Your return request has been submitted for review.",
+            order: updated,
+          });
+        },
       },
       {
         path: "/:id/status",
@@ -212,7 +371,91 @@ export const Orders: CollectionOverride = ({ defaultCollection }) => {
           []) as CollectionAfterChangeHook[]),
 
         async (args) => {
-          const { operation, doc, req } = args;
+          const { operation, doc, req, previousDoc } = args;
+
+          // Restore stock once when an order is cancelled. The status
+          // transition rules below prevent reopening a cancelled order,
+          // which would otherwise make repeated restocking possible.
+          if (
+            operation === "update" &&
+            doc.status === OrderStatus.CANCELED &&
+            previousDoc?.status !== OrderStatus.CANCELED
+          ) {
+            const cancelledItems: OrderItem[] = Array.isArray(doc.items) ? doc.items : [];
+            const restoredProductIds = new Set<number>();
+            for (const item of cancelledItems) {
+              const quantity = Number(item?.quantity ?? 0);
+              if (!Number.isSafeInteger(quantity) || quantity < 1) continue;
+              const variantId = typeof item.variant === "object" ? item.variant?.id : item.variant;
+              const productId = typeof item.product === "object" ? item.product?.id : item.product;
+              const targetId = variantId ?? productId;
+              if (!targetId) continue;
+              await changeInventoryAtomically({
+                req,
+                collection: variantId ? "variants" : CollectionName.products,
+                id: targetId,
+                quantity,
+                direction: "restore",
+              });
+              if (productId) restoredProductIds.add(productId);
+            }
+
+            if (restoredProductIds.size) {
+              const products = await req.payload.find({
+                collection: CollectionName.products,
+                depth: 0,
+                pagination: false,
+                limit: restoredProductIds.size,
+                where: { id: { in: Array.from(restoredProductIds) } },
+                select: { slug: true },
+              });
+              for (const product of products.docs) {
+                if (product.slug) revalidate(`${CollectionName.products}-${product.slug}`);
+              }
+            }
+          }
+
+          const completedOrder = doc as typeof doc & { isDemoOrder?: boolean };
+          if (
+            operation === "update" &&
+            completedOrder.status === OrderStatus.DONE &&
+            previousDoc?.status !== OrderStatus.DONE &&
+            completedOrder.isDemoOrder !== true
+          ) {
+            const sellerIds = new Set<number | string>();
+            const completedItems: OrderItem[] = Array.isArray(doc.items) ? doc.items : [];
+            for (const item of completedItems) {
+              const productId = typeof item.product === "object" ? item.product?.id : item.product;
+              if (!productId) continue;
+              const product = await req.payload.findByID({
+                collection: CollectionName.products,
+                id: productId,
+                depth: 0,
+                overrideAccess: true,
+              }) as Product & { seller?: number | string | { id: number | string } };
+              const sellerId = typeof product.seller === "object" && product.seller
+                ? product.seller.id
+                : product.seller;
+              if (sellerId) sellerIds.add(sellerId);
+            }
+
+            for (const sellerId of sellerIds) {
+              const seller = await req.payload.findByID({
+                collection: "sellers" as never,
+                id: sellerId,
+                depth: 0,
+                overrideAccess: true,
+              } as never) as unknown as { completedOrders?: number };
+              await req.payload.update({
+                collection: "sellers" as never,
+                id: sellerId,
+                data: { completedOrders: Number(seller.completedOrders ?? 0) + 1 },
+                overrideAccess: true,
+                req,
+              } as never);
+            }
+          }
+
           if (operation !== "create" || req.context?.skipOrderNotification)
             return doc;
 
@@ -235,11 +478,12 @@ export const Orders: CollectionOverride = ({ defaultCollection }) => {
             const targetId = variantId ?? productId;
             if (!targetId) continue;
 
-            await req.payload.db.updateOne({
+            await changeInventoryAtomically({
+              req,
               collection: variantId ? "variants" : CollectionName.products,
               id: targetId,
-              data: { inventory: { $inc: quantity * -1 } },
-              req,
+              quantity,
+              direction: "reserve",
             });
 
             if (productId) touchedProductIds.add(productId);
@@ -266,6 +510,43 @@ export const Orders: CollectionOverride = ({ defaultCollection }) => {
         },
 
         async (args) => {
+          const { operation, doc, req, previousDoc } = args;
+          if (req.context?.skipOrderNotification) return doc;
+          const customerId = typeof doc.customer === "object" && doc.customer
+            ? doc.customer.id
+            : doc.customer;
+          if (customerId && operation === "create") {
+            await createStoreNotification(req.payload, {
+              user: customerId,
+              type: "order_update",
+              title: "Order received",
+              message: `Order #${doc.id} was created in demo mode. No payment was processed.`,
+              href: "/account/orders",
+              relatedOrder: doc.id,
+            });
+          } else if (customerId && operation === "update" && previousDoc?.status !== doc.status) {
+            if (req.user?.roles?.includes("admin")) {
+              await createStoreAuditLog(req.payload, {
+                actor: req.user.id,
+                action: "order_status_changed",
+                targetCollection: "orders",
+                targetId: doc.id,
+                summary: `Order #${doc.id} status changed from ${String(previousDoc?.status ?? "unknown")} to ${String(doc.status ?? "unknown")}.`,
+              });
+            }
+            await createStoreNotification(req.payload, {
+              user: customerId,
+              type: "order_update",
+              title: "Order status updated",
+              message: `Order #${doc.id} is now marked ${String(doc.status ?? "updated")}.`,
+              href: "/account/orders",
+              relatedOrder: doc.id,
+            });
+          }
+          return doc;
+        },
+
+        async (args) => {
           const { operation, doc, req } = args;
           if (
             operation !== "create" ||
@@ -285,11 +566,31 @@ export const Orders: CollectionOverride = ({ defaultCollection }) => {
         async ({ data, req, operation }) => {
           if (!data) return data;
 
-          if (operation === "create") data.status = OrderStatus.NEW;
+          // Order line items and totals are immutable snapshots after creation.
+          // Status changes and return-request updates must never be rebuilt
+          // from a cart that may have changed or been emptied since checkout.
+          if (operation !== "create") return data;
+
+          if (operation === "create") {
+            if (!req.user) throw new Error("Sign in before placing an order.");
+            data.status = OrderStatus.NEW;
+            data.isDemoOrder = !stripeConfig.ENABLED;
+            data.customer = req.user.id;
+            // Order notifications must go only to the authenticated account
+            // address, never an arbitrary address supplied in the request.
+            data.email = req.user.email;
+          }
 
           const rawCart = data.cart;
           const cartId = typeof rawCart === "object" ? rawCart?.id : rawCart;
-          if (!cartId) return data;
+          if (!cartId) {
+            if (operation === "create") throw new Error("A valid cart is required to place an order.");
+            return data;
+          }
+
+          if (operation === "create" && !req.user) {
+            throw new Error("Sign in before placing an order.");
+          }
 
           const cart = await req.payload.findByID({
             collection: "carts",
@@ -297,61 +598,84 @@ export const Orders: CollectionOverride = ({ defaultCollection }) => {
             depth: 3,
           });
 
-          const items: CartItem[] = Array.isArray(cart?.items)
-            ? cart.items
-            : [];
-
           if (operation === "create") {
-            for (const item of items) {
-              const productId =
-                typeof item.product === "object"
-                  ? item.product?.id
-                  : item.product;
-              const variantId =
-                typeof item.variant === "object"
-                  ? item.variant?.id
-                  : item.variant;
-
-              if (!variantId) continue;
-
-              const variant =
-                typeof item.variant === "object" && item.variant
-                  ? item.variant
-                  : await req.payload.findByID({
-                      collection: "variants",
-                      id: variantId,
-                      depth: 0,
-                      select: { product: true },
-                    });
-              const variantProductId =
-                typeof variant.product === "object"
-                  ? variant.product?.id
-                  : variant.product;
-
-              if (
-                !productId ||
-                String(variantProductId) !== String(productId)
-              ) {
-                throw new Error("Cart variant does not belong to its product.");
-              }
+            const cartCustomer = (cart as typeof cart & { customer?: number | string | { id: number | string } }).customer;
+            const cartCustomerId = typeof cartCustomer === "object" && cartCustomer
+              ? cartCustomer.id
+              : cartCustomer;
+            if (!req.user || String(cartCustomerId ?? "") !== String(req.user.id)) {
+              throw new Error("This cart does not belong to your signed-in account.");
             }
           }
 
-          // Stripe integration touch point 2/2 — see @/lib/stripe/server
-          if (
-            stripeConfig.ENABLED &&
-            operation === "create" &&
-            !isAdmin({ req })
-          ) {
-            await verifyStripePaymentIntent({
-              paymentIntentId: data.paymentIntentId,
-              cartId,
-              expectedAmount: cart?.subtotal ?? 0,
-              payload: req.payload,
-            });
+          const items: CartItem[] = Array.isArray(cart?.items) ? cart.items : [];
+          const verifiedItems: CartItem[] = [];
+
+          if (operation === "create") {
+            if (!items.length) throw new Error("Your cart is empty.");
+
+            for (const item of items) {
+              const quantity = Number(item?.quantity ?? 0);
+              if (!Number.isSafeInteger(quantity) || quantity < 1) {
+                throw new Error("Cart quantities must be positive whole numbers.");
+              }
+
+              const productId = typeof item.product === "object"
+                ? item.product?.id
+                : item.product;
+              if (!productId) throw new Error("A cart item is missing its product.");
+
+              // Always re-read current product and variant records. Never trust
+              // prices, status, or inventory copied into a stale client cart.
+              const product = await req.payload.findByID({
+                collection: CollectionName.products,
+                id: productId,
+                depth: 0,
+              }) as Product & { listingStatus?: string; isDemo?: boolean };
+
+              if (
+                product._status !== "published" ||
+                ["pending", "rejected", "suspended"].includes(product.listingStatus ?? "")
+              ) {
+                throw new Error("A product in your cart is no longer available.");
+              }
+
+              const variantId = typeof item.variant === "object"
+                ? item.variant?.id
+                : item.variant;
+              const variant = variantId
+                ? await req.payload.findByID({
+                    collection: "variants",
+                    id: variantId,
+                    depth: 0,
+                  }) as Variant
+                : null;
+
+              if (variant) {
+                const variantProductId = typeof variant.product === "object"
+                  ? variant.product?.id
+                  : variant.product;
+                if (String(variantProductId) !== String(productId)) {
+                  throw new Error("Cart variant does not belong to its product.");
+                }
+              }
+
+              const available = Number(variant?.inventory ?? product.inventory ?? 0);
+              if (available < quantity) {
+                throw new Error(`Not enough stock for ${product.title}. Available: ${available}.`);
+              }
+
+              verifiedItems.push({
+                ...item,
+                product,
+                ...(variant ? { variant } : {}),
+              } as CartItem);
+            }
+          } else {
+            verifiedItems.push(...items);
           }
 
-          const snapshot = items
+          const snapshot = verifiedItems
             .map((it) => {
               const quantity = Number(it?.quantity ?? 0);
               if (!quantity) return null;
@@ -393,6 +717,7 @@ export const Orders: CollectionOverride = ({ defaultCollection }) => {
                 quantity,
                 unitPrice,
                 lineTotal: unitPrice * quantity,
+                isDemo: Boolean((product as Product & { isDemo?: boolean }).isDemo),
               };
             })
             .filter(
@@ -405,11 +730,29 @@ export const Orders: CollectionOverride = ({ defaultCollection }) => {
                 quantity: number;
                 unitPrice: number;
                 lineTotal: number;
+                isDemo: boolean;
               } => Boolean(x),
             );
 
+          const verifiedTotal = snapshot.reduce((total, item) => total + item.lineTotal, 0);
+
+          // Verify payment against the same server-calculated amount stored
+          // on the order, not a potentially stale cart subtotal.
+          if (
+            stripeConfig.ENABLED &&
+            operation === "create" &&
+            !isAdmin({ req })
+          ) {
+            await verifyStripePaymentIntent({
+              paymentIntentId: data.paymentIntentId,
+              cartId,
+              expectedAmount: verifiedTotal,
+              payload: req.payload,
+            });
+          }
+
           data.items = snapshot;
-          data.amount = cart.subtotal;
+          data.amount = verifiedTotal;
 
           return data;
         },

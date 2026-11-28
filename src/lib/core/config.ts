@@ -1,9 +1,9 @@
-type AppLocale = "en" | "he";
+type AppLocale = "en" | "am" | "om" | "he";
 
 type LocaleConfig = {
   lang: AppLocale;
   dir: "ltr" | "rtl";
-  locale: "en-ET" | "he-IL";
+  locale: "en-ET" | "am-ET" | "om-ET" | "he-IL";
   isRtl: boolean;
   currency: "ETB" | "ILS";
 };
@@ -18,6 +18,21 @@ const LOCALE_CONFIG: Record<AppLocale, LocaleConfig> = {
     isRtl: false,
     currency: "ETB",
   },
+  am: {
+    lang: "am",
+    dir: "ltr",
+    locale: "am-ET",
+    isRtl: false,
+    currency: "ETB",
+  },
+  om: {
+    lang: "om",
+    dir: "ltr",
+    locale: "om-ET",
+    isRtl: false,
+    currency: "ETB",
+  },
+  // Retained for legacy Payload admin translation compatibility.
   he: {
     lang: "he",
     dir: "rtl",
@@ -74,8 +89,12 @@ export const appConfig: AppConfig = {
   SERVER_URL: (process.env.NEXT_PUBLIC_SERVER_URL ??
     process.env.NEXT_PUBLIC_BASE_URL) as string,
   LOCAL: LOCALE_CONFIG[
-    (process.env.NEXT_PUBLIC_LANG as AppLocale) ?? "en"
-  ] as LocaleConfig,
+    process.env.NEXT_PUBLIC_LANG === "am" ||
+    process.env.NEXT_PUBLIC_LANG === "om" ||
+    process.env.NEXT_PUBLIC_LANG === "he"
+      ? process.env.NEXT_PUBLIC_LANG
+      : "en"
+  ],
   DATABASE_URL: process.env.DATABASE_URL as string,
 
   PREVIEW_SECRET: process.env.PREVIEW_SECRET as string,

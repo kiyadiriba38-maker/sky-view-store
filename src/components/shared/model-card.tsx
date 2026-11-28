@@ -12,8 +12,9 @@ import { cn, getSizedVariant, isRtl } from "@/lib/core/util";
 
 export type CardModel = Product | Page | Category;
 
-const resolveMedia = (media: number | SeoMedia): SeoMedia | null =>
-  typeof media === "object" ? media : null;
+const resolveMedia = (
+  media: number | SeoMedia | null | undefined,
+): SeoMedia | null => (typeof media === "object" && media !== null ? media : null);
 
 const resolveModel = (model: CardModel, route: RoutePath) => {
   if (route === RoutePath.page) {

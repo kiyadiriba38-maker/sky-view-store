@@ -16,7 +16,7 @@ interface Props {
   height?: number;
   imgClassName?: string;
   priority?: boolean;
-  resource: UploadMedia;
+  resource: UploadMedia | null | undefined;
   size?: string;
   variant?: MediaVariant;
   videoClassName?: string;
@@ -32,7 +32,7 @@ const MediaImage = ({
   size: sizeFromProps,
   variant,
   width: widthFromProps,
-}: Props) => {
+}: Props & { resource: UploadMedia }) => {
   const sizedResource = getSizedVariant(resource, variant);
   const width =
     widthFromProps ?? sizedResource?.width ?? resource.width ?? undefined;
@@ -58,7 +58,7 @@ const MediaImage = ({
   );
 };
 
-const MediaVideo = ({ resource, videoClassName }: Props) => (
+const MediaVideo = ({ resource, videoClassName }: Props & { resource: UploadMedia }) => (
   <video
     autoPlay
     controls

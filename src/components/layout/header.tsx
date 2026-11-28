@@ -15,6 +15,7 @@ import type { PayloadAdminBarProps } from "@payloadcms/admin-bar";
 import type { ReactNode } from "react";
 
 import AccessibilityBar from "@/components/layout/accessibility-bar";
+import LanguageSwitcher from "@/components/layout/language-switcher";
 import Search from "@/components/layout/search";
 import CmsLink from "@/components/shared/cms-link";
 import ImageVideo from "@/components/shared/image-video";
@@ -98,7 +99,7 @@ const ThemeToggle = () => {
   return (
     <Button
       variant="outline"
-      className="border-0 bg-white shadow-sm transition hover:bg-neutral-100 hover:shadow-md dark:border-neutral-700 dark:bg-neutral-900 dark:hover:bg-neutral-800 mb-1"
+      className="mb-1 border border-amber-300/20 bg-[#17130e]/80 text-amber-200 shadow-[0_6px_22px_rgba(0,0,0,0.24)] backdrop-blur-xl transition hover:border-amber-300/45 hover:bg-[#2a2115]"
       size="icon"
       onClick={() => setTheme(isDark ? "light" : "dark")}
       aria-label={t("toggle_theme")}
@@ -106,7 +107,7 @@ const ThemeToggle = () => {
       {isDark ? (
         <FiSun className="h-7 w-7 text-yellow-400" />
       ) : (
-        <FiMoon className="h-7 w-7 text-blue-400" />
+        <FiMoon className="h-7 w-7 text-amber-300" />
       )}
     </Button>
   );
@@ -152,7 +153,7 @@ const MobileMenu = ({ navItems }: { navItems: HeaderNavItems }) => {
         type="button"
         variant="outline"
         size="icon"
-        className="mb-1 border-0 bg-white shadow-sm transition hover:bg-neutral-100 hover:shadow-md md:hidden dark:border-neutral-700 dark:bg-neutral-900 dark:hover:bg-neutral-800"
+        className="mb-1 border border-amber-300/20 bg-[#17130e]/80 text-amber-200 shadow-[0_6px_22px_rgba(0,0,0,0.24)] backdrop-blur-xl transition hover:border-amber-300/45 hover:bg-[#2a2115] md:hidden"
         onClick={() => setOpen(true)}
         aria-label="Open navigation menu"
         aria-expanded={open}
@@ -168,7 +169,7 @@ const MobileMenu = ({ navItems }: { navItems: HeaderNavItems }) => {
               onClick={() => setOpen(false)}
             >
               <div
-                className="absolute top-0 start-0 flex h-full w-[min(20rem,85vw)] flex-col gap-6 bg-background p-4 shadow-xl"
+                className="absolute top-0 start-0 flex h-full w-[min(20rem,85vw)] flex-col gap-6 border-e border-amber-300/15 bg-[#141414] p-4 text-white shadow-2xl"
                 role="dialog"
                 aria-modal="true"
                 aria-label="Navigation menu"
@@ -178,7 +179,7 @@ const MobileMenu = ({ navItems }: { navItems: HeaderNavItems }) => {
                   type="button"
                   variant="outline"
                   size="icon"
-                  className="self-start border-0"
+                  className="self-start border border-amber-300/20 bg-white/5 text-amber-200 hover:bg-white/10"
                   onClick={() => setOpen(false)}
                   aria-label="Close navigation menu"
                 >
@@ -218,7 +219,7 @@ const SearchToggle = ({
     <Button
       variant="outline"
       size="icon"
-      className="relative flex items-center justify-center border-0 mb-1 border-neutral-300 bg-white shadow-sm transition hover:bg-neutral-100 hover:shadow-md dark:border-neutral-700 dark:bg-neutral-900 dark:hover:bg-neutral-800"
+      className="relative mb-1 flex items-center justify-center border border-amber-300/20 bg-[#17130e]/80 text-amber-200 shadow-[0_6px_22px_rgba(0,0,0,0.24)] backdrop-blur-xl transition hover:border-amber-300/45 hover:bg-[#2a2115]"
       onClick={onClick}
       aria-label={t("search")}
       aria-expanded={open}
@@ -237,7 +238,7 @@ const HeaderBar = ({
   const [searchOpen, setSearchOpen] = useState(false);
 
   return (
-    <div className="relative border-b bg-background md:px-18">
+    <div className="relative border-b border-white/10 bg-[#121212]/85 text-white shadow-[0_12px_36px_rgba(0,0,0,0.2)] backdrop-blur-2xl md:px-18">
       <nav className="container flex min-w-0 items-center justify-between px-2 py-1 sm:px-4 md:max-h-17 md:items-end md:px-0">
         <div className="grid w-full min-w-0 grid-cols-3 items-center gap-2 sm:gap-3 md:items-end">
           <div className="flex shrink-0 items-center justify-start gap-2">
@@ -256,6 +257,7 @@ const HeaderBar = ({
 
           <div className="flex shrink-0 items-center justify-end gap-2 md:gap-4">
             {headerContent}
+            <LanguageSwitcher />
             <ThemeToggle />
             <CartModal />
           </div>

@@ -9,7 +9,7 @@ export const metadata: Metadata = { title: "Shop all | Sky View Store", descript
 
 export default async function ShopPage() {
   const products = await DAL.queryAllProducts();
-  return <StorefrontShell eyebrow="Marketplace catalogue / 01" title="Explore the marketplace." description="Discover 1,000+ clearly labelled demo listings alongside real products published by Sky View Store and approved sellers. Demo listings simulate the shopping experience and are not real offers for sale.">
+  return <StorefrontShell page="shop" eyebrow="Marketplace catalogue / 01" title="Explore the marketplace." description="Discover 1,000+ clearly labelled demo listings alongside real products published by Sky View Store and approved sellers. Demo listings simulate the shopping experience and are not real offers for sale.">
     <DemoShopBrowser realProducts={products} />
   </StorefrontShell>;
 }

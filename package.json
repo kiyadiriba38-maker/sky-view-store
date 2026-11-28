@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "next dev -p 3344",
-    "build": "pnpm payload migrate && next build",
+    "build": "pnpm payload migrate && pnpm generate:types && pnpm typecheck && pnpm lint && next build",
     "start": "next start",
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit",
@@ -17,9 +17,10 @@
     "seed": "pnpm tsx  seed/run.ts",
     "reset": "yes | payload migrate:fresh",
     "generate:importmap": "payload generate:importmap",
-    "generate:types": "payload generate:types",
+    "generate:types": "PAYLOAD_CONFIG_PATH=src/payload.config.ts payload generate:types",
     "reinstall": "rm -rf tsconfig.tsbuildinfo .next node_modules  pnpm-lock.yaml && pnpm install",
-    "reinstall:full": "rm -rf pnpm-lock.yaml .next .turbo node_modules && pnpm store prune && pnpm install"
+    "reinstall:full": "rm -rf pnpm-lock.yaml .next .turbo node_modules && pnpm store prune && pnpm install",
+    "seed:marketplace": "pnpm tsx seed/marketplace-demo.ts"
   },
   "dependencies": {
     "@payloadcms/admin-bar": "3.90.2",

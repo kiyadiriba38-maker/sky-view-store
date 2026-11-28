@@ -26,5 +26,6 @@ export type OrderDashboardData = {
     amount: number;
     status: DashboardOrderStatus;
     createdAt: string;
+    isDemoOrder?: boolean;
   }>;
 };

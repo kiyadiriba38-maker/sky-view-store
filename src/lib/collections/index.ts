@@ -1,6 +1,9 @@
 export { Category } from "./Category";
 export { Carts } from "./Carts";
 export { Reviews } from "./Reviews";
+export { Notifications } from "./Notifications";
+export { Reports } from "./Reports";
+export { AuditLogs } from "./AuditLogs";
 export { GalleryMedia, Media, SeoMedia } from "./MediaCollections";
 export { Orders } from "./Orders";
 export { Pages } from "./Pages";
@@ -11,3 +14,5 @@ export { Users } from "./Users";
 export { Variants } from "./Variants";
 export { VariantOptions } from "./VariantOptions";
 export { VariantTypes } from "./VariantTypes";
+
+export { Sellers } from "./Sellers";

@@ -18,7 +18,7 @@ const DesktopNavigation = ({ navItems }: { navItems: HeaderNavItems }) => {
   return (
     <nav
       aria-label="Main navigation"
-      className=" hidden border-b bg-background md:block md:px-18"
+      className="hidden w-full border-b border-white/10 bg-[#121212]/80 shadow-[0_10px_35px_rgba(0,0,0,0.16)] backdrop-blur-2xl md:block"
     >
       <div className="container flex items-center justify-center gap-6 py-2">
         {navItems.map(({ link, id }, index) => (
@@ -26,7 +26,7 @@ const DesktopNavigation = ({ navItems }: { navItems: HeaderNavItems }) => {
             key={id ?? index}
             link={link}
             appearance="link"
-            className="text-sm font-medium text-neutral-700 hover:text-foreground dark:text-neutral-300"
+            className="rounded-full px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-white/65 transition-colors duration-200 hover:bg-white/[0.06] hover:text-amber-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/70 dark:text-white/65"
           />
         ))}
       </div>

@@ -5,7 +5,6 @@ import { postgresAdapter } from "@payloadcms/db-postgres";
 import { nodemailerAdapter } from "@payloadcms/email-nodemailer";
 import { buildConfig } from "payload";
 import { en } from "payload/i18n/en";
-import { he } from "payload/i18n/he";
 import sharp from "sharp";
 
 import {
@@ -17,6 +16,10 @@ import {
   Category,
   Users,
   Reviews,
+  Sellers,
+  Notifications,
+  Reports,
+  AuditLogs,
 } from "@/lib/collections";
 import { baseEditor } from "@/lib/collections/base-fields";
 import appConfig from "@/lib/core/config";
@@ -61,14 +64,16 @@ export default buildConfig({
   },
   globals: [SiteSettings],
 
+  // Keep the Payload admin UI in English; storefront language selection
+  // is handled independently by the customer-facing locale provider.
   i18n: {
-    fallbackLanguage: appConfig.LOCAL.lang,
-    supportedLanguages: appConfig.LOCAL.lang === "he" ? { he } : { en },
+    fallbackLanguage: "en",
+    supportedLanguages: { en },
   },
 
   sharp,
 
-  collections: [Users, Pages, Category, Media, SeoMedia, GalleryMedia, Reviews],
+  collections: [Users, Pages, Category, Media, SeoMedia, GalleryMedia, Reviews, Sellers, Notifications, Reports, AuditLogs],
   db: postgresAdapter({
     pool: {
       connectionString: appConfig.DATABASE_URL,

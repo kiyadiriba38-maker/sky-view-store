@@ -1,4 +1,4 @@
-import type { Page } from "@/lib/core/types/payload-types";
+import type { SeoMedia } from "@/lib/core/types/payload-types";
 import type { Metadata } from "next";
 
 import appConfig from "@/lib/core/config";
@@ -31,7 +31,13 @@ export const generateMetadataLayout = (): Metadata => {
   };
 };
 
-type MetadataModel = Pick<Page, "meta">;
+type MetadataModel = {
+  meta: {
+    title?: string | null;
+    description?: string | null;
+    image?: number | SeoMedia | null;
+  };
+};
 
 const routeByCollection: Record<CollectionName, string> = {
   [CollectionName.pages]: "",
@@ -69,16 +75,16 @@ export const buildMetadataByModel = (
 
   return {
     title,
-    description,
+    description: description ?? undefined,
     twitter: {
       title,
-      description,
+      description: description ?? undefined,
       card: "summary_large_image",
       ...(imageUrl ? { images: [imageUrl] } : {}),
     },
     openGraph: {
       title,
-      description,
+      description: description ?? undefined,
       url,
       ...(imageUrl
         ? {
@@ -87,7 +93,7 @@ export const buildMetadataByModel = (
                 url: imageUrl,
                 width: 1200,
                 height: 630,
-                ...(image?.alt ? { alt: image.alt } : {}),
+                alt: image?.alt ?? "",
               },
             ],
           }

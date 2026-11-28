@@ -1,141 +1,64 @@
-# Next.js + Payload E-commerce Starter
+# Sky View Store
 
-Production-ready e-commerce starter built with Next.js 16 and Payload CMS 3.
+A futuristic, mobile-responsive marketplace for Ethiopia, built with Next.js 16, React 19, Payload CMS 3, and PostgreSQL.
 
-Clone, configure, and launch your store.
+## Marketplace features
 
----
+- Responsive storefront with search, categories, filters, sorting, deals, and product comparison
+- Product detail pages, product galleries, variants, stock information, and customer reviews
+- Customer registration and sign-in, account pages, notifications, and order history
+- Simulated cart and checkout flow; no real payment is collected
+- Seller applications, seller workspace, product submissions, and moderation workflows
+- Admin workspace for orders, seller applications, listing moderation, reports, and audit history
+- English, Amharic, and Afaan Oromo storefront languages
+- Ethiopian Birr (ETB) as the storefront currency
+- Demo catalogue and reviews are marked as demo content and excluded from real seller reputation and revenue reporting
 
-## Features
+## Important launch safeguards
 
-- Full Payload E-commerce CMS integration
-- Complete Category → Product → Add to Cart → Checkout → Purchase storefront flow
-- Checkout supports store pickup or online payment (Stripe integration included) — enable/switch per store
-- Admin dashboard for tracking sales and orders
-- Aggressive tag-based caching with manual revalidation
-- SEO-ready (metadata + JSON-LD + sitemap + robots.txt)
-- Analytics & pixels (GA4 / GTag / Meta / TikTok) with built-in conversion tracking (add_to_cart, begin_checkout, purchase)
-- Order email confirmation + WhatsApp notification
+- **Payments:** checkout is simulated. Live payment processing is not enabled.
+- **Google sign-in:** requires a Google Web OAuth client ID. See [Google sign-in setup](docs/google-sign-in-setup.md).
+- **Email:** without an SMTP provider, Payload writes email messages to the service console. Configure a provider before relying on email notifications.
+- **Seller moderation:** keep `LISTING_MODERATOR_EMAIL` unset until a responsible adult store administrator is designated. Seller listings remain unpublished until policy review.
+- **Media:** Render's ephemeral filesystem is not durable storage. Configure Vercel Blob or S3-compatible object storage before relying on uploaded media in production.
+- **Production:** keep the feature branch preview separate from the production service until browser-based checkout, account, admin, and moderation flows have been tested and all required providers are configured.
 
-## Live Preview
+## Local development
 
-**Main Site:**
-https://ecommerce.studiopo.net
+Requirements: Node.js 24+ and pnpm.
 
-**Admin Panel:**
-https://ecommerce.studiopo.net/admin
+1. Install dependencies:
 
-**Demo Login:**
-Email: `admin@admin.com`
-Password: `admin`
+   ```bash
+   pnpm install --frozen-lockfile
+   ```
 
-🔄 Reset Demo Data
+2. Create `.env.local` using [`.env.example`](.env.example). Configure a PostgreSQL database and unique values for `PAYLOAD_SECRET` and `PREVIEW_SECRET`.
 
-If demo data was modified while you or another user were testing, you can restore it to a fresh state by visiting:
-https://ecommerce.studiopo.net/preview/reset
+3. Start the development server:
 
-#### This will reset and reseed the database (media preserved).
+   ```bash
+   pnpm dev
+   ```
 
----
+4. Open [http://localhost:3000](http://localhost:3000).
 
-## ▲ Deploy Your Own
+## Build and quality checks
 
-Deploy your own Payload-powered e-commerce storefront.
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/buildlabs-io/next-ecommerce)
-
-After creating your project, make sure to go to the Vercel dashboard
-and update your environment variables based on [.env.example](.env.example)
-
----
-
-## Stack
-
-- **Next.js 16** (App Router) + **React 19** + **Payload CMS 3** + **PostgreSQL**
-- **Tailwind CSS 4** + **React Icons** + **next-intl** + **radix-ui** + **React Hook Form**
-- **pnpm** as package manager (Node >= 24)
-
-### Data Layer, Caching & Revalidation
-
-The project uses a simple DAL (Data Access Layer) abstraction.
-
-You can choose the implementation in:
-
-[`src/lib/core/dal/Pages.ts`](src/lib/core/dal/index.ts)
-
-- **Api** → Headless REST mode (recommended for production)
-- **Queries** → Direct Payload SDK mode (monolith)
-
-Both expose the same public methods.
-
----
-
-### Caching & Revalidation
-
-- The frontend uses Next.js cache with tag-based revalidation. Products and categories auto-revalidate on save or delete. The storefront is aggressively cached for performance.
-- After changing products, categories, layout, footer or sitemap, click **“Revalidate” in Admin → Site Settings** to refresh immediately.
-- Draft mode is supported — preview content does not affect the published cache.
-
-### Orders & Notifications
-
-- On order creation, a confirmation email is automatically sent to the customer.
-- A WhatsApp notification is sent to the store owner via Callmebot.
-- At checkout, choose between store pickup or online payment.
-- Stripe integration included for online payment. Other gateways can be added the same way via order hooks.
-
-### Local Development
-
-Clone the repo and start a local PostgreSQL with Docker:
+The production build runs database migrations, generates Payload types, checks TypeScript, runs ESLint, and compiles Next.js:
 
 ```bash
-docker run --name payload-ecommerce \
-  -e POSTGRES_USER=admin \
-  -e POSTGRES_PASSWORD=admin \
-  -e POSTGRES_DB=payload \
-  -p 5443:5432 \
-  -v payload_ecommerce_data:/var/lib/postgresql \
-  -d postgres:18
+pnpm run build
 ```
 
-Create a `.env` file based on [`.env.example`](.env.example) and configure your environment variables, then install and run:
+The GitHub Actions workflow `.github/workflows/marketplace-checks.yml` runs the marketplace checks for pull requests.
 
-```bash
-pnpm install
-pnpm dev
-```
+## Demo catalogue
 
-### Seeding Mock Data
+The isolated development database branch contains 25 demo categories, 1,000 demo products, and 2,000 demo reviews. Demo records are explicitly marked and must not be treated as real customer orders, seller performance, or revenue.
 
-To seed mock data for local development:
+## Deployment
 
-1. Download the product images from [this Google Drive folder](https://go.studiopo.net/images) and extract them into `seed/data/images`.
-2. Run the [seeder script](seed/index.ts):
+The project is deployed from the feature branch to the isolated Render preview service. Configure the environment values from [`.env.example`](.env.example) in the Render dashboard; do not commit secrets. Review the [Google sign-in setup](docs/google-sign-in-setup.md) for OAuth and adult-moderator setup.
 
-```bash
-   pnpm run seed
-```
-
-This will populate your local database with sample products, categories, and orders for development and testing.
-
-### Key Directories
-
-- `src/app/(app)/` — Public storefront (home, product, category, checkout, preview)
-- `src/app/(payload)/` — Payload admin + API routes
-- `src/lib/` — Core app logic (collections, queries, caching, types, utilities, providers, i18n)
-- `src/lib/collections/` — Payload CMS collection definitions (Products, Category, Media, Users, Orders, etc.)
-- `src/components/` — UI + domain components (cart, checkout, product, layout, shared, ui)
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome!  
-If you find this project useful, consider giving it a ⭐ on GitHub — it helps others discover it!
-
-To contribute, fork the repository and submit a pull request with your enhancements or bug fixes.
-
----
-
-## 📄 License
-
-This project is licensed under the [MIT License](./LICENSE).
+The production Render service tracks `master`. Do not merge the feature branch or change the production service until the release checks and required account/provider setup are complete.

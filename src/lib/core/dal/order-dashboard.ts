@@ -14,7 +14,7 @@ const NON_REVENUE_STATUSES = new Set(["canceled", "refunded"]);
 type DashboardOrder = Pick<
   Order,
   "id" | "name" | "email" | "amount" | "status" | "createdAt"
->;
+> & { isDemoOrder?: boolean };
 
 const toInputDate = (date: Date) => date.toISOString().slice(0, 10);
 
@@ -33,7 +33,7 @@ const getRevenue = (orders: DashboardOrder[]) =>
     orders
       .reduce(
         (total, order) =>
-          NON_REVENUE_STATUSES.has(order.status ?? "")
+          (NON_REVENUE_STATUSES.has(order.status ?? "") || order.isDemoOrder === true)
             ? total
             : total + Number(order.amount ?? 0),
         0,
@@ -91,7 +91,7 @@ const buildChart = (
     if (!bucket) continue;
 
     bucket.orders += 1;
-    if (!NON_REVENUE_STATUSES.has(order.status ?? "")) {
+    if (!NON_REVENUE_STATUSES.has(order.status ?? "") && order.isDemoOrder !== true) {
       bucket.revenue += Number(order.amount ?? 0);
     }
   }
@@ -139,9 +139,10 @@ export const getOrderDashboard = async (req: PayloadRequest) => {
       amount: true,
       status: true,
       createdAt: true,
+      isDemoOrder: true,
     },
   });
-  const orders = docs as DashboardOrder[];
+  const orders = docs as unknown as DashboardOrder[];
   const fromTime = from.getTime();
   const toTime = to.getTime();
   const periodOrders = orders.filter((order) => {
@@ -181,6 +182,7 @@ export const getOrderDashboard = async (req: PayloadRequest) => {
       amount: Number(order.amount ?? 0),
       status: (order.status ?? "new") as DashboardOrderStatus,
       createdAt: order.createdAt,
+      isDemoOrder: Boolean(order.isDemoOrder),
     })),
   };
 

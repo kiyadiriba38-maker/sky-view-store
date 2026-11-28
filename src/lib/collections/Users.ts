@@ -11,6 +11,9 @@ export const Users: CollectionConfig = {
   },
   auth: {
     tokenExpiration: 60 * 60 * 24 * 7,
+    maxLoginAttempts: 10,
+    lockTime: 15 * 60 * 1000,
+    useSessions: true,
     cookies: {
       sameSite: "Lax",
       secure: process.env.NODE_ENV === "production",
@@ -18,19 +21,25 @@ export const Users: CollectionConfig = {
     },
   },
   access: {
-    read: ({ req: { user } }) => Boolean(user),
-    // Public registration is safe because the hook below always assigns
-    // the customer role to unauthenticated sign-ups.
-    create: () => true,
+    read: ({ req: { user } }) => {
+      if (!user) return false;
+      if (user.roles?.includes("admin")) return true;
+      return { id: { equals: user.id } };
+    },
+    // Public registration remains available, but signed-in non-admin users
+    // cannot create accounts or assign roles through the API.
+    create: ({ req }) => !req.user || isAdmin({ req }),
     delete: () => false,
     update: isAdmin,
     admin: isAdmin,
   },
   hooks: {
     beforeValidate: [
-      async ({ data, req }) => {
+      ({ data, req }) => {
         if (!data) return data;
-        if (!req.user) {
+        // Only an administrator may assign privileged roles. This also
+        // protects public registration if a caller submits roles: ["admin"].
+        if (!isAdmin({ req })) {
           return { ...data, roles: ["customer"] };
         }
         return data;
@@ -46,6 +55,7 @@ export const Users: CollectionConfig = {
       options: [
         { label: "admin", value: "admin" },
         { label: "customer", value: "customer" },
+        { label: "seller", value: "seller" },
       ],
       admin: {
         hidden: true,

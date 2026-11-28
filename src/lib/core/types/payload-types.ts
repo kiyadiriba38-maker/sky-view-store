@@ -193,9 +193,12 @@ export interface Product {
   generateSlug?: boolean | null;
   slug: string;
   title: string;
-  listingType?: "own_store" | "external" | null;
-  externalMarketplace?: "jiji" | "amazon" | "ebay" | "other" | null;
-  externalUrl?: string | null;
+  listingType?: "own_store" | "marketplace_seller" | null;
+  listingStatus?: "pending" | "approved" | "rejected" | "suspended" | null;
+  listingPolicyReviewed?: boolean | null;
+  isDemo?: boolean | null;
+  demoImageUrl?: string | null;
+  productImageUrl?: string | null;
   inventory?: number | null;
   priceInUSDEnabled?: boolean | null;
   priceInUSD?: number | null;

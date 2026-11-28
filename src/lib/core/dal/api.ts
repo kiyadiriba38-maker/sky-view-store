@@ -220,7 +220,12 @@ export default class Api extends BaseDal {
         reviews: true,
         enableVariants: true,
         variantTypes: true,
-      },
+        listingType: true,
+        isDemo: true,
+        demoImageUrl: true,
+        productImageUrl: true,
+        seller: true,
+      } as never,
     );
 
     if (!product) {
@@ -254,12 +259,23 @@ export default class Api extends BaseDal {
       : null;
     return {
       id: product.id,
+      slug,
+      priceInUSD: product.priceInUSD,
+      originalPriceInUSD: product.originalPriceInUSD,
+      inventory: product.inventory,
+      categories: product.categories,
+      enableVariants: product.enableVariants,
       title: product.title,
       description: product.description,
       updatedAt: product.updatedAt,
       meta: product.meta,
       gallery: product.gallery,
       faqs: product.faqs,
+      listingType: product.listingType ?? "own_store",
+      isDemo: Boolean((product as Product & { isDemo?: boolean }).isDemo),
+      demoImageUrl: (product as Product & { demoImageUrl?: string | null }).demoImageUrl ?? null,
+      productImageUrl: (product as Product & { productImageUrl?: string | null }).productImageUrl ?? null,
+      seller: (product as Product & { seller?: ProductSinglePage["seller"] }).seller ?? null,
       relatedProducts,
       reviews: product.reviews?.docs as Review[],
       purchase_section: buildProductPurchaseSectionData(product, combined),
