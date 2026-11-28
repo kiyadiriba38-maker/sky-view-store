@@ -730,3 +730,89 @@ html[data-theme="light"] .sv-page [class*="bg-white/"] {
   from { opacity: 0; transform: translate3d(22px,18px,0) scale(.94); }
   to { opacity: 1; transform: translate3d(0,0,0) scale(1); }
 }
+
+
+/* The storefront home route owns its canvas; suppress the CMS chrome around it. */
+.layout-container:has(> main > .sv-marketplace) {
+  width: 100%;
+  max-width: none;
+  padding-inline: 0;
+}
+.layout-container:has(> main > .sv-marketplace) > main {
+  width: 100%;
+  max-width: none;
+  padding: 0;
+}
+.layout-container:has(> main > .sv-marketplace) > footer,
+.layout-container:has(> main > .sv-marketplace) > .sticky {
+  display: none !important;
+}
+.sv-home-viewport {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+}
+.sv-home-viewport .sv-market-header,
+.sv-home-viewport .sv-market-searchbar,
+.sv-home-viewport .sv-market-hero,
+.sv-home-viewport .sv-benefit-strip,
+.sv-home-viewport .sv-category-section,
+.sv-home-viewport .sv-product-section {
+  max-width: 1880px;
+}
+.sv-product-experience {
+  --sv-product-mood: #171c25;
+  transition: background-color .7s ease;
+  background:
+    radial-gradient(ellipse at 78% 22%, color-mix(in srgb, var(--sv-product-accent) 22%, transparent), transparent 42%),
+    linear-gradient(125deg, var(--sv-product-mood) 0%, #292d36 52%, #111720 100%);
+}
+.sv-product-experience::after {
+  transition: background .65s ease;
+}
+.sv-product-gallery {
+  transition: background .65s ease, border-color .65s ease, box-shadow .65s ease;
+  background: linear-gradient(140deg, color-mix(in srgb,var(--sv-product-accent) 12%,transparent), #ffffff02);
+}
+.sv-product-main-image {
+  transition: transform .65s cubic-bezier(.2,.7,.2,1), filter .65s ease, opacity .45s ease;
+}
+.sv-product-mood-picker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin: 24px 0 20px;
+  padding: 13px 15px;
+  border: 1px solid #ffffff20;
+  border-radius: 11px;
+  background: #ffffff08;
+}
+.sv-product-mood-picker>span {
+  color: #ffffff90;
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: .16em;
+}
+.sv-product-mood-picker>div {
+  display: flex;
+  gap: 9px;
+}
+.sv-product-mood-picker button {
+  width: 22px;
+  height: 22px;
+  border: 2px solid #ffffff88;
+  border-radius: 50%;
+  background: var(--swatch);
+  box-shadow: 0 0 0 0 color-mix(in srgb,var(--swatch) 40%,transparent);
+  transition: transform .25s, box-shadow .25s;
+  cursor: pointer;
+}
+.sv-product-mood-picker button:hover,
+.sv-product-mood-picker button[aria-pressed="true"] {
+  transform: scale(1.16);
+  box-shadow: 0 0 0 4px color-mix(in srgb,var(--swatch) 28%,transparent);
+}
+@media (max-width: 600px) {
+  .sv-product-mood-picker { margin-block: 18px; }
+}
