@@ -104,7 +104,7 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
       id: `database-${product.slug}`, slug: product.slug, title: product.title,
       category: product.category ?? "Marketplace", categorySlug: product.categorySlug ?? "marketplace",
       priceETB: product.price, originalPriceETB: product.originalPrice ?? product.price,
-      image: demo ? `https://loremflickr.com/900/900/${encodeURIComponent((product.category ?? "marketplace").toLowerCase())}?lock=${product.slug.split("").reduce((value, char) => (value * 31 + char.charCodeAt(0)) >>> 0, 7)}` : product.productImageUrl || product.image || DEMO_CATEGORIES[2].image,
+      image: demo ? DEMO_CATEGORIES.find((item) => item.slug === product.categorySlug)?.image ?? DEMO_CATEGORIES[2].image : product.productImageUrl || product.image || DEMO_CATEGORIES[2].image,
       demo,
       databaseBacked: true as const,
     };
