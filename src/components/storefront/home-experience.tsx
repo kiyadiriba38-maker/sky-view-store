@@ -65,8 +65,24 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
   const [rateReady, setRateReady] = useState(false);
   const [heroTab, setHeroTab] = useState<"features" | "gallery" | "specs" | "reviews">("features");
   const [cartCount, setCartCount] = useState(0);
+  const [isHeaderScrolled, setIsHeaderScrolled] = useState(false);
+  const [quickSearchOpen, setQuickSearchOpen] = useState(false);
   const [wishlist, setWishlist] = useState<string[]>([]);
   const t = copy[locale];
+
+  useEffect(() => {
+    const updateHeaderScroll = () => setIsHeaderScrolled(window.scrollY > 50);
+    updateHeaderScroll();
+    window.addEventListener("scroll", updateHeaderScroll, { passive: true });
+    return () => window.removeEventListener("scroll", updateHeaderScroll);
+  }, []);
+
+  useEffect(() => {
+    if (!quickSearchOpen) return;
+    const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape") setQuickSearchOpen(false); };
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [quickSearchOpen]);
 
   useEffect(() => {
     try {
@@ -157,7 +173,7 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
   return (
     <main className="sv-marketplace sv-home-viewport min-h-screen sv-dark">
       <div className="sv-market-topline">ETHIOPIA FIRST <span>✦</span> DISCOVER MORE. SHOP SMARTER.</div>
-      <header className="sv-market-header sv-amber-header">
+      <header className={`sv-market-header sv-amber-header${isHeaderScrolled ? " is-scrolled" : ""}`} data-scrolled={isHeaderScrolled}>
         <Link href="/" className="sv-brand" aria-label="Sky View Store home">
           <span className="sv-brand-mark" aria-hidden="true"><svg viewBox="0 0 48 48" role="img" focusable="false"><path d="M6 34.5 19.2 13l8.1 13.2 4.3-6.4L42 34.5H6Z" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinejoin="round"/><path d="M10 38h28M15 30.5l4.2-6.8 4.5 7.2 4-5.9 5.6 8.5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/><circle cx="34.5" cy="11.5" r="3" fill="#fff0c2"/></svg></span><span className="sv-brand-wordmark">SKY VIEW <b>STORE</b></span>
         </Link>
@@ -174,7 +190,7 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
         </div>
         <div className="sv-header-actions sv-amber-actions">
           <Link href="/wishlist" aria-label={`Wishlist, ${wishlist.length} saved items`} className="relative"><FiHeart />{wishlist.length > 0 ? <i className="absolute -right-2 -top-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-amber-400 px-1 text-[9px] font-bold not-italic text-black">{wishlist.length > 99 ? "99+" : wishlist.length}</i> : null}</Link>
-          <button type="button" aria-label="Focus search" onClick={() => document.getElementById("catalogue-search")?.focus()}><FiSearch /></button>
+          <button type="button" aria-label="Open quick search" aria-expanded={quickSearchOpen} aria-controls="sv-quick-search-overlay" onClick={() => setQuickSearchOpen((open) => !open)}><FiSearch /></button>
           <Link href="/demo-cart" aria-label={cartCount ? `Shopping cart, ${cartCount} items` : "Shopping cart"} className="sv-icon-cart"><FiShoppingCart />{cartCount > 0 ? <i>{cartCount > 99 ? "99+" : cartCount}</i> : null}</Link>
           <Link href="/account" aria-label="User profile"><FiUser /></Link>
           <select aria-label="Language" value={locale} onChange={(event) => setLocale(event.target.value as Language)}>
@@ -184,6 +200,12 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
             <option value="ETB">ETB</option><option value="USD">USD</option><option value="EUR">EUR</option><option value="GBP">GBP</option><option value="AED">AED</option>
           </select>
         </div>
+        {quickSearchOpen ? (
+          <div id="sv-quick-search-overlay" className="sv-quick-search-overlay" role="dialog" aria-label="Quick product search">
+            <div className="sv-quick-search-field"><FiSearch aria-hidden="true" /><input autoFocus value={query} onChange={(event) => setQuery(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter") { setQuickSearchOpen(false); document.getElementById("catalogue")?.scrollIntoView({ behavior: "smooth" }); } }} placeholder={t.search} aria-label={t.search} /><button type="button" onClick={() => { setQuickSearchOpen(false); document.getElementById("catalogue")?.scrollIntoView({ behavior: "smooth" }); }}>{t.searchButton}</button><button type="button" className="sv-quick-search-close" aria-label="Close quick search" onClick={() => setQuickSearchOpen(false)}>×</button></div>
+            <p>Search the marketplace by product, brand or category.</p>
+          </div>
+        ) : null}
       </header>
 
       <section className="sv-market-searchbar sv-amber-search">
