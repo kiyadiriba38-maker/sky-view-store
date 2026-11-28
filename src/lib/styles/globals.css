@@ -1454,3 +1454,16 @@ html[data-theme="light"] .sv-page [class*="bg-white/"] {
 @media (prefers-reduced-motion: reduce) {
   .sv-amber-glow,.sv-amber-product { animation: none !important; }
 }
+
+.sv-demo-variant-options { display:flex; flex-wrap:wrap; gap:9px; margin-top:10px; }
+.sv-demo-variant-options button {
+  min-width:42px; min-height:42px; padding:0 13px; border:1px solid #ffffff35;
+  border-radius:999px; background:#ffffff0b; color:#f2eee7; font-size:10px;
+  font-weight:800; cursor:pointer; transition:background .2s ease,border-color .2s ease,transform .2s ease;
+}
+.sv-demo-variant-options button[aria-pressed="true"] {
+  border-color:var(--sv-product-accent); background:color-mix(in srgb,var(--sv-product-accent) 20%,transparent);
+  color:#fff; box-shadow:0 0 0 3px color-mix(in srgb,var(--sv-product-accent) 13%,transparent);
+}
+.sv-demo-variant-options button:hover { transform:translateY(-2px); }
+.sv-demo-stock-note { display:block; margin-top:9px; color:#c2b9aa; font-size:9px; }
