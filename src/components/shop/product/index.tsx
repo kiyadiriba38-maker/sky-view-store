@@ -8,47 +8,50 @@ import GalleryBlock from "@/components/blocks/gallery";
 import ProductDescription from "@/components/shop/product/product-description";
 import ProductReviews from "@/components/shop/product/review";
 import ReportListingButton from "@/components/storefront/report-listing-button";
+import { resolveMediaUrl } from "@/lib/core/util";
 
-export default async function ProductPage({
-  product,
-}: {
-  product: ProductSinglePage;
-}) {
+export default async function ProductPage({ product }: { product: ProductSinglePage }) {
   const t = await getTranslations("product");
   const isDemo = Boolean((product as ProductSinglePage & { isDemo?: boolean }).isDemo);
+  const extended = product as ProductSinglePage & { demoImageUrl?: string | null; productImageUrl?: string | null };
+  const galleryImage = product.gallery?.find((item) => item.image && typeof item.image === "object")?.image;
+  const heroImage = extended.productImageUrl || extended.demoImageUrl || (galleryImage && typeof galleryImage === "object" ? resolveMediaUrl(galleryImage) : null);
+  const category = product.categories?.map((item) => typeof item === "object" && item ? item.title : "").filter(Boolean)[0] || "Selected collection";
+  const backdropStyle = heroImage ? { "--sv-product-backdrop": `url("${heroImage}")` } as React.CSSProperties : undefined;
 
   return (
-    <div className="container pb-2 ">
-      <div className="flex flex-col  rounded-lg border  border-t-0 lg:p-8    lg:flex-row    ">
-        <div className="h-full w-full basis-full lg:basis-1/2">
-          <div className="w-full">
-            {!product.gallery?.some((item) => item.image && typeof item.image === "object") && ((product as ProductSinglePage & { demoImageUrl?: string; productImageUrl?: string }).demoImageUrl || (product as ProductSinglePage & { productImageUrl?: string }).productImageUrl) ? (
-              <div className="relative mx-auto aspect-square w-full max-w-md overflow-hidden rounded-2xl bg-[#101a28]">
-                <Image src={((product as ProductSinglePage & { demoImageUrl?: string; productImageUrl?: string }).demoImageUrl || (product as ProductSinglePage & { productImageUrl?: string }).productImageUrl)!} alt={product.title} fill unoptimized sizes="(max-width: 768px) 100vw, 448px" className="object-cover" />
+    <main className="sv-product-experience" style={backdropStyle}>
+      <div className="sv-product-topbar">
+        <a href="/shop" className="sv-product-wordmark"><span>SV</span> SKY VIEW <i> / </i> STORE</a>
+        <nav aria-label="Product navigation"><a href="/shop">DISCOVER</a><a href="/categories">CATEGORIES</a><a href="/deals">OFFERS</a></nav>
+        <a href="/demo-cart" className="sv-product-toplink">YOUR CART ↗</a>
+      </div>
+      <div className="sv-product-crumb"><a href="/">HOME</a><span> / </span><a href="/shop">MARKETPLACE</a><span> / </span><b>{category}</b></div>
+      <section className="sv-product-hero">
+        <div className="sv-product-gallery-panel">
+          <div className="sv-product-index">01 <span> / PRODUCT VIEW</span></div>
+          <div className="sv-product-gallery">
+            {heroImage && !product.gallery?.some((item) => item.image && typeof item.image === "object") ? (
+              <div className="sv-product-main-image">
+                <Image src={heroImage} alt={product.title} fill unoptimized priority sizes="(max-width: 900px) 100vw, 58vw" className="object-contain" />
               </div>
             ) : null}
-            <GalleryBlock
-              images={product.gallery ?? []}
-              id={`product-${product.id}`}
-              variant="product"
-            />
+            <GalleryBlock images={product.gallery ?? []} id={`product-${product.id}`} variant="product" />
+            {!heroImage ? <div className="sv-product-image-placeholder"><span>SKY VIEW</span><b>{product.title}</b></div> : null}
           </div>
+          <div className="sv-product-gallery-caption"><span>CURATED PRODUCT VIEW</span><span>SCROLL TO EXPLORE ↓</span></div>
         </div>
-        <div className="basis-full lg:basis-1/2 p-3 lg:p-8">
+        <aside className="sv-product-info-panel">
+          <div className="sv-product-overline"><span></span>{category} <i>·</i> SKY VIEW SELECTION</div>
           <ProductDescription product={product} />
-        </div>
-      </div>
-      {product.relatedProducts?.length ? (
-        <div className="pt-8">
-          <h3 className="mb-4 text-lg font-semibold">{t("relatedProducts")}</h3>
-          <ArchiveBlock
-            items={product.relatedProducts}
-            displayMode="autoScroll"
-          />
-        </div>
-      ) : null}
-      <ProductReviews reviews={product.reviews} productId={product.id} />
-      {!isDemo ? <ReportListingButton productId={product.id} productSlug={product.slug} /> : null}
-    </div>
+          <div className="sv-product-trust-row"><span>◇ SECURE ACCOUNT</span><span>✧ SIMULATED CHECKOUT</span><span>↗ ETHIOPIA</span></div>
+        </aside>
+      </section>
+      <section className="sv-product-lower">
+        <div><span className="sv-product-lower-kicker">MORE TO EXPLORE</span><h2>Made to stand out.</h2><p>Explore more finds selected for the Sky View marketplace.</p></div>
+        {product.relatedProducts?.length ? <ArchiveBlock items={product.relatedProducts} displayMode="autoScroll" /> : <p className="sv-product-empty-related">More products are being curated for this collection.</p>}
+      </section>
+      <section className="sv-product-reviews"><ProductReviews reviews={product.reviews} productId={product.id} />{!isDemo ? <ReportListingButton productId={product.id} productSlug={product.slug} /> : null}</section>
+    </main>
   );
 }
