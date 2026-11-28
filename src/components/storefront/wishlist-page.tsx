@@ -53,7 +53,8 @@ function normalizeSavedProduct(value: unknown): SavedProduct | null {
   };
 }
 
-export default function WishlistPage() {\n  const t = useTranslations("marketplace");
+export default function WishlistPage() {
+  const t = useTranslations("marketplace");
   const [items, setItems] = useState<SavedProduct[]>([]);
   const [storageAvailable, setStorageAvailable] = useState(true);
 
