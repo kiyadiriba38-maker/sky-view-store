@@ -75,16 +75,16 @@ export const buildMetadataByModel = (
 
   return {
     title,
-    description,
+    description: description ?? undefined,
     twitter: {
       title,
-      description,
+      description: description ?? undefined,
       card: "summary_large_image",
       ...(imageUrl ? { images: [imageUrl] } : {}),
     },
     openGraph: {
       title,
-      description,
+      description: description ?? undefined,
       url,
       ...(imageUrl
         ? {
@@ -93,7 +93,7 @@ export const buildMetadataByModel = (
                 url: imageUrl,
                 width: 1200,
                 height: 630,
-                alt: image.alt ?? "",
+                alt: image?.alt ?? "",
               },
             ],
           }
