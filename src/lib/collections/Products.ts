@@ -312,6 +312,13 @@ export const Products: CollectionOverride = ({ defaultCollection }) => {
     },
   ];
 
+  // Product imagery is supplied by the product gallery or the marketplace
+  // HTTPS image URL. The separate SEO social-preview image is optional.
+  const productMetaTab = metaTab();
+  productMetaTab.fields = productMetaTab.fields.map((field) =>
+    getFieldName(field) === "image" ? { ...field, required: false } : field,
+  );
+
   const variantNames = new Set(["enableVariants", "variantTypes", "variants"]);
   const sidebarFields = allFields.filter(isSidebarField);
   const variantFields = allFields.filter((field) =>
@@ -449,7 +456,7 @@ export const Products: CollectionOverride = ({ defaultCollection }) => {
             label: "Variants",
             fields: variantFields,
           },
-          metaTab(),
+          productMetaTab,
         ],
       },
     ],
