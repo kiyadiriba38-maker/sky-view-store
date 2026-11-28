@@ -53,7 +53,6 @@ export default function DemoCheckoutPanel() {
   const [payment, setPayment] = useState(paymentOptions[0]);
   const [order, setOrder] = useState<DemoOrder | null>(null);
   const [storageError, setStorageError] = useState(false);
-  const [submitError, setSubmitError] = useState(false);
 
   useEffect(() => {
     try {
@@ -105,7 +104,6 @@ export default function DemoCheckoutPanel() {
 
     setOrder(created);
     setItems([]);
-    setSubmitError(false);
   };
 
   if (order) {
