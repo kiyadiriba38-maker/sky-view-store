@@ -2,10 +2,12 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 type Order = { id: number; name?: string; status?: string; amount?: number; createdAt?: string; isDemoOrder?: boolean; returnRequestStatus?: string; returnReason?: string; returnRequestedAt?: string; items?: Array<{ title: string; quantity: number; lineTotal: number; isDemo?: boolean }> };
 
 export default function CustomerOrders() {
+  const router = useRouter();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
@@ -46,7 +48,11 @@ export default function CustomerOrders() {
     async function load() {
       try {
         const meResponse = await fetch("/api/users/me", { credentials: "include", cache: "no-store" });
-        if (!meResponse.ok) throw new Error("Sign in to view your orders.");
+        if (meResponse.status === 401) {
+          router.replace("/account/login?next=%2Faccount%2Forders");
+          return;
+        }
+        if (!meResponse.ok) throw new Error("Could not verify your account. Please try again.");
         const me = await meResponse.json();
         const url = new URL("/api/orders", window.location.origin);
         url.searchParams.set("where[customer][equals]", String(me?.user?.id ?? ""));
@@ -65,7 +71,7 @@ export default function CustomerOrders() {
     }
     void load();
     return () => { active = false; };
-  }, []);
+  }, [router]);
 
   return (
     <main className="sv-page min-h-[75vh] bg-[#070b12] px-4 py-12 text-white sm:px-8">
