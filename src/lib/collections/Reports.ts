@@ -27,19 +27,72 @@ export const Reports: CollectionConfig = {
   },
   hooks: {
     beforeValidate: [
-      ({ data, req, operation }) => {
-        if (!data || !req.user) return data;
-        if (operation === "create") {
-          const targetType = data.targetType;
-          const targetIsPresent =
-            (targetType === "product" && Boolean(data.targetProduct)) ||
-            (targetType === "seller" && Boolean(data.targetSeller)) ||
-            (targetType === "review" && Boolean(data.targetReview)) ||
-            (targetType === "order" && Boolean(data.targetOrder));
-          if (!targetIsPresent) throw new Error("Choose a valid item to report.");
-          return { ...data, reporter: req.user.id, status: "pending", moderatorNotes: undefined };
+      async ({ data, req, operation }) => {
+        if (!data || !req.user || operation !== "create") return data;
+
+        const targetFields = {
+          product: data.targetProduct,
+          seller: data.targetSeller,
+          review: data.targetReview,
+          order: data.targetOrder,
+        } as const;
+        const selectedTargets = Object.entries(targetFields).filter(([, value]) => {
+          if (value == null || value === "") return false;
+          if (typeof value === "object" && "id" in value) {
+            return Boolean((value as { id?: unknown }).id);
+          }
+          return true;
+        });
+        const targetType = data.targetType as keyof typeof targetFields;
+
+        if (
+          !(targetType in targetFields) ||
+          selectedTargets.length !== 1 ||
+          selectedTargets[0]?.[0] !== targetType
+        ) {
+          throw new Error("Choose exactly one report target that matches its type.");
         }
-        return data;
+
+        // An order report must refer to the signed-in customer's own order.
+        // Product, seller, and review reports remain available to all customers.
+        if (targetType === "order") {
+          const rawOrder = targetFields.order;
+          const orderId = typeof rawOrder === "object" && rawOrder && "id" in rawOrder
+            ? (rawOrder as { id: string | number }).id
+            : rawOrder;
+          if (orderId == null) throw new Error("Choose a valid order to report.");
+
+          const order = await req.payload.findByID({
+            collection: "orders",
+            id: orderId as string | number,
+            depth: 0,
+            overrideAccess: true,
+            select: { customer: true },
+          });
+          const rawCustomer = order.customer as
+            | string
+            | number
+            | { id?: string | number }
+            | null
+            | undefined;
+          const customerId = typeof rawCustomer === "object" && rawCustomer
+            ? rawCustomer.id
+            : rawCustomer;
+          if (String(customerId ?? "") !== String(req.user.id)) {
+            throw new Error("You can only report an order associated with your account.");
+          }
+        }
+
+        return {
+          ...data,
+          reporter: req.user.id,
+          status: "pending",
+          moderatorNotes: undefined,
+          targetProduct: targetType === "product" ? data.targetProduct : null,
+          targetSeller: targetType === "seller" ? data.targetSeller : null,
+          targetReview: targetType === "review" ? data.targetReview : null,
+          targetOrder: targetType === "order" ? data.targetOrder : null,
+        };
       },
     ],
     beforeChange: [
