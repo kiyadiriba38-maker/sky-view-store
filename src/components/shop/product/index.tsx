@@ -14,9 +14,12 @@ export default async function ProductPage({ product }: { product: ProductSingleP
   const isDemo = Boolean((product as ProductSinglePage & { isDemo?: boolean }).isDemo);
   const extended = product as ProductSinglePage & { demoImageUrl?: string | null; productImageUrl?: string | null };
   const galleryImage = product.gallery?.find((item) => item.image && typeof item.image === "object")?.image;
-  const heroImage = extended.productImageUrl || extended.demoImageUrl || (galleryImage && typeof galleryImage === "object" ? resolveMediaUrl(galleryImage) : null);
   const category = product.categories?.map((item) => typeof item === "object" && item ? item.title : "").filter(Boolean)[0] || "Selected collection";
-  const backdropStyle = heroImage ? { "--sv-product-backdrop": `url("${heroImage}")` } as CSSProperties : undefined;
+  const slugHash = product.slug.split("").reduce((value, char) => (value * 31 + char.charCodeAt(0)) >>> 0, 7);
+  const uniqueDemoImage = `https://loremflickr.com/1200/1200/${encodeURIComponent(category.toLowerCase())}?lock=${slugHash}`;
+  const heroImage = isDemo ? uniqueDemoImage : extended.productImageUrl || extended.demoImageUrl || (galleryImage && typeof galleryImage === "object" ? resolveMediaUrl(galleryImage) : null);
+  const accent = /fashion|shoe|cloth|beauty|watch|bag/i.test(category) ? "#ff9b63" : /tech|electronic|computer|phone/i.test(category) ? "#71dff1" : /home|furniture|decor/i.test(category) ? "#d5b6ff" : "#8be3c5";
+  const backdropStyle = { "--sv-product-backdrop": heroImage ? `url("${heroImage}")` : "none", "--sv-product-accent": accent } as CSSProperties;
 
   return (
     <main className="sv-product-experience" style={backdropStyle}>
