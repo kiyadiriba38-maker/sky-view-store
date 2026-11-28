@@ -620,3 +620,113 @@ html[data-theme="light"] .sv-page [class*="bg-white/"] {
   .sv-product-experience,.sv-product-experience::before,.sv-product-gallery,.sv-product-info-panel { animation: none !important; }
   .sv-product-gallery img,.sv-product-main-image { transition: none !important; }
 }
+
+
+/* First-screen desktop composition: the main storefront experience fits a typical laptop viewport. */
+@media (min-width: 901px) {
+  .sv-home-viewport {
+    min-height: 100svh;
+    padding-bottom: 0;
+  }
+  .sv-home-viewport .sv-market-topline {
+    padding-block: 6px;
+    min-height: 25px;
+  }
+  .sv-home-viewport .sv-market-header {
+    padding-block: 10px;
+    min-height: 58px;
+  }
+  .sv-home-viewport .sv-brand-mark {
+    width: 34px;
+    height: 34px;
+  }
+  .sv-home-viewport .sv-market-searchbar {
+    padding-top: 10px;
+    padding-bottom: 0;
+  }
+  .sv-home-viewport .sv-search-wrap {
+    padding-block: 4px;
+  }
+  .sv-home-viewport .sv-quick-links {
+    margin-top: 5px;
+  }
+  .sv-home-viewport .sv-market-hero {
+    margin-top: 12px;
+    grid-template-columns: minmax(0, 1.02fr) minmax(0, .98fr);
+    gap: clamp(14px, 1.5vw, 24px);
+  }
+  .sv-home-viewport .sv-hero-copy,
+  .sv-home-viewport .sv-hero-visual {
+    min-height: clamp(320px, calc(100svh - 350px), 490px);
+    max-height: 490px;
+    border-radius: 20px;
+  }
+  .sv-home-viewport .sv-hero-copy {
+    padding: clamp(24px, 3vw, 48px);
+  }
+  .sv-home-viewport .sv-hero-copy h1 {
+    font-size: clamp(38px, 4.2vw, 64px);
+    margin-block: 16px 12px;
+  }
+  .sv-home-viewport .sv-hero-copy p {
+    font-size: 12px;
+    line-height: 1.65;
+  }
+  .sv-home-viewport .sv-hero-buttons {
+    margin-top: 20px;
+  }
+  .sv-home-viewport .sv-hero-meta {
+    margin-top: 22px;
+    padding-top: 12px;
+  }
+  .sv-home-viewport .sv-benefit-strip {
+    margin-block: 12px 0;
+  }
+  .sv-home-viewport .sv-benefit-strip div {
+    padding-block: 10px;
+  }
+}
+@media (min-width: 1500px) {
+  .sv-home-viewport .sv-market-header,
+  .sv-home-viewport .sv-market-searchbar,
+  .sv-home-viewport .sv-market-hero,
+  .sv-home-viewport .sv-benefit-strip {
+    max-width: 1880px;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+  ::view-transition-old(root) {
+    animation: sv-page-out .22s ease both;
+  }
+  ::view-transition-new(root) {
+    animation: sv-page-in .48s cubic-bezier(.2,.7,.2,1) both;
+  }
+  .sv-product-experience::before {
+    animation: sv-product-backdrop-in .9s ease-out both;
+  }
+  .sv-product-main-image {
+    animation: sv-product-image-in .85s cubic-bezier(.16,.75,.25,1) both;
+    view-transition-name: sv-product-hero-image;
+  }
+  .sv-product-gallery {
+    view-transition-name: sv-product-gallery;
+  }
+}
+@keyframes sv-page-out {
+  to { opacity: 0; filter: blur(5px); transform: scale(.992); }
+}
+@keyframes sv-page-in {
+  from { opacity: 0; filter: blur(5px); transform: scale(1.008); }
+  to { opacity: 1; filter: blur(0); transform: scale(1); }
+}
+@keyframes sv-product-backdrop-in {
+  from { opacity: 0; transform: scale(1.16); }
+  to { opacity: .19; transform: scale(1.08); }
+}
+@keyframes sv-product-image-in {
+  from { opacity: 0; transform: translate3d(22px,18px,0) scale(.94); }
+  to { opacity: 1; transform: translate3d(0,0,0) scale(1); }
+}
