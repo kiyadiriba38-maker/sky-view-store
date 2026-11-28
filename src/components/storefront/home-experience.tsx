@@ -162,9 +162,9 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
           <span className="sv-brand-mark">◇</span><span>SKY VIEW <b>STORE</b></span>
         </Link>
         <div className="sv-amber-navigation">
-          <span className="sv-super-deals">SUPER DEALS</span>
+          <Link href="/deals" className="sv-super-deals" aria-label="Explore current deals">SUPER DEALS <FiArrowUpRight aria-hidden="true" /></Link>
           <nav className="sv-main-nav" aria-label="Main navigation">
-            <Link className="active" href="/">HOME</Link>
+            <Link className="active" href="/" aria-current="page">HOME</Link>
             <Link href="/shop?category=electronics">ELECTRONICS</Link>
             <Link href="/shop?category=fashion">FASHION</Link>
             <Link href="/shop?category=automotive">VEHICLES</Link>
@@ -220,7 +220,7 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
           <div className="sv-amber-product product-delivery"><Image src={DEMO_CATEGORIES[16].image} alt="Travel and delivery accessories collection" fill unoptimized sizes="(max-width: 800px) 25vw, 17vw" /></div>
           <div className="sv-amber-stage-caption"><small>CURATED FOR YOU / 001</small><b>Find your next<br/>favourite thing.</b></div>
         </div>
-        <div className="sv-amber-hero-cta"><button type="button" onClick={() => document.getElementById("catalogue")?.scrollIntoView({ behavior: "smooth" })}>Get the look <FiArrowUpRight /></button><span>DISCOVER THE COLLECTION</span></div>
+        <div className="sv-amber-hero-cta"><button type="button" onClick={() => document.getElementById("catalogue")?.scrollIntoView({ behavior: "smooth" })}>Explore products <FiArrowUpRight aria-hidden="true" /></button><span>DISCOVER THE COLLECTION</span></div>
         <a className="sv-more-anchor" href="#catalogue"><span /> MORE TO LOVE <b>↓</b></a>
       </section>
 
