@@ -1,4 +1,5 @@
 import Image from "next/image";
+import type { CSSProperties } from "react";
 import { getTranslations } from "next-intl/server";
 
 import type { ProductSinglePage } from "@/lib/core/types/types";
@@ -17,7 +18,7 @@ export default async function ProductPage({ product }: { product: ProductSingleP
   const galleryImage = product.gallery?.find((item) => item.image && typeof item.image === "object")?.image;
   const heroImage = extended.productImageUrl || extended.demoImageUrl || (galleryImage && typeof galleryImage === "object" ? resolveMediaUrl(galleryImage) : null);
   const category = product.categories?.map((item) => typeof item === "object" && item ? item.title : "").filter(Boolean)[0] || "Selected collection";
-  const backdropStyle = heroImage ? { "--sv-product-backdrop": `url("${heroImage}")` } as React.CSSProperties : undefined;
+  const backdropStyle = heroImage ? { "--sv-product-backdrop": `url("${heroImage}")` } as CSSProperties : undefined;
 
   return (
     <main className="sv-product-experience" style={backdropStyle}>
