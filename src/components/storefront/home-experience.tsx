@@ -6,7 +6,6 @@ import { useEffect, useMemo, useState } from "react";
 import { FiHeart, FiSearch, FiShoppingCart, FiUser, FiArrowUpRight, FiMonitor, FiGrid, FiSliders, FiStar } from "react-icons/fi";
 
 import { useStoreLocale } from "@/lib/providers/intl";
-import { useTheme } from "@/lib/providers/theme";
 
 import { DEMO_CATEGORIES, DEMO_PRODUCTS } from "@/lib/demo/catalog";
 
@@ -59,7 +58,6 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
   const [kind, setKind] = useState<"all" | "demo" | "real">("all");
   const [currency, setCurrency] = useState<Currency>("ETB");
   const { locale, setLocale } = useStoreLocale();
-  const { theme, setTheme } = useTheme();
   const [rates, setRates] = useState<Record<string, number>>({});
   const [rateReady, setRateReady] = useState(false);
   const [heroTab, setHeroTab] = useState<"features" | "gallery" | "specs" | "reviews">("features");
@@ -118,14 +116,8 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
     }));
   }, [realProducts]);
 
-  const changeTheme = () => {
-    const next = theme === "dark" ? "light" : "dark";
-    setTheme(next);
-
-  };
-
   return (
-    <main className={`sv-marketplace sv-home-viewport min-h-screen ${theme === "dark" ? "sv-dark" : "sv-light"}`}>
+    <main className="sv-marketplace sv-home-viewport min-h-screen sv-dark">
       <div className="sv-market-topline">ETHIOPIA FIRST <span>✦</span> DISCOVER MORE. SHOP SMARTER.</div>
       <header className="sv-market-header sv-amber-header">
         <Link href="/" className="sv-brand" aria-label="Sky View Store home">
