@@ -1467,3 +1467,67 @@ html[data-theme="light"] .sv-page [class*="bg-white/"] {
 }
 .sv-demo-variant-options button:hover { transform:translateY(-2px); }
 .sv-demo-stock-note { display:block; margin-top:9px; color:#c2b9aa; font-size:9px; }
+
+
+/* Sky View Store unified amber studio theme — shared by every marketplace route. */
+.sv-page,
+.sv-marketplace {
+  --sv-bg: #121212;
+  --sv-panel: #1b1916;
+  --sv-panel-2: #252018;
+  --sv-text: #f7f3eb;
+  --sv-muted: #b8afa1;
+  --sv-line: rgba(255, 255, 255, .11);
+  --sv-accent: #f59e0b;
+  --sv-accent-strong: #d97706;
+  background-color: #121212;
+  color: #f7f3eb;
+}
+.sv-marketplace { background: radial-gradient(ellipse at 50% 0%, rgba(217,119,6,.12), transparent 42%), #121212; }
+.sv-marketplace .sv-market-topline { background:#17130e; color:#c9bda9; }
+.sv-marketplace .sv-brand-mark { background:linear-gradient(140deg,#fbbf24,#b45309); color:#17110a; box-shadow:0 8px 25px #d9770633; }
+.sv-marketplace .sv-main-nav a:hover,
+.sv-marketplace .sv-market-footer a:hover { color:#fbbf24; }
+.sv-marketplace .sv-header-actions select,
+.sv-marketplace .sv-theme-toggle,
+.sv-marketplace .sv-signin,
+.sv-marketplace .sv-cart-link { border-color:var(--sv-line); }
+.sv-marketplace .sv-cart-link,
+.sv-marketplace .sv-search-wrap button,
+.sv-marketplace .sv-primary-button { background:#f59e0b; color:#17110a; }
+.sv-marketplace .sv-hero-copy { background:radial-gradient(ellipse at 5% 0%,#d9770626,transparent 48%),var(--sv-panel); }
+.sv-marketplace .sv-eyebrow,
+.sv-marketplace .sv-benefit-strip b,
+.sv-marketplace .sv-section-heading>a,
+.sv-marketplace .sv-quick-links button:hover { color:#fbbf24; }
+.sv-marketplace .sv-hero-visual { background:#26190d; }
+.sv-marketplace .sv-hero-orbit { border-color:#fbbf2466; box-shadow:0 0 70px #d9770633,inset 0 0 60px #d9770622; }
+.sv-marketplace .sv-hero-float small { color:#fbbf24; }
+.sv-marketplace .sv-filter-pills button.active { background:#f59e0b; border-color:#f59e0b; color:#17110a; }
+.sv-marketplace .sv-product-card:hover { border-color:#f59e0b; }
+.sv-marketplace .sv-market-header { background:color-mix(in srgb,#121212 92%,transparent); }
+.sv-marketplace .sv-market-footer { background:#17130e; }
+
+/* Recolour legacy Tailwind-based marketplace pages to match the amber homepage. */
+.sv-page { background:radial-gradient(ellipse at 50% -12%,rgba(217,119,6,.13),transparent 40%),#121212 !important; }
+.sv-page header.sticky { background:rgba(18,18,18,.92) !important; border-color:rgba(255,255,255,.1) !important; }
+.sv-page footer { background:#17130e !important; border-color:rgba(255,255,255,.1) !important; }
+.sv-page [class~="bg-cyan-300"],
+.sv-page [class~="bg-cyan-200"] { background-color:#f59e0b !important; color:#17110a !important; }
+.sv-page [class~="text-cyan-200"],
+.sv-page [class~="text-cyan-100"] { color:#fbbf24 !important; }
+.sv-page [class~="border-cyan-200"],
+.sv-page [class~="border-cyan-300"] { border-color:rgba(245,158,11,.55) !important; }
+.sv-page [class~="hover:bg-cyan-200"]:hover,
+.sv-page [class~="hover:bg-cyan-300"]:hover { background-color:#fcd34d !important; color:#17110a !important; }
+.sv-page [class~="hover:text-cyan-200"]:hover { color:#fcd34d !important; }
+.sv-page [class~="bg-[#070b12]"],
+.sv-page [class~="bg-[#070b12]"] { background-color:#121212 !important; }
+.sv-page [class~="bg-[#080e18]"],
+.sv-page [class~="bg-[#090f19]"] { background-color:#17130e !important; }
+.sv-page [class~="bg-[#101a28]"],
+.sv-page [class~="bg-[#101a29]"] { background-color:#1b1916 !important; }
+.sv-page [class~="bg-[#091321]"],
+.sv-page [class~="bg-[#172436]"] { background-color:#211c15 !important; }
+.sv-page [class~="focus:border-cyan-300"]:focus { border-color:#f59e0b !important; }
+.sv-page a, .sv-page button { transition-property:color,background-color,border-color,transform,box-shadow; }
