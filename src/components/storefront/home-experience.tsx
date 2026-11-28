@@ -135,7 +135,7 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
           </nav>
         </div>
         <div className="sv-header-actions sv-amber-actions">
-          <Link href="/account/wishlist" aria-label="Wishlist"><FiHeart /></Link>
+          <Link href="/account" aria-label="Wishlist and saved items"><FiHeart /></Link>
           <button type="button" aria-label="Focus search" onClick={() => document.getElementById("catalogue-search")?.focus()}><FiSearch /></button>
           <Link href="/demo-cart" aria-label="Shopping cart" className="sv-icon-cart"><FiShoppingCart /><i>1</i></Link>
           <Link href="/account" aria-label="User profile"><FiUser /></Link>
