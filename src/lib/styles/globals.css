@@ -1597,3 +1597,110 @@ html[data-theme="light"] .sv-page [class*="bg-white/"] {
 .sv-store input::placeholder,
 .sv-store textarea::placeholder { color:#8f877b; }
 .sv-store :focus-visible { outline:2px solid #f59e0b; outline-offset:3px; }
+
+
+/* Cinematic typography + high-contrast, usable homepage navigation. */
+.sv-store,.sv-page,.sv-marketplace {
+  font-family: "DM Sans", "Avenir Next", "Segoe UI", sans-serif;
+  font-optical-sizing: auto;
+  font-kerning: normal;
+  font-feature-settings: "kern" 1, "liga" 1;
+}
+.sv-home-viewport .sv-amber-hero-copy h1,
+.sv-home-viewport .sv-section-heading h2,
+.sv-home-viewport .sv-promo-band h2 {
+  font-family: "Bodoni Moda", "Playfair Display", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  font-weight: 600;
+  letter-spacing: -.055em;
+  text-wrap: balance;
+}
+.sv-home-viewport .sv-amber-hero-copy h1 {
+  font-size: clamp(3.25rem,6.1vw,6.4rem);
+  line-height: .94;
+}
+.sv-home-viewport .sv-amber-hero-copy h1 em {
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: -.065em;
+}
+.sv-home-viewport .sv-amber-navigation .sv-main-nav {
+  padding: 6px;
+  gap: 4px;
+  background: #f3eee4;
+  border: 1px solid #fff9ed;
+  box-shadow: 0 10px 30px #0004, inset 0 1px #fff;
+}
+.sv-home-viewport .sv-amber-navigation .sv-main-nav a {
+  color: #453b2e;
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.sv-home-viewport .sv-amber-navigation .sv-main-nav a:hover {
+  color: #17120a;
+  background: #e9dcc5;
+}
+.sv-home-viewport .sv-amber-navigation .sv-main-nav a.active,
+.sv-home-viewport .sv-amber-navigation .sv-main-nav a[aria-current="page"] {
+  color: #fffaf1;
+  background: #211a12;
+  box-shadow: 0 3px 10px #211a1233;
+}
+.sv-home-viewport .sv-super-deals {
+  min-height: 29px;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 13px;
+  background: #f59e0b;
+  color: #21170a;
+  border: 1px solid #ffd27a;
+  box-shadow: 0 5px 18px #f59e0b30;
+  text-decoration: none;
+  transition: transform .2s ease,background .2s ease,box-shadow .2s ease;
+}
+.sv-home-viewport .sv-super-deals:hover {
+  transform: translateY(-2px);
+  background: #ffc45e;
+  box-shadow: 0 8px 22px #f59e0b40;
+}
+.sv-home-viewport .sv-amber-navigation .sv-main-nav a:focus-visible,
+.sv-home-viewport .sv-super-deals:focus-visible,
+.sv-home-viewport .sv-amber-hero-cta button:focus-visible {
+  outline: 3px solid #f59e0b;
+  outline-offset: 3px;
+}
+.sv-home-viewport .sv-amber-hero-cta button {
+  min-height: 50px;
+  padding-inline: 26px;
+  background: linear-gradient(135deg,#ffd27a,#f59e0b 60%,#d97706);
+  color: #21170a;
+  box-shadow: 0 10px 34px #f59e0b45;
+  font-size: 13px;
+  letter-spacing: .01em;
+}
+.sv-home-viewport .sv-amber-hero-cta button:hover {
+  background: #ffd27a;
+  box-shadow: 0 14px 42px #f59e0b60;
+}
+.sv-home-viewport .sv-amber-hero-copy>p,
+.sv-home-viewport .sv-hero-tab-content span {
+  max-width: 46ch;
+  line-height: 1.85;
+}
+@media (max-width: 900px) {
+  .sv-home-viewport .sv-amber-navigation .sv-main-nav {
+    background: #f3eee4;
+    border-color: #fff9ed;
+  }
+}
+@media (max-width: 600px) {
+  .sv-home-viewport .sv-amber-navigation .sv-main-nav a {
+    color: #453b2e;
+    min-height: 34px;
+  }
+  .sv-home-viewport .sv-amber-navigation .sv-main-nav a.active {
+    color: #fffaf1;
+    background: #211a12;
+  }
+}
