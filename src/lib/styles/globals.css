@@ -200,8 +200,8 @@ html[data-theme="light"] .sv-page {
   background: #f4f7fb !important;
   color: #111827 !important;
 }
-html[data-theme="light"] .sv-store header,
-html[data-theme="light"] .sv-page header {
+html[data-theme="light"] .sv-store header:not(.sv-amber-header),
+html[data-theme="light"] .sv-page header:not(.sv-amber-header) {
   background: rgba(255,255,255,.92) !important;
   border-color: rgba(15,23,42,.12) !important;
 }
@@ -2757,3 +2757,72 @@ html::-webkit-scrollbar-corner { background:transparent !important; }
 /* Keep the cinematic hero as the first visual focus; search remains available in the glass header. */
 .sv-home-viewport>.sv-market-searchbar{display:none!important}
 .sv-home-viewport .sv-cinematic-hero{margin-top:0}
+
+
+/* Final homepage header override: keep the glass rail full-bleed and obsidian
+   even when the rest of the application is switched to its light theme. */
+html[data-theme="light"] .sv-store .sv-market-header.sv-amber-header,
+html[data-theme="light"] .sv-page .sv-market-header.sv-amber-header,
+.sv-home-viewport .sv-market-header.sv-amber-header {
+  position: sticky !important;
+  inset-inline: 0 !important;
+  top: 0 !important;
+  z-index: 50 !important;
+  display: grid !important;
+  width: 100% !important;
+  max-width: none !important;
+  min-height: 88px;
+  margin: 0 !important;
+  padding: 15px clamp(18px, 3.2vw, 58px) !important;
+  border: 0 !important;
+  border-bottom: 1px solid rgba(255,255,255,.07) !important;
+  border-radius: 0 !important;
+  background: rgba(18,18,18,.48) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.09), 0 16px 42px rgba(0,0,0,.12) !important;
+  backdrop-filter: blur(24px) saturate(140%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(140%) !important;
+  transition: min-height .45s ease, padding .45s ease, background .45s ease, box-shadow .45s ease;
+}
+html[data-theme="light"] .sv-store .sv-market-header.sv-amber-header.is-scrolled,
+html[data-theme="light"] .sv-page .sv-market-header.sv-amber-header.is-scrolled,
+.sv-home-viewport .sv-market-header.sv-amber-header.is-scrolled {
+  min-height: 66px;
+  padding-block: 7px !important;
+  background: rgba(12,12,12,.88) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.09), 0 20px 45px rgba(0,0,0,.42) !important;
+  backdrop-filter: blur(28px) saturate(145%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(145%) !important;
+}
+.sv-home-viewport .sv-market-header.sv-amber-header .sv-amber-navigation .sv-super-deals {
+  color: #f7d9a0 !important;
+  border: 1px solid rgba(245,158,11,.32) !important;
+  background: rgba(245,158,11,.12) !important;
+  box-shadow: inset 0 1px rgba(255,255,255,.08), 0 5px 18px rgba(0,0,0,.18) !important;
+}
+.sv-home-viewport .sv-market-header.sv-amber-header .sv-amber-navigation .sv-main-nav a.active,
+.sv-home-viewport .sv-market-header.sv-amber-header .sv-amber-navigation .sv-main-nav a[aria-current="page"] {
+  color: #17120b !important;
+  background: linear-gradient(135deg,#fbbf24,#f59e0b) !important;
+  box-shadow: 0 4px 16px rgba(245,158,11,.2) !important;
+}
+.sv-home-viewport .sv-market-header.sv-amber-header .sv-header-actions .sv-utility-button {
+  color: #f8f4ec !important;
+  background: rgba(255,255,255,.065) !important;
+  border: 1px solid rgba(255,255,255,.15) !important;
+  box-shadow: inset 0 1px rgba(255,255,255,.08), 0 6px 18px rgba(0,0,0,.18) !important;
+}
+.sv-home-viewport .sv-market-header.sv-amber-header .sv-header-actions .sv-utility-button:hover {
+  color: #fcd38a !important;
+  background: rgba(245,158,11,.15) !important;
+  border-color: rgba(251,191,36,.42) !important;
+}
+@media (max-width: 700px) {
+  .sv-home-viewport .sv-market-header.sv-amber-header {
+    min-height: 82px;
+    padding: 9px 12px !important;
+  }
+  .sv-home-viewport .sv-market-header.sv-amber-header.is-scrolled {
+    min-height: 68px;
+    padding-block: 7px !important;
+  }
+}
