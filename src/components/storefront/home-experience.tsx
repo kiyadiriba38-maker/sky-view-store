@@ -159,7 +159,7 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
       <div className="sv-market-topline">ETHIOPIA FIRST <span>✦</span> DISCOVER MORE. SHOP SMARTER.</div>
       <header className="sv-market-header sv-amber-header">
         <Link href="/" className="sv-brand" aria-label="Sky View Store home">
-          <span className="sv-brand-mark">◇</span><span>SKY VIEW <b>STORE</b></span>
+          <span className="sv-brand-mark" aria-hidden="true"><svg viewBox="0 0 48 48" role="img" focusable="false"><path d="M6 34.5 19.2 13l8.1 13.2 4.3-6.4L42 34.5H6Z" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinejoin="round"/><path d="M10 38h28M15 30.5l4.2-6.8 4.5 7.2 4-5.9 5.6 8.5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/><circle cx="34.5" cy="11.5" r="3" fill="#fff0c2"/></svg></span><span className="sv-brand-wordmark">SKY VIEW <b>STORE</b></span>
         </Link>
         <div className="sv-amber-navigation">
           <Link href="/deals" className="sv-super-deals" aria-label="Explore current deals">SUPER DEALS <FiArrowUpRight aria-hidden="true" /></Link>
@@ -251,7 +251,7 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
 
       <section className="sv-promo-band"><div><span className="sv-eyebrow">{t.promoEyebrow}</span><h2>{t.promoTitle}</h2><p>{t.promoText}</p></div><Link href="/shop" className="sv-primary-button">{t.startExploring} ↗</Link></section>
 
-      <footer className="sv-market-footer"><div className="sv-brand"><span className="sv-brand-mark">SV</span><span>SKY VIEW <b>STORE</b></span></div><p>{t.footerTagline}</p><div><Link href="/about">{t.about}</Link><Link href="/shipping">{t.shipping}</Link><Link href="/returns">{t.returns}</Link><Link href="/privacy">{t.privacy}</Link><Link href="/help">{t.helpCenter}</Link></div><small>© {new Date().getFullYear()} Sky View Store · {t.footerNote}</small></footer>
+      <footer className="sv-market-footer"><div className="sv-brand"><span className="sv-brand-mark" aria-hidden="true"><svg viewBox="0 0 48 48" focusable="false"><path d="M6 34.5 19.2 13l8.1 13.2 4.3-6.4L42 34.5H6Z" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinejoin="round"/><path d="M10 38h28M15 30.5l4.2-6.8 4.5 7.2 4-5.9 5.6 8.5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/><circle cx="34.5" cy="11.5" r="3" fill="#fff0c2"/></svg></span><span className="sv-brand-wordmark">SKY VIEW <b>STORE</b></span></div><p>{t.footerTagline}</p><div><Link href="/about">{t.about}</Link><Link href="/shipping">{t.shipping}</Link><Link href="/returns">{t.returns}</Link><Link href="/privacy">{t.privacy}</Link><Link href="/help">{t.helpCenter}</Link></div><small>© {new Date().getFullYear()} Sky View Store · {t.footerNote}</small></footer>
       <nav className="sv-mobile-nav" aria-label="Mobile navigation"><Link href="/">⌂<span>{t.mobileHome}</span></Link><Link href="/shop">⌕<span>{t.mobileShop}</span></Link><Link href="/categories">▦<span>{t.mobileCategories}</span></Link><Link href="/demo-cart">▣<span>{t.mobileCart}</span></Link><Link href="/account">◎<span>{t.mobileAccount}</span></Link></nav>
     </main>
   );
