@@ -153,24 +153,24 @@ export default function SellerDashboard() {
   }
 
   return (
-    <main className="sv-page min-h-[75vh] bg-[#070b12] px-4 py-12 text-white sm:px-8">
+    <main className="sv-page min-h-[75vh] bg-[#121212] px-4 py-12 text-white sm:px-8">
       <div className="mx-auto max-w-6xl">
-        <Link href="/account" className="text-xs text-cyan-200 hover:text-white">← Customer account</Link>
-        <p className="mt-8 text-[10px] font-bold uppercase tracking-[.25em] text-cyan-200">Marketplace / Seller Center</p>
+        <Link href="/account" className="text-xs text-amber-300 hover:text-white">← Customer account</Link>
+        <p className="mt-8 text-[10px] font-bold uppercase tracking-[.25em] text-amber-300">Marketplace / Seller Center</p>
         <h1 className="mt-3 text-4xl font-semibold tracking-tight">Your store workspace.</h1>
         {loading ? <p className="mt-8 text-sm text-white/50">Loading seller workspace…</p> : !seller ? (
-          <div className="mt-8 rounded-2xl border border-white/10 bg-[#101a28] p-7">
+          <div className="mt-8 rounded-2xl border border-white/10 bg-[#191919] p-7">
             <h2 className="text-xl font-semibold">You do not have a seller profile yet.</h2>
             <p className="mt-3 text-sm text-white/50">Apply to open a store. An administrator must approve your application before you can list products.</p>
-            <Link href="/seller/apply" className="mt-6 inline-flex rounded-full bg-cyan-200 px-5 py-3 text-sm font-bold text-[#07111a]">Apply to sell ↗</Link>
+            <Link href="/seller/apply" className="mt-6 inline-flex rounded-full bg-amber-300 px-5 py-3 text-sm font-bold text-[#121212]">Apply to sell ↗</Link>
           </div>
         ) : (
           <>
-            <div className="mt-8 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-white/10 bg-[#101a28] p-6">
+            <div className="mt-8 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-white/10 bg-[#191919] p-6">
               <div><p className="text-xs text-white/40">Store profile</p><h2 className="mt-1 text-2xl font-semibold">{seller.storeName}</h2><p className="mt-1 text-xs text-white/45">{seller.city || "Ethiopia"}</p></div>
               <span className={`rounded-full border px-4 py-2 text-[10px] font-bold uppercase tracking-wider ${seller.approvalStatus === "approved" ? "border-emerald-300/30 bg-emerald-300/10 text-emerald-200" : "border-amber-300/30 bg-amber-300/10 text-amber-200"}`}>{seller.approvalStatus}</span>
             </div>
-            <section className="mt-5 rounded-2xl border border-white/10 bg-[#101a28] p-6">
+            <section className="mt-5 rounded-2xl border border-white/10 bg-[#191919] p-6">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <h2 className="text-lg font-semibold">{t("metricsTitle")}</h2>
                 <span className="text-[9px] uppercase tracking-wider text-white/35">{t("badges")}</span>
@@ -184,38 +184,38 @@ export default function SellerDashboard() {
                 <div className="rounded-xl border border-white/10 bg-white/[.025] p-4"><p className="text-[10px] text-white/45">{t("responseTime")}</p><strong className="mt-2 block text-sm">{metrics?.responseTimeHours == null ? t("notMeasured") : `${metrics.responseTimeHours} h`}</strong></div>
                 <div className="rounded-xl border border-white/10 bg-white/[.025] p-4"><p className="text-[10px] text-white/45">{t("deliveryPerformance")}</p><strong className="mt-2 block text-sm">{metrics?.deliveryPerformance == null ? t("notMeasured") : `${metrics.deliveryPerformance}%`}</strong></div>
                 <div className="rounded-xl border border-white/10 bg-white/[.025] p-4"><p className="text-[10px] text-white/45">{t("sellerRank")}</p><strong className="mt-2 block text-sm">{metrics?.rank ? `#${metrics.rank} / ${metrics.approvedSellerCount}` : t("notRanked")}</strong></div>
-                <div className="rounded-xl border border-white/10 bg-white/[.025] p-4"><p className="text-[10px] text-white/45">{t("badges")}</p><div className="mt-2 flex flex-wrap gap-1.5">{(metrics?.badges ?? []).map((badge) => <span key={badge} className="rounded-full border border-cyan-200/20 bg-cyan-200/5 px-2 py-1 text-[9px] text-cyan-100">{badge === "Trusted seller" ? t("trustedSeller") : badge === "Top rated" ? t("topRated") : t("newSeller")}</span>)}</div></div>
+                <div className="rounded-xl border border-white/10 bg-white/[.025] p-4"><p className="text-[10px] text-white/45">{t("badges")}</p><div className="mt-2 flex flex-wrap gap-1.5">{(metrics?.badges ?? []).map((badge) => <span key={badge} className="rounded-full border border-amber-300/20 bg-amber-300/5 px-2 py-1 text-[9px] text-amber-100">{badge === "Trusted seller" ? t("trustedSeller") : badge === "Top rated" ? t("topRated") : t("newSeller")}</span>)}</div></div>
               </div>
             </section>
             {seller.approvalStatus !== "approved" ? (
               <div className="mt-5 rounded-2xl border border-amber-300/20 bg-amber-300/5 p-6 text-sm leading-7 text-amber-100">Your seller application is {seller.approvalStatus}. Product listing tools unlock after an administrator approves your store.</div>
             ) : (
               <div className="mt-8 grid gap-6 lg:grid-cols-[.9fr_1.1fr]">
-                <form onSubmit={addProduct} className="h-fit rounded-2xl border border-white/10 bg-[#101a28] p-6">
+                <form onSubmit={addProduct} className="h-fit rounded-2xl border border-white/10 bg-[#191919] p-6">
                   <h2 className="text-xl font-semibold">{editingProductId === null ? "Submit a product" : "Edit product listing"}</h2>
                   <p className="mt-2 text-xs leading-6 text-white/45">New seller listings are reviewed by an administrator before becoming visible.</p>
-                  <label className="mt-5 block text-xs text-white/70">Product title<input required value={title} onChange={(event) => setTitle(event.target.value)} className="mt-2 w-full rounded-xl border border-white/15 bg-white/[.04] px-4 py-3 text-sm outline-none focus:border-cyan-200" /></label>
-                  <label className="mt-4 block text-xs text-white/70">Category<select required value={categoryId} onChange={(event) => setCategoryId(event.target.value)} className="mt-2 w-full rounded-xl border border-white/15 bg-[#091321] px-4 py-3 text-sm text-white outline-none focus:border-cyan-200"><option value="">Choose a category</option>{categories.map((category) => <option key={category.id} value={category.id}>{category.title}</option>)}</select></label>
-                  <label className="mt-4 block text-xs text-white/70">Product image URL (HTTPS)<input required type="url" pattern="https://.*" value={imageUrl} onChange={(event) => setImageUrl(event.target.value)} placeholder="https://..." className="mt-2 w-full rounded-xl border border-white/15 bg-white/[.04] px-4 py-3 text-sm outline-none focus:border-cyan-200" /><span className="mt-1 block text-[10px] leading-5 text-white/40">Required. Use an HTTPS image URL that you have permission to publish.</span></label>
-                  <label className="mt-4 block text-xs text-white/70">Description<textarea required minLength={20} rows={4} value={description} onChange={(event) => setDescription(event.target.value)} className="mt-2 w-full rounded-xl border border-white/15 bg-white/[.04] px-4 py-3 text-sm outline-none focus:border-cyan-200" /></label>
+                  <label className="mt-5 block text-xs text-white/70">Product title<input required value={title} onChange={(event) => setTitle(event.target.value)} className="mt-2 w-full rounded-xl border border-white/15 bg-white/[.04] px-4 py-3 text-sm outline-none focus:border-amber-300" /></label>
+                  <label className="mt-4 block text-xs text-white/70">Category<select required value={categoryId} onChange={(event) => setCategoryId(event.target.value)} className="mt-2 w-full rounded-xl border border-white/15 bg-[#191919] px-4 py-3 text-sm text-white outline-none focus:border-amber-300"><option value="">Choose a category</option>{categories.map((category) => <option key={category.id} value={category.id}>{category.title}</option>)}</select></label>
+                  <label className="mt-4 block text-xs text-white/70">Product image URL (HTTPS)<input required type="url" pattern="https://.*" value={imageUrl} onChange={(event) => setImageUrl(event.target.value)} placeholder="https://..." className="mt-2 w-full rounded-xl border border-white/15 bg-white/[.04] px-4 py-3 text-sm outline-none focus:border-amber-300" /><span className="mt-1 block text-[10px] leading-5 text-white/40">Required. Use an HTTPS image URL that you have permission to publish.</span></label>
+                  <label className="mt-4 block text-xs text-white/70">Description<textarea required minLength={20} rows={4} value={description} onChange={(event) => setDescription(event.target.value)} className="mt-2 w-full rounded-xl border border-white/15 bg-white/[.04] px-4 py-3 text-sm outline-none focus:border-amber-300" /></label>
                   <div className="mt-4 grid grid-cols-2 gap-3">
-                    <label className="block text-xs text-white/70">Price (ETB)<input required type="number" min="1" value={price} onChange={(event) => setPrice(event.target.value)} className="mt-2 w-full rounded-xl border border-white/15 bg-white/[.04] px-3 py-3 text-sm outline-none focus:border-cyan-200" /></label>
-                    <label className="block text-xs text-white/70">Stock<input required type="number" min="0" value={inventory} onChange={(event) => setInventory(event.target.value)} className="mt-2 w-full rounded-xl border border-white/15 bg-white/[.04] px-3 py-3 text-sm outline-none focus:border-cyan-200" /></label>
+                    <label className="block text-xs text-white/70">Price (ETB)<input required type="number" min="1" value={price} onChange={(event) => setPrice(event.target.value)} className="mt-2 w-full rounded-xl border border-white/15 bg-white/[.04] px-3 py-3 text-sm outline-none focus:border-amber-300" /></label>
+                    <label className="block text-xs text-white/70">Stock<input required type="number" min="0" value={inventory} onChange={(event) => setInventory(event.target.value)} className="mt-2 w-full rounded-xl border border-white/15 bg-white/[.04] px-3 py-3 text-sm outline-none focus:border-amber-300" /></label>
                   </div>
-                  <button disabled={busy} className="mt-5 w-full rounded-full bg-cyan-200 px-5 py-3 text-sm font-bold text-[#07111a] disabled:opacity-50">{busy ? "Saving…" : editingProductId === null ? "Submit for review" : "Save changes for review"}</button>
+                  <button disabled={busy} className="mt-5 w-full rounded-full bg-amber-300 px-5 py-3 text-sm font-bold text-[#121212] disabled:opacity-50">{busy ? "Saving…" : editingProductId === null ? "Submit for review" : "Save changes for review"}</button>
                   {editingProductId !== null ? <button type="button" onClick={resetProductForm} disabled={busy} className="mt-3 w-full rounded-full border border-white/15 px-5 py-3 text-xs font-semibold text-white/65 disabled:opacity-50">Cancel editing</button> : null}
                 </form>
-                <section className="rounded-2xl border border-white/10 bg-[#101a28] p-6">
+                <section className="rounded-2xl border border-white/10 bg-[#191919] p-6">
                   <div className="flex items-center justify-between gap-3"><h2 className="text-xl font-semibold">Your products</h2><span className="text-xs text-white/40">{products.length} listings</span></div>
                   <div className="mt-5 space-y-3">
-                    {products.length ? products.map((product) => <article key={product.id} className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/[.025] p-4"><div><h3 className="text-sm font-semibold">{product.title}</h3><p className="mt-1 text-[10px] text-white/40">Stock: {product.inventory ?? 0} · ETB {Number(product.priceInUSD ?? 0).toLocaleString("en-ET")}</p></div><div className="flex items-center gap-2"><span className="rounded-full border border-white/10 px-3 py-1.5 text-[9px] uppercase tracking-wider text-white/60">{product.listingStatus || product._status || "pending"}</span><button type="button" onClick={() => editProduct(product)} className="rounded-full border border-cyan-200/30 px-3 py-1.5 text-[9px] font-semibold text-cyan-100 hover:bg-cyan-200/10">Edit</button></div></article>) : <p className="rounded-xl border border-dashed border-white/15 p-8 text-center text-sm text-white/45">No products submitted yet.</p>}
+                    {products.length ? products.map((product) => <article key={product.id} className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/[.025] p-4"><div><h3 className="text-sm font-semibold">{product.title}</h3><p className="mt-1 text-[10px] text-white/40">Stock: {product.inventory ?? 0} · ETB {Number(product.priceInUSD ?? 0).toLocaleString("en-ET")}</p></div><div className="flex items-center gap-2"><span className="rounded-full border border-white/10 px-3 py-1.5 text-[9px] uppercase tracking-wider text-white/60">{product.listingStatus || product._status || "pending"}</span><button type="button" onClick={() => editProduct(product)} className="rounded-full border border-amber-300/30 px-3 py-1.5 text-[9px] font-semibold text-amber-100 hover:bg-amber-300/10">Edit</button></div></article>) : <p className="rounded-xl border border-dashed border-white/15 p-8 text-center text-sm text-white/45">No products submitted yet.</p>}
                   </div>
                 </section>
               </div>
             )}
           </>
         )}
-        {message ? <p role="status" className="mt-5 rounded-xl border border-cyan-200/20 bg-cyan-200/5 p-4 text-sm text-cyan-100">{message}</p> : null}
+        {message ? <p role="status" className="mt-5 rounded-xl border border-amber-300/20 bg-amber-300/5 p-4 text-sm text-amber-100">{message}</p> : null}
       </div>
     </main>
   );
