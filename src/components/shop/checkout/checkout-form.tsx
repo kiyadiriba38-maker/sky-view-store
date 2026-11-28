@@ -53,7 +53,7 @@ export default function CheckoutForm({
     <div className="w-full">
       <div
         role="status"
-        className="mb-5 rounded-xl border border-cyan-500/30 bg-cyan-500/5 px-4 py-3 text-sm text-foreground"
+        className="mb-5 rounded-xl border border-amber-300/25 bg-amber-300/5 px-4 py-3 text-sm text-foreground"
       >
         <p className="font-semibold">Demo checkout — no real payment will be taken.</p>
         <p className="mt-1 text-muted-foreground">
@@ -79,11 +79,11 @@ export default function CheckoutForm({
                 type="button"
                 aria-pressed={selected}
                 onClick={() => setPaymentMethod(method.value)}
-                className={`rounded-xl border p-4 text-left transition duration-200 hover:-translate-y-0.5 hover:border-cyan-400 ${selected ? "border-cyan-400 bg-cyan-400/10 ring-1 ring-cyan-400/40" : "border-border bg-background"}`}
+                className={`rounded-xl border p-4 text-left transition duration-200 hover:-translate-y-0.5 hover:border-amber-300 ${selected ? "border-amber-300 bg-amber-300/10 ring-1 ring-amber-300/30" : "border-border bg-background"}`}
               >
                 <span className="flex items-center justify-between gap-3">
                   <span className="font-semibold">{method.label}</span>
-                  <span className={`grid size-5 place-items-center rounded-full border text-xs ${selected ? "border-cyan-400 bg-cyan-400 text-slate-950" : "border-muted-foreground/50"}`}>
+                  <span className={`grid size-5 place-items-center rounded-full border text-xs ${selected ? "border-amber-300 bg-amber-300 text-[#17120b]" : "border-muted-foreground/50"}`}>
                     {selected ? "✓" : ""}
                   </span>
                 </span>
