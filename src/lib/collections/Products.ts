@@ -264,7 +264,7 @@ export const Products: CollectionOverride = ({ defaultCollection }) => {
     {
       name: "gallery",
       type: "array",
-      minRows: 1,
+      minRows: 0,
       fields: [
         {
           name: "image",
@@ -273,6 +273,9 @@ export const Products: CollectionOverride = ({ defaultCollection }) => {
           required: true,
         },
       ],
+      admin: {
+        description: "Optional uploaded gallery. Marketplace sellers may use an approved HTTPS product image URL instead.",
+      },
     },
     {
       name: "relatedProducts",
@@ -406,7 +409,10 @@ export const Products: CollectionOverride = ({ defaultCollection }) => {
                 Boolean(item) && item.image !== null,
             );
 
-            data.gallery = filtered.length ? filtered : [{ image: null }];
+            // Empty galleries are valid for seller listings that use the
+            // separate HTTPS productImageUrl field. Do not inject a null
+            // upload row, which fails the required upload validation.
+            data.gallery = filtered;
           }
 
           return normalizeFaqs(data);
