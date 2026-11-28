@@ -65,10 +65,16 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
   const [rateReady, setRateReady] = useState(false);
   const [heroTab, setHeroTab] = useState<"features" | "gallery" | "specs" | "reviews">("features");
   const [cartCount, setCartCount] = useState(0);
+  const [dealSecondsRemaining, setDealSecondsRemaining] = useState(8 * 60 * 60);
   const [isHeaderScrolled, setIsHeaderScrolled] = useState(false);
   const [quickSearchOpen, setQuickSearchOpen] = useState(false);
   const [wishlist, setWishlist] = useState<string[]>([]);
   const t = copy[locale];
+
+  useEffect(() => {
+    const timer = window.setInterval(() => setDealSecondsRemaining((seconds) => seconds > 0 ? seconds - 1 : 8 * 60 * 60), 1000);
+    return () => window.clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     const updateHeaderScroll = () => setIsHeaderScrolled(window.scrollY > 50);
@@ -253,6 +259,24 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
           <button type="button" className={heroTab === "reviews" ? "active" : ""} onClick={() => setHeroTab("reviews")}>+ REVIEWS</button>
         </div>
         <a className="sv-cinematic-more" href="#catalogue"><span /> MORE TO LOVE <b>↓</b></a>
+      </section>
+
+      <section className="sv-deals-section" aria-labelledby="sv-deals-heading">
+        <div className="sv-deals-heading">
+          <div><span className="sv-eyebrow">LIMITED-TIME DEMO PICKS</span><h2 id="sv-deals-heading">Super Deals <em>preview</em></h2><p>Explore sample offers from the demo catalogue. Prices and timer are illustrative.</p></div>
+          <div className="sv-deal-timer" aria-label="Demo countdown timer"><small>DEMO TIMER</small><div><b>{String(Math.floor(dealSecondsRemaining / 3600)).padStart(2,"0")}</b><span>:</span><b>{String(Math.floor((dealSecondsRemaining % 3600) / 60)).padStart(2,"0")}</b><span>:</span><b>{String(dealSecondsRemaining % 60).padStart(2,"0")}</b></div></div>
+          <Link href="/deals">Explore deals ↗</Link>
+        </div>
+        <div className="sv-deals-grid">
+          {DEMO_PRODUCTS.slice(0,4).map((product) => {
+            const discount = product.originalPriceETB > product.priceETB ? Math.round((1 - product.priceETB / product.originalPriceETB) * 100) : 0;
+            return <article className="sv-deal-card" key={product.id}>
+              <Link href={`/demo-product/${product.slug}`} className="sv-deal-image"><StorefrontImage src={product.image} fallbackSrc={DEMO_CATEGORIES[2].image} alt={product.title} sizes="(max-width: 700px) 45vw, 22vw" />{discount > 0 ? <span className="sv-deal-discount">-{discount}%</span> : <span className="sv-deal-discount">DEMO</span>}</Link>
+              <div className="sv-deal-info"><small>{product.category}</small><Link href={`/demo-product/${product.slug}`}>{product.title}</Link><b>{formatPrice(product.priceETB,currency,rates,locale)}</b><del>{product.originalPriceETB > product.priceETB ? formatPrice(product.originalPriceETB,currency,rates,locale) : ""}</del></div>
+              <button type="button" aria-label={wishlist.includes(product.id) ? `Remove ${product.title} from wishlist` : `Save ${product.title} to wishlist`} aria-pressed={wishlist.includes(product.id)} onClick={() => toggleWishlist(product)}><FiHeart /> {wishlist.includes(product.id) ? "Saved" : "Save"}</button>
+            </article>;
+          })}
+        </div>
       </section>
 
       <section className="sv-benefit-strip"><div><b>01</b><span>{t.benefitDiscovery}</span></div><div><b>02</b><span>{t.benefitLocal}</span></div><div><b>03</b><span>{t.benefitSeller}</span></div><div><b>04</b><span>{t.benefitSecure}</span></div></section>
