@@ -1561,11 +1561,11 @@ html[data-theme="light"] .sv-page [class*="bg-white/"] {
 /* Final cross-route token bridge: covers account, order, seller and utility screens too. */
 .sv-store [class*="text-cyan-"] { color:#fbbf24 !important; }
 .sv-store [class*="border-cyan-"] { border-color:rgba(245,158,11,.48) !important; }
-.sv-store [class*="bg-cyan-"] { background-color:#f59e0b !important; color:#17110a !important; }
-.sv-store [class*="hover\\:text-cyan-"]:hover { color:#fcd34d !important; }
-.sv-store [class*="hover\\:border-cyan-"]:hover { border-color:#f59e0b !important; }
-.sv-store [class*="hover\\:bg-cyan-"]:hover { background-color:#fcd34d !important; color:#17110a !important; }
-.sv-store [class*="focus\\:border-cyan-"]:focus { border-color:#f59e0b !important; }
+.sv-store [class~="bg-cyan-200"], .sv-store [class~="bg-cyan-300"], .sv-store [class~="bg-cyan-400"] { background-color:#f59e0b !important; color:#17110a !important; }
+.sv-store [class*="hover:text-cyan-"]:hover { color:#fcd34d !important; }
+.sv-store [class*="hover:border-cyan-"]:hover { border-color:#f59e0b !important; }
+.sv-store [class*="hover:bg-cyan-"]:hover { background-color:#fcd34d !important; color:#17110a !important; }
+.sv-store [class*="focus:border-cyan-"]:focus { border-color:#f59e0b !important; }
 .sv-store [class*="bg-[#07111a]"],
 .sv-store [class*="bg-[#070b12]"],
 .sv-store [class*="bg-[#07111a]/"] { background-color:#121212 !important; }
