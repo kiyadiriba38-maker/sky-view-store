@@ -21,7 +21,7 @@ export default function DemoProductDetail({ product }: { product: DemoProduct })
   const variantPrice = product.priceETB + selectedVariant * Math.max(50, Math.round(product.priceETB * 0.08));
   const demoStock = Math.max(2, 18 - ((Number(product.id.replace(/\D/g, "")) + selectedVariant * 5) % 15));
   const moods = [
-    { name: "Original", accent: defaultAccent, background: "#171c25", filter: "none" },
+    { name: "Original", accent: defaultAccent, background: "#17130e", filter: "none" },
     { name: "Crimson", accent: "#ff6b63", background: "#351716", filter: "saturate(1.12)" },
     { name: "Arctic", accent: "#7bdcf4", background: "#102936", filter: "saturate(.9)" },
     { name: "Midnight", accent: "#c0a4ff", background: "#211b35", filter: "brightness(.82) saturate(.8)" },
