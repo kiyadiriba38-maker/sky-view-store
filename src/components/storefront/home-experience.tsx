@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import { FiHeart, FiSearch, FiShoppingCart, FiUser, FiArrowUpRight, FiMonitor, FiGrid, FiSliders, FiStar } from "react-icons/fi";
 
 import { useStoreLocale } from "@/lib/providers/intl";
 import { useTheme } from "@/lib/providers/theme";
@@ -61,6 +62,7 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
   const { theme, setTheme } = useTheme();
   const [rates, setRates] = useState<Record<string, number>>({});
   const [rateReady, setRateReady] = useState(false);
+  const [heroTab, setHeroTab] = useState<"features" | "gallery" | "specs" | "reviews">("features");
   const t = copy[locale];
 
   useEffect(() => {
@@ -125,34 +127,71 @@ export default function HomeExperience({ catalogProducts = [] }: { catalogProduc
   return (
     <main className={`sv-marketplace sv-home-viewport min-h-screen ${theme === "dark" ? "sv-dark" : "sv-light"}`}>
       <div className="sv-market-topline">ETHIOPIA FIRST <span>✦</span> DISCOVER MORE. SHOP SMARTER.</div>
-      <header className="sv-market-header">
-        <Link href="/" className="sv-brand" aria-label={t.navShop}>
-          <span className="sv-brand-mark">SV</span><span>SKY VIEW <b>STORE</b></span>
+      <header className="sv-market-header sv-amber-header">
+        <Link href="/" className="sv-brand" aria-label="Sky View Store home">
+          <span className="sv-brand-mark">◇</span><span>SKY VIEW <b>STORE</b></span>
         </Link>
-        <nav className="sv-main-nav" aria-label="Main navigation">
-          <Link href="/shop">{t.navShop}</Link><Link href="/categories">{t.navCategories}</Link><a href="#popular">{t.navTrending}</a><Link href="/deals">{t.navDeals}</Link><Link href="/help">{t.navHelp}</Link>
-        </nav>
-        <div className="sv-header-actions">
+        <div className="sv-amber-navigation">
+          <span className="sv-super-deals">SUPER DEALS</span>
+          <nav className="sv-main-nav" aria-label="Main navigation">
+            <Link className="active" href="/">HOME</Link>
+            <Link href="/shop?category=electronics">ELECTRONICS</Link>
+            <Link href="/shop?category=fashion">FASHION</Link>
+            <Link href="/shop?category=automotive">VEHICLES</Link>
+            <Link href="/categories">ACCESSORIES</Link>
+            <Link href="/categories">ALL CATEGORIES</Link>
+          </nav>
+        </div>
+        <div className="sv-header-actions sv-amber-actions">
+          <Link href="/account/wishlist" aria-label="Wishlist"><FiHeart /></Link>
+          <button type="button" aria-label="Focus search" onClick={() => document.getElementById("catalogue-search")?.focus()}><FiSearch /></button>
+          <Link href="/demo-cart" aria-label="Shopping cart" className="sv-icon-cart"><FiShoppingCart /><i>1</i></Link>
+          <Link href="/account" aria-label="User profile"><FiUser /></Link>
           <select aria-label="Language" value={locale} onChange={(event) => setLocale(event.target.value as Language)}>
             <option value="en">EN</option><option value="am">አማ</option><option value="om">OR</option>
           </select>
           <select aria-label="Currency" value={currency} onChange={(event) => { const value = event.target.value as Currency; setCurrency(value); window.localStorage.setItem("sv-currency", value); }}>
             <option value="ETB">ETB</option><option value="USD">USD</option><option value="EUR">EUR</option><option value="GBP">GBP</option><option value="AED">AED</option>
           </select>
-          <button type="button" className="sv-theme-toggle" onClick={changeTheme} aria-label="Toggle theme">{theme === "dark" ? "☼" : "☾"}</button>
-          <Link href="/account/login" className="sv-signin">{t.signIn}</Link>
-          <Link href="/demo-cart" className="sv-cart-link">{t.cart} ↗</Link>
         </div>
       </header>
 
-      <section className="sv-market-searchbar">
-        <div className="sv-search-wrap"><span aria-hidden="true">⌕</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t.search} aria-label={t.search} /><button type="button" onClick={() => document.getElementById("catalogue")?.scrollIntoView({ behavior: "smooth" })}>{t.searchButton}</button></div>
+      <section className="sv-market-searchbar sv-amber-search">
+        <div className="sv-search-wrap"><span aria-hidden="true">⌕</span><input id="catalogue-search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t.search} aria-label={t.search} /><button type="button" onClick={() => document.getElementById("catalogue")?.scrollIntoView({ behavior: "smooth" })}>{t.searchButton}</button></div>
         <div className="sv-quick-links"><span>{t.popularPrefix}</span><button onClick={() => setQuery("wireless")}>{t.wireless}</button><button onClick={() => setQuery("phone")}>{t.phoneAccessories}</button><button onClick={() => setQuery("home")}>{t.homeSearch}</button><button onClick={() => setQuery("travel")}>{t.travel}</button></div>
       </section>
 
-      <section className="sv-market-hero">
-        <div className="sv-hero-copy"><span className="sv-eyebrow"><i /> {t.heroEyebrow}</span><h1>{t.hero}</h1><p>{t.sub}</p><div className="sv-hero-buttons"><Link href="/shop" className="sv-primary-button">{t.shop} <span>↗</span></Link><Link href="/categories" className="sv-secondary-button">{t.categories}</Link></div><div className="sv-hero-meta"><span>{t.metaETB}</span><span>{t.metaSellers}</span><span>{t.metaDemo}</span></div></div>
-        <div className="sv-hero-visual"><Image src={DEMO_CATEGORIES[2].image} alt="Technology and electronics collection" fill priority unoptimized sizes="(max-width: 800px) 100vw, 50vw" className="sv-hero-image" /><div className="sv-hero-orbit" /><div className="sv-hero-float"><small>SKY VIEW / 001</small><b>Discover your next favorite.</b><span>Explore the marketplace</span></div></div>
+      <section className="sv-amber-hero" aria-label="Sky View Store featured marketplace">
+        <div className="sv-hero-watermark" aria-hidden="true">SKY VIEW <b>2026</b></div>
+        <div className="sv-amber-hero-copy">
+          <span className="sv-amber-eyebrow"><i /> THE SKY VIEW MARKETPLACE</span>
+          <h1>Online Shopping,<br/><em>Simplified.</em></h1>
+          <p>Discover technology, fashion and everyday essentials in one beautifully simple marketplace, made for shoppers across Ethiopia.</p>
+          <div className="sv-hero-tabs" role="tablist" aria-label="Marketplace highlights">
+            <button type="button" role="tab" aria-selected={heroTab === "features"} className={heroTab === "features" ? "active" : ""} onClick={() => setHeroTab("features")}>+ TOP FEATURES</button>
+            <button type="button" role="tab" aria-selected={heroTab === "gallery"} className={heroTab === "gallery" ? "active" : ""} onClick={() => setHeroTab("gallery")}>+ GALLERY</button>
+            <button type="button" role="tab" aria-selected={heroTab === "specs"} className={heroTab === "specs" ? "active" : ""} onClick={() => setHeroTab("specs")}>+ SPECS</button>
+            <button type="button" role="tab" aria-selected={heroTab === "reviews"} className={heroTab === "reviews" ? "active" : ""} onClick={() => setHeroTab("reviews")}>+ REVIEWS</button>
+          </div>
+          <div className="sv-hero-tab-content" role="tabpanel">
+            {heroTab === "features" ? <><b><FiGrid /> A marketplace built to explore</b><span>Discover thousands of products, trusted sellers and a simpler way to shop.</span></> : null}
+            {heroTab === "gallery" ? <><b><FiMonitor /> A closer look at what you love</b><span>Explore product collections across electronics, fashion, home and more.</span></> : null}
+            {heroTab === "specs" ? <><b><FiSliders /> Clear product details</b><span>Compare product options, specifications, availability and seller information.</span></> : null}
+            {heroTab === "reviews" ? <><b><FiStar /> Shop with more confidence</b><span>Read buyer feedback and verified-purchase reviews on eligible listings.</span></> : null}
+          </div>
+          <div className="sv-amber-hero-meta"><span>ETB-FIRST SHOPPING</span><span>APPROVED SELLERS</span><span>DEMO CHECKOUT</span></div>
+        </div>
+        <div className="sv-amber-product-stage">
+          <div className="sv-amber-glow" />
+          <div className="sv-amber-stage-ring ring-one" /><div className="sv-amber-stage-ring ring-two" />
+          <div className="sv-amber-product product-laptop"><Image src={DEMO_CATEGORIES[1].image} alt="Laptop and computer collection" fill unoptimized sizes="(max-width: 800px) 30vw, 20vw" /></div>
+          <div className="sv-amber-product product-vr"><Image src={DEMO_CATEGORIES[2].image} alt="Electronics and smart devices collection" fill unoptimized sizes="(max-width: 800px) 25vw, 17vw" /></div>
+          <div className="sv-amber-product product-fashion"><Image src={DEMO_CATEGORIES[4].image} alt="Fashion collection" fill unoptimized sizes="(max-width: 800px) 28vw, 18vw" /></div>
+          <div className="sv-amber-product product-delivery"><Image src={DEMO_CATEGORIES[16].image} alt="Travel and delivery accessories collection" fill unoptimized sizes="(max-width: 800px) 25vw, 17vw" /></div>
+          <div className="sv-amber-stage-caption"><small>CURATED FOR YOU / 001</small><b>Find your next<br/>favourite thing.</b></div>
+        </div>
+        <div className="sv-amber-hero-cta"><button type="button" onClick={() => document.getElementById("catalogue")?.scrollIntoView({ behavior: "smooth" })}>Get the look <FiArrowUpRight /></button><span>DISCOVER THE COLLECTION</span></div>
+        <a className="sv-more-anchor" href="#catalogue"><span /> MORE TO LOVE <b>↓</b></a>
       </section>
 
       <section className="sv-benefit-strip"><div><b>01</b><span>{t.benefitDiscovery}</span></div><div><b>02</b><span>{t.benefitLocal}</span></div><div><b>03</b><span>{t.benefitSeller}</span></div><div><b>04</b><span>{t.benefitSecure}</span></div></section>
