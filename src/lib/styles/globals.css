@@ -2826,3 +2826,129 @@ html[data-theme="light"] .sv-page .sv-market-header.sv-amber-header.is-scrolled,
     padding-block: 7px !important;
   }
 }
+
+
+/* Sky View glass navigation: edge-to-edge obsidian header with a deliberate
+   scroll state, avoiding the legacy white container and desktop side gutters. */
+.sv-home-viewport > .sv-market-header.sv-amber-header {
+  position: sticky;
+  top: 0;
+  z-index: 70;
+  width: 100%;
+  max-width: none;
+  min-height: 82px;
+  margin: 0;
+  padding: 12px clamp(20px, 4.2vw, 76px);
+  border: 0;
+  border-bottom: 1px solid rgba(255,255,255,.075);
+  border-radius: 0;
+  background: rgba(18,18,18,.58);
+  -webkit-backdrop-filter: blur(22px) saturate(145%);
+  backdrop-filter: blur(22px) saturate(145%);
+  box-shadow: 0 8px 34px rgba(0,0,0,.08);
+  transition:
+    min-height .32s ease,
+    padding .32s ease,
+    background-color .32s ease,
+    border-color .32s ease,
+    box-shadow .32s ease;
+}
+.sv-home-viewport > .sv-market-header.sv-amber-header.is-scrolled {
+  min-height: 68px;
+  padding-block: 8px;
+  border-bottom-color: rgba(245,158,11,.2);
+  background: rgba(13,13,13,.91);
+  box-shadow: 0 12px 38px rgba(0,0,0,.32);
+}
+.sv-home-viewport .sv-brand,
+.sv-home-viewport .sv-amber-navigation,
+.sv-home-viewport .sv-amber-actions {
+  min-width: 0;
+}
+.sv-home-viewport .sv-amber-navigation .sv-main-nav {
+  border-color: rgba(255,255,255,.13);
+  background: rgba(255,255,255,.055);
+  box-shadow: inset 0 1px rgba(255,255,255,.06), 0 8px 28px rgba(0,0,0,.12);
+}
+.sv-home-viewport .sv-amber-navigation .sv-main-nav a {
+  transition:
+    color .22s ease,
+    background-color .22s ease,
+    transform .22s ease;
+}
+.sv-home-viewport .sv-amber-navigation .sv-main-nav a:hover {
+  transform: translateY(-1px);
+  background: rgba(245,158,11,.15);
+  color: #ffd58a;
+}
+.sv-home-viewport .sv-amber-navigation .sv-main-nav a.active {
+  background: linear-gradient(135deg,#fff3d6,#f4c36d);
+  color: #21170a;
+  box-shadow: 0 3px 14px rgba(245,158,11,.16);
+}
+.sv-home-viewport .sv-amber-actions>a,
+.sv-home-viewport .sv-amber-actions>button {
+  border-radius: 999px;
+  transition:
+    color .2s ease,
+    background-color .2s ease,
+    border-color .2s ease,
+    transform .2s ease;
+}
+.sv-home-viewport .sv-amber-actions>a:hover,
+.sv-home-viewport .sv-amber-actions>button:hover {
+  transform: translateY(-1px);
+  color: #ffc66b;
+  background: rgba(245,158,11,.11);
+}
+.sv-home-viewport .sv-amber-actions select {
+  border-radius: 999px;
+  outline-offset: 4px;
+}
+.sv-home-viewport .sv-super-deals {
+  transition: color .2s ease, background-color .2s ease, opacity .25s ease, transform .25s ease;
+}
+.sv-home-viewport .sv-super-deals:hover {
+  background: #f59e0b;
+  color: #17120a;
+  transform: translateY(-1px);
+}
+.sv-home-viewport .sv-super-deals.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-5px);
+}
+@media (max-width: 900px) {
+  .sv-home-viewport > .sv-market-header.sv-amber-header {
+    width: 100%;
+    min-height: 70px;
+    padding: 10px 20px;
+    gap: 12px;
+  }
+  .sv-home-viewport > .sv-market-header.sv-amber-header.is-scrolled {
+    min-height: 62px;
+    padding-block: 7px;
+  }
+}
+@media (max-width: 600px) {
+  .sv-home-viewport > .sv-market-header.sv-amber-header {
+    padding-inline: 13px;
+    gap: 8px;
+  }
+  .sv-home-viewport > .sv-market-header.sv-amber-header.is-scrolled {
+    padding-inline: 13px;
+  }
+  .sv-home-viewport .sv-amber-actions>a,
+  .sv-home-viewport .sv-amber-actions>button {
+    min-width: 28px;
+    min-height: 34px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sv-home-viewport > .sv-market-header.sv-amber-header,
+  .sv-home-viewport .sv-amber-navigation .sv-main-nav a,
+  .sv-home-viewport .sv-amber-actions>a,
+  .sv-home-viewport .sv-amber-actions>button {
+    transition: none !important;
+  }
+}
