@@ -99,6 +99,11 @@ const enforceSellerListing: CollectionBeforeChangeHook = async ({ data, req, ope
     throw new Error("Add an HTTPS product image URL or upload at least one gallery image.");
   }
 
+  const categories = data.categories ?? originalDoc?.categories;
+  if (!Array.isArray(categories) || categories.length === 0) {
+    throw new Error("Choose at least one category for this marketplace listing.");
+  }
+
   return {
     ...data,
     seller: seller.id,
