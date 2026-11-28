@@ -39,7 +39,7 @@ export default async function RootLayout({
       <body>
         <AnalyticsLayout />
         <Providers>
-          <div className="min-h-screen flex flex-col">
+          <div className="sv-page sv-store min-h-screen flex flex-col">
             <div className="layout-container flex flex-col flex-1">
               {settings.general?.logo ? (
                 <Suspense
