@@ -164,7 +164,9 @@ export default function AccessibilityBar() {
     <div className="fixed bottom-16 left-0 z-[999999] flex items-center">
       <Button
         onClick={() => setOpen((v) => !v)}
-        className="h-10 w-9 rounded-r-full rounded-l-none border border-amber-300/30 bg-[#17130e] p-0 text-amber-300 shadow-[0_8px_24px_rgba(0,0,0,0.3)] transition-colors hover:bg-[#2a2115]"\n        aria-label={t("title")}\n        aria-expanded={open}
+        className="h-10 w-9 rounded-r-full rounded-l-none border border-amber-300/30 bg-[#17130e] p-0 text-amber-300 shadow-[0_8px_24px_rgba(0,0,0,0.3)] transition-colors hover:bg-[#2a2115]"
+        aria-label={t("title")}
+        aria-expanded={open}
       >
         <BsUniversalAccessCircle />
       </Button>
