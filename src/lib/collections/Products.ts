@@ -76,7 +76,7 @@ const canManageSellerProducts: Access = async ({ req }) => {
   return ids.length ? { seller: { in: ids } } : false;
 };
 
-const enforceSellerListing: CollectionBeforeChangeHook = async ({ data, req, operation }) => {
+const enforceSellerListing: CollectionBeforeChangeHook = async ({ data, req, operation, originalDoc }) => {
   if (!data || !req.user || req.user.roles?.includes("admin")) return data;
   const sellers = await req.payload.find({
     collection: "sellers" as never,
@@ -86,10 +86,27 @@ const enforceSellerListing: CollectionBeforeChangeHook = async ({ data, req, ope
   });
   const seller = (sellers.docs as Array<{ id: number }>)[0];
   if (!seller) throw new Error("An approved seller account is required to manage products.");
-  if (operation === "create") {
-    return { ...data, seller: seller.id, listingType: "marketplace_seller", isDemo: false, listingStatus: "pending", _status: "draft" };
+
+  // Every marketplace listing needs at least one usable image. The seller
+  // dashboard supports HTTPS image URLs; uploaded gallery images remain valid.
+  const imageUrl = data.productImageUrl ?? originalDoc?.productImageUrl;
+  const gallery = data.gallery ?? originalDoc?.gallery;
+  const hasGalleryImage = Array.isArray(gallery) && gallery.some((item) =>
+    Boolean(item && typeof item === "object" && "image" in item && item.image),
+  );
+  const hasHttpsImageUrl = typeof imageUrl === "string" && imageUrl.trim().startsWith("https://");
+  if (!hasHttpsImageUrl && !hasGalleryImage) {
+    throw new Error("Add an HTTPS product image URL or upload at least one gallery image.");
   }
-  return { ...data, seller: seller.id, listingType: "marketplace_seller", isDemo: false, listingStatus: "pending", _status: "draft" };
+
+  return {
+    ...data,
+    seller: seller.id,
+    listingType: "marketplace_seller",
+    isDemo: false,
+    listingStatus: "pending",
+    _status: "draft",
+  };
 };
 
 const requirePolicyReviewForPublication: CollectionBeforeChangeHook = async ({
